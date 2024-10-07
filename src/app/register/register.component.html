@@ -81,7 +81,7 @@
               <ng-template matStepLabel>Verificación</ng-template>
               <div style="display: flex; align-items: flex-start;">
                 <mat-form-field>
-                  <mat-label>Codigo</mat-label>
+                  <mat-label>Codigos</mat-label>
                   <input matInput placeholder="Ingrese codigo de 5 Digitos" formControlName="password" type="password" required [matTooltip]="getPasswordError()">  
                 </mat-form-field>
                 <button class='timer-button' (click)="startTimer()" [disabled]="isButtonDisabled">{{ buttonText }}</button>
