@@ -1,1 +1,32 @@
+@import "@angular/material/prebuilt-themes/cyan-orange.css";
+@import "../node_modules/material-icons/iconfont/material-icons.css";
+@import 'material-icons/iconfont/material-icons.css';
+
+:root {
+  --gray1: #353535;
+  --gray2: #252f2f;
+  --white: #ccdddd;
+  --blue: #2e6a73;
+}
+
+@font-face {
+  font-family: 'sf-pro';
+  src: url('/fonts/SF-PRO-REGULAR.OTF');
+  format: 'truetype';
+}
+
+@font-face {
+  font-family: 'sf-rounded';
+  src: url('/fonts/SF-ROUNDED.ttf');
+  format: 'truetype';
+}
+
+
 /* You can add global styles to this file, and also import other style files */
+* {
+  font-family: 'sf-pro', sans-serif !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

@@ -1,0 +1,97 @@
+<div style="display:flex;align-items: center;">
+    <section style="background: var(--blue);height: 100vh;width: -webkit-fill-available;max-width: 40%;">
+  
+    </section>
+    <section style="
+    width: -webkit-fill-available;
+    background: #293331;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;">
+        <!--<button mat-raised-button  id="toggle-linear">
+            {{!isLinear ? 'Ingresa tus datos para registrarte' : 'Ingresa tus datos para registrarte'}}
+          </button> -->
+               <button mat-raised-button  id="toggle-linear">Ingresa tus datos para registrarte</button>
+          <mat-stepper #stepper style="background: #293331;">
+            
+            <mat-step [stepControl]="firstFormGroup" style="margin:2rem 0 ;" [completed]="firstFormGroup.valid">
+
+              <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Ingresa tus datos</ng-template>
+
+                <section style="display: flex;flex-direction: column;gap: 1rem;">
+                  <div style="display: flex;justify-content: center;width: 100%;">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>Escoge una fecha</mat-label>
+                        <input matInput formControlName="birthday" [matDatepicker]="picker">
+                        <mat-hint style="color:#fff">DIA/MES/AÑO</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                  </div>
+
+                  <div style="display: flex;justify-content: space-between;">
+                    <mat-form-field>
+                      <mat-label>Nombre</mat-label>
+                      <input matInput placeholder="Ingrese Nombre" formControlName="name" required >
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <mat-label>Apellido</mat-label>
+                      <input matInput placeholder="Ingrese Apellido" formControlName="last_name" required>
+                    </mat-form-field>
+                  </div>
+              </section>
+
+                <div>
+                  <button mat-button matStepperNext [disabled]="firstFormGroup.invalid"><mat-icon>keyboard_arrow_right</mat-icon>Siguiente</button>
+                </div>
+
+              </form>
+
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup" label="Crea tu cuenta">
+              <form [formGroup]="secondFormGroup">
+               
+                <div style="display: flex;justify-content: space-between;flex-direction: column;gap:1rem;">
+                  <mat-form-field>
+                    <mat-label>Correo Electronico</mat-label>
+                    <input matInput formControlName="email" placeholder="Ingresa correo electronico">
+                    <mat-error *ngIf="secondFormGroup.get('email').invalid">
+                      Ingresa un email valido: ejemplo&#64;ejemplo.com
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput placeholder="Ingrese Contraseña" formControlName="password" type="password" required [matTooltip]="getPasswordError()"> 
+                  </mat-form-field>
+
+                  <p style="color: rgb(196, 196, 196); font-style: italic; font-size: 14px;">Ingrese por lo menos una contraseña que contenga una letra, un numero y un caracter especial***</p>
+                </div>
+                <div>
+                  <button mat-button matStepperPrevious><mat-icon>arrow_left_alt</mat-icon>Atras</button>
+                  <button mat-button matStepperNext [disabled]="secondFormGroup.invalid"><mat-icon>keyboard_arrow_right</mat-icon>Siguiente</button>
+                </div>
+              </form>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Verificación</ng-template>
+              <div style="display: flex; align-items: flex-start;">
+                <mat-form-field>
+                  <mat-label>Codigo</mat-label>
+                  <input matInput placeholder="Ingrese codigo de 5 Digitos" formControlName="password" type="password" required [matTooltip]="getPasswordError()">  
+                </mat-form-field>
+                <button class='timer-button' (click)="startTimer()" [disabled]="isButtonDisabled">{{ buttonText }}</button>
+              </div>
+              <p style="color: rgb(196, 196, 196); font-style: italic; font-size: 14px;">Se envio un codigo de 5 digitos a su dirección de correo electronico, verifique***</p>
+              <div>
+                <button mat-button matStepperPrevious>Atras</button>
+                <button mat-button (click)="stepper.reset()">Finalizar</button>
+              </div>
+            </mat-step>
+          </mat-stepper>
+    </section>
+</div>

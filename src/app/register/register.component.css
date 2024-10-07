@@ -1,0 +1,22 @@
+
+:host /deep/ .material-icons {
+    font-family: 'Material Icons' !important;
+  }
+  
+
+  ::ng-deep  .mat-horizontal-stepper-header-container {
+    margin: 2rem 0;
+  }
+
+  .timer-button{
+    padding: 1.3rem 2rem;
+    color: #fff;
+    background: #58b5c3;
+    border: none;
+    border-radius: 9px;
+    box-shadow: 6px 5px 6px 0px #004f4f;
+  }
+
+  .timer-button:hover{
+    background: #004f4f;
+  }
