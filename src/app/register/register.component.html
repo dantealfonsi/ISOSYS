@@ -77,12 +77,14 @@
                 </div>
               </form>
             </mat-step>
-            <mat-step>
+            <mat-step [stepControl]="thirdFormGroup">
+              <form [formGroup]="thirdFormGroup">
+
               <ng-template matStepLabel>Verificación</ng-template>
               <div style="display: flex; align-items: flex-start;">
                 <mat-form-field>
                   <mat-label>Codigos</mat-label>
-                  <input matInput placeholder="Ingrese codigo de 5 Digitos" formControlName="password" type="password" required [matTooltip]="getPasswordError()">  
+                  <input matInput placeholder="Ingrese codigo de 5 Digitos" formControlName="code" type="password" required [matTooltip]="getPasswordError()">  
                 </mat-form-field>
                 <button class='timer-button' (click)="startTimer()" [disabled]="isButtonDisabled">{{ buttonText }}</button>
               </div>
@@ -91,6 +93,7 @@
                 <button mat-button matStepperPrevious>Atras</button>
                 <button mat-button (click)="stepper.reset()">Finalizar</button>
               </div>
+              </form>
             </mat-step>
           </mat-stepper>
     </section>

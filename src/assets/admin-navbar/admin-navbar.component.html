@@ -1,0 +1,15 @@
+<nav class="navbar" *ngIf="isSmallScreen">
+  <button class="toggle-btn" (click)="toggleSidenav()">☰</button>
+</nav>
+<div class="sidenav" [class.active]="isToggled">
+  <ul>
+    <li *ngFor="let item of navItems" (click)="toggleSubmenu(item)">
+      <div class="menu-item">
+        <i [class]="item.iconClass"></i> {{ item.name }}
+        <i class="fas fa-chevron-down" *ngIf="item.subItems && item.subItems.length > 0"></i>
+      </div>
+      <ul [ngClass]="{'expanded': item.expanded}">
+        <li *ngFor="let subItem of item.subItems" style="border: 1px solid white;padding-left: 3rem;padding-top: 1rem;padding-bottom: 1rem;">{{ subItem.name }}</li>
+      </ul>
+    </li>
+  </ul>
