@@ -161,14 +161,13 @@ a{
 }
 
 .register{
-  color:#2e6a73;
+  color:var(--primary);
   cursor:pointer;
   font-size: 1rem;
 }
 
 .register:hover{
   text-decoration: underline;
-  font-weight: 800;
 }
 
 

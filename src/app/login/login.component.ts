@@ -18,6 +18,8 @@ import { MatListModule } from "@angular/material/list";
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from '../../auth.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -29,7 +31,9 @@ import { RouterOutlet } from '@angular/router';
     MatSelectModule,
     MatListModule,
     MatIconModule,    
-    RouterOutlet
+    RouterOutlet,
+    FormsModule
+    
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -48,10 +52,12 @@ goToRegister() {
   //constructor(private auth : AuthService) { }
 
 
-  constructor(private cookieService: CookieService,private router: Router) {};
+  constructor(private authService: AuthService, private router: Router) {}
 
 
   async OnUserLogin(){
+    alert(this.email +" / "+ this.password);
+
     if (this.email == ''){
       Swal.fire({
         title: 'Introduce un email!',
@@ -70,49 +76,22 @@ goToRegister() {
       return;
     }
 
-    const datos = {
-      login: "",
-      user: this.email,
-      password: this.password      
-  };
-
-  await fetch('http://localhost/jfb_rest_api/server.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-  .then(response => response.json())
-  .then(data => {
-
-    console.log(data);
-    if(data
-      .exists === false){
-      Swal.fire({
-        title: '¡Usuario Inexistente!',
-        text: 'Este usuario no existe.',
-        icon: 'warning'
-      });    
-      return;
-    }
-    if(data.pass === false){
-      Swal.fire({
-        title: 'Contraseña Incorrecta!',
-        text: 'Esta contraseña no corresponde al usuario.',
-        icon: 'error'
-      });    
-      return;
-    }else{
-      this.cookieService.set('user_id', data.user_id);
-      this.cookieService.set('isAdmin', data.isAdmin);
-      this.router.navigate(['/app/dashboard']);
-    }
-    // "Receta guardada correctamente"
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+    this.authService.login(this.email, this.password).subscribe({
+      next: (isAdmin) => {
+        if (isAdmin) {
+          this.router.navigate(['main']);
+        } else {
+          this.router.navigate(['home']);
+        }
+      },
+      error: (error) => {
+        console.error('Error during login', error);
+      },
+      complete: () => {
+        console.log('Login request complete');
+      }
+    });
   }
 
 }
+

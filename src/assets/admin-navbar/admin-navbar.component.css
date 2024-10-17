@@ -1,8 +1,15 @@
+
+
+:host /deep/ .material-icons {
+  font-family: 'Material Icons' !important;
+}
+
+
 /* Estilos generales */
 .sidenav {
   width: 20%;
   height: 100%;
-  background-color: #111;
+  background-color: #11111182;
   position: fixed;
   top: 0;
   left: 0;
@@ -44,9 +51,15 @@
 .sidenav .menu-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 2rem;
   padding: 1rem;
-  border: 1px solid white;
+  border: 1px solid #dd721e4d;
+}
+
+.sidenav .menu-item:hover {
+  background: rgba(216, 130, 60, 0.637);
+  transition: 0.2s ease-in ;
 }
 
 .sidenav li ul {
@@ -119,3 +132,15 @@
     display: none;
   }
 }
+
+/* Estilo para ocultar el sidenav en pantalla grande */
+@media (max-width: 1050px) {
+  .sidenav {
+    width: 100%;
+  }
+
+}
+
+
+
+

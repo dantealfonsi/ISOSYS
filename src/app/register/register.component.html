@@ -1,10 +1,10 @@
 <div style="display:flex;align-items: center;">
-    <section style="background: var(--blue);height: 100vh;width: -webkit-fill-available;max-width: 40%;">
+    <section style="background: var(--primary);height: 100vh;width: -webkit-fill-available;max-width: 40%;">
   
     </section>
     <section style="
     width: -webkit-fill-available;
-    background: #293331;
+    background: var(--light-surface);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -14,7 +14,7 @@
             {{!isLinear ? 'Ingresa tus datos para registrarte' : 'Ingresa tus datos para registrarte'}}
           </button> -->
                <button mat-raised-button  id="toggle-linear">Ingresa tus datos para registrarte</button>
-          <mat-stepper #stepper style="background: #293331;">
+          <mat-stepper #stepper style="background: var(--light-surface);">
             
             <mat-step [stepControl]="firstFormGroup" style="margin:2rem 0 ;" [completed]="firstFormGroup.valid">
 
@@ -26,7 +26,7 @@
                     <mat-form-field style="width: 100%;">
                         <mat-label>Escoge una fecha</mat-label>
                         <input matInput formControlName="birthday" [matDatepicker]="picker">
-                        <mat-hint style="color:#fff">DIA/MES/AÑO</mat-hint>
+                        <mat-hint>DIA/MES/AÑO</mat-hint>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
@@ -69,7 +69,7 @@
                     <input matInput placeholder="Ingrese Contraseña" formControlName="password" type="password" required [matTooltip]="getPasswordError()"> 
                   </mat-form-field>
 
-                  <p style="color: rgb(196, 196, 196); font-style: italic; font-size: 14px;">Ingrese por lo menos una contraseña que contenga una letra, un numero y un caracter especial***</p>
+                  <p style="font-style: italic; font-size: 14px;">Ingrese por lo menos una contraseña que contenga una letra, un numero y un caracter especial***</p>
                 </div>
                 <div>
                   <button mat-button matStepperPrevious><mat-icon>arrow_left_alt</mat-icon>Atras</button>
@@ -85,13 +85,14 @@
                 <mat-form-field>
                   <mat-label>Codigos</mat-label>
                   <input matInput placeholder="Ingrese codigo de 5 Digitos" formControlName="code" type="password" required [matTooltip]="getPasswordError()">  
+                  <mat-error *ngIf="thirdFormGroup.get('code').hasError('valueMismatch')">El valor no coincide</mat-error>
                 </mat-form-field>
                 <button class='timer-button' (click)="startTimer()" [disabled]="isButtonDisabled">{{ buttonText }}</button>
               </div>
-              <p style="color: rgb(196, 196, 196); font-style: italic; font-size: 14px;">Se envio un codigo de 5 digitos a su dirección de correo electronico, verifique***</p>
+              <p style="font-style: italic; font-size: 14px;">Se envio un codigo de 5 digitos a su dirección de correo electronico, verifique***</p>
               <div>
                 <button mat-button matStepperPrevious>Atras</button>
-                <button mat-button (click)="stepper.reset()">Finalizar</button>
+                <button mat-button (click)="register()"  [disabled]="thirdFormGroup.invalid">Finalizar</button>
               </div>
               </form>
             </mat-step>

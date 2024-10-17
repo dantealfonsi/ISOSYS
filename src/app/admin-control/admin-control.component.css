@@ -1,0 +1,33 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  .main-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+  
+  app-admin-navbar {
+    flex: 0 0 auto; /* Mantener el tamaño del navbar */
+  }
+  
+
+  .content {
+    flex: 1;
+    margin-left: 20%;    
+    padding: 20px; /* Espacio opcional alrededor del contenido */
+  }
+
+
+  @media (max-width: 1050px) {
+    .main-container {
+      flex-direction: column; /* Cambiar a columna para que estén uno debajo del otro */
+    }
+  
+    .content {
+      margin-left: 0; /* Eliminar el margen izquierdo */
+      width: 100%; /* Ocupar todo el ancho */
+    }
+  }
