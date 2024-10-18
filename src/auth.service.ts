@@ -18,22 +18,34 @@ export class AuthService {
       map(response => {
         console.log('Response:', response); // Verifica la respuesta completa
         if (response && response.token) {
-          this.setToken(response.token);
+          this.setToken(response.token,response.isAdmin);
           console.log('Token guardado:', response.token);
-          return response.isAdmin === true;
+        } else{
+          throw new Error('Usuario O Contraseña incorrectos'); // Fuerza un error si el token no está presente
         }
         return false;
       })
     );
   }
   
-  setToken(token: string): void {
+  setToken(token: string,isAdmin:string): void {
     console.log('Set token:', token); // Verifica que el token no sea nulo o indefinido
     localStorage.setItem('token', token);
+
+    if(isAdmin === '0'){
+      localStorage.setItem('user', isAdmin);
+    } else {
+      localStorage.setItem('admin', isAdmin);
+    }
   }
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  
+  getAdminToken(): string | null {
+    return localStorage.getItem('admin');
   }
 
   logout(): void {
@@ -42,10 +54,9 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    const token = this.getToken();
+    const token = this.getAdminToken();
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.isAdmin === 1;
+      return true;
     }
     return false;
   }

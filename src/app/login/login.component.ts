@@ -77,15 +77,19 @@ goToRegister() {
     }
 
     this.authService.login(this.email, this.password).subscribe({
-      next: (isAdmin) => {
-        if (isAdmin) {
+      next: () => {
+        if (this.authService.isAdmin()) {
           this.router.navigate(['main']);
         } else {
           this.router.navigate(['home']);
         }
       },
       error: (error) => {
-        console.error('Error during login', error);
+        Swal.fire({
+          title: 'Datos Incorrectos!',
+          text: error.message, // Asegúrate de mostrar el mensaje de error
+          icon: 'error'
+        });
       },
       complete: () => {
         console.log('Login request complete');
