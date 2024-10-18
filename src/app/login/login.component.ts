@@ -54,6 +54,14 @@ goToRegister() {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  ngOnInit(): void {
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['main']);
+    } else {
+      this.router.navigate(['home']);
+    }
+    
+  }
 
   async OnUserLogin(){
     alert(this.email +" / "+ this.password);

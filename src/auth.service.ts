@@ -28,34 +28,36 @@ export class AuthService {
     );
   }
   
-  setToken(token: string,isAdmin:string): void {
+  setToken(token: any,isAdmin:string): void {
     console.log('Set token:', token); // Verifica que el token no sea nulo o indefinido
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', JSON.stringify(token)); // con esto se guarda en el localstore un JSON
+    localStorage.setItem('user', isAdmin);
 
-    if(isAdmin === '0'){
+    /*if(isAdmin === '0'){
       localStorage.setItem('user', isAdmin);
     } else {
       localStorage.setItem('admin', isAdmin);
-    }
+    }*/
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  getToken(token:string): any | null {
+    return localStorage.getItem(token);
   }
 
   
   getAdminToken(): string | null {
-    return localStorage.getItem('admin');
+    return localStorage.getItem('user');
   }
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.router.navigate(['login']);
   }
 
   isAdmin(): boolean {
-    const token = this.getAdminToken();
-    if (token) {
+    const obj = JSON.parse(this.getToken('token'));
+    if (obj.isAdmin === '1') {
       return true;
     }
     return false;
