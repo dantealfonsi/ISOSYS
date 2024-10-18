@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../auth.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-user-navbar',
   standalone: true,
   imports: [
-    
+    CommonModule
   ],
   templateUrl: './user-navbar.component.html',
   styleUrl: './user-navbar.component.css'
@@ -16,7 +18,7 @@ import Swal from 'sweetalert2';
 export class UserNavbarComponent {
 
 
-  constructor(private cookieService: CookieService,private router: Router) {};
+  constructor(private cookieService: CookieService,private router: Router,public authService: AuthService) {};
 
     
   goToAboutUs() {

@@ -33,7 +33,7 @@ import { HttpClient } from '@angular/common/http';
     MatIconModule,    
     RouterOutlet,
     FormsModule
-    
+
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -55,12 +55,9 @@ goToRegister() {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    if (this.authService.isAdmin()) {
-      this.router.navigate(['main']);
-    } else {
+    if (this.authService.getToken('token')) {
       this.router.navigate(['home']);
     }
-    
   }
 
   async OnUserLogin(){

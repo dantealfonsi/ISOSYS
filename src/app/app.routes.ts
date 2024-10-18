@@ -7,6 +7,8 @@ import { TermsComponent } from './terms/terms.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { AdminControlComponent } from './admin-control/admin-control.component';
 import { UnitComponent } from './unit/unit.component';
+import { AuthGuard } from '../auth.guard';
+
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
     {path: 'login',           component: LoginComponent},

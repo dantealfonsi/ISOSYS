@@ -782,24 +782,6 @@ input::-ms-input-placeholder {
 }
 
 
-/*video section css*/
-
-.video{
-    background: url(../images/videobg.jpg) no-repeat top center;
-    background-size:cover;
-}
-.video .main_video{
-    padding: 220px 0px 160px 0px;
-    overflow: hidden;
-}
-.video .icon{}
-.video .icon h3{
-    color:#fff;
-    margin-top:30px;
-    margin-bottom: 0px;
-}
-
-
 /*about section css*/
 .about{}
 .about .main_about_area{}

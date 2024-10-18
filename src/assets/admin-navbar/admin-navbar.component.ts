@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-admin-navbar',
@@ -17,6 +18,9 @@ import { RouterModule, Routes } from '@angular/router';
 export class AdminNavbarComponent {
   isToggled = false;
   isSmallScreen = window.innerWidth <= 1050;
+
+  constructor(private authService: AuthService) {}
+
 
   navItems = [
     {

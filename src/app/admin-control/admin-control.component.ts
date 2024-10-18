@@ -28,9 +28,12 @@ export class AdminControlComponent {
 
 
    ngOnInit(): void {
- 
 
+    if (!this.authService.isAdmin()) {
+      this.router.navigate(['home']);
+    } 
     
+
   }
 
   
