@@ -1,0 +1,75 @@
+<div class="section-outer-container"> 
+    <div class="section-container">
+      <mat-icon>keyboard_backspace</mat-icon>
+      <mat-icon class="title-icon">school</mat-icon>
+        <div style="display: flex;flex-direction: column;"><h1 class="title">Unidad {{unitData.unit_order}}</h1>
+          <p style="margin:0;">{{firstLetterUpperCase(unitData.name)}}</p></div>
+        </div>
+  
+    <img
+      style="width: 30%; border-radius: 2rem; height: 6rem"
+      src="../../assets/img/students.png"
+    />
+  </div>
+
+          <!--add-student content -->  
+
+          <section class="optionsContainer">
+            <div>
+              <h4 style='margin-bottom:0;'>Dia:</h4>
+              <mat-form-field class="example-full-width">
+                <mat-label>Seleccione el Dia</mat-label>
+                <mat-select #day value="1" (valueChange)="changeDay($event)">
+                  <mat-option value=1>Lunes</mat-option>
+                  <mat-option value=2>Martes</mat-option>
+                  <mat-option value=3>Miércoles</mat-option>
+                  <mat-option value=4>Jueves</mat-option>
+                  <mat-option value=5>Viernes</mat-option>
+                  <mat-option value=6>Sábado</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button (click)="generatePDF()">PDF</button>
+            </div>
+          
+            <div>
+              <h4 style='margin-bottom:0;'>Turno:</h4>
+              <toggle-switch (toggleChange)="onToggleChange()"></toggle-switch>
+
+            </div>
+          </section>
+
+          <form [formGroup]="scheduleForm">
+            <div formArrayName="timeBlocks">
+              <div *ngFor="let block of timeBlocks.controls | slice:minRange:maxRange+1;  let i = index" [formGroupName]="i+minRange" class="timeThread">
+                <div>
+                  <mat-form-field>
+                    <input type="text" matInput formControlName="subject" [matAutocomplete]="auto" (input)="addSubjectToRoutine(i+minRange)">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addSubjectToRoutine(i+minRange)">
+                      <mat-option *ngFor="let subject of filteredSubjects | async" [value]="subject.name" [attr.data-id]="subject.id" >{{ subject.name }}</mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="timeBlocks.at(i).get('subject').hasError('notFound')">Esta materia no existe.</mat-error>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field>
+                    <mat-label>Profesor</mat-label>
+                    <input type="text" matInput formControlName="teacher" [matAutocomplete]="teacherAuto" (input)="addTeacherToRoutine(i+minRange)">
+                    <mat-autocomplete #teacherAuto="matAutocomplete" (optionSelected)="addTeacherToRoutine(i+minRange)">
+                      <mat-option *ngFor="let teacher of filteredTeacher | async" [value]="teacher.name + ' ' + teacher.last_name" [attr.data-id]="teacher.id">{{ teacher.name + ' ' + teacher.last_name }}</mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="timeBlocks.at(i).get('teacher').hasError('notFound')">Este nombre no pertenece a un profesor</mat-error>
+                  </mat-form-field>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                  <mat-form-field style="width: 25%;" class="example-full-width">
+                    <mat-label>Hora de Inicio</mat-label>
+                    <input type="text" matInput style='text-transform: capitalize;' formControlName="start">
+                  </mat-form-field>
+                  <mat-form-field style="width: 25%;" class="example-full-width">
+                    <mat-label>Hora de Fin</mat-label>
+                    <input type="text" style='text-transform: capitalize;' matInput formControlName="end">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </form>

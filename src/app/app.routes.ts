@@ -8,7 +8,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { AdminControlComponent } from './admin-control/admin-control.component';
 import { UnitComponent } from './unit/unit.component';
 import { AuthGuard } from '../auth.guard';
-
+import { ManageLessonsComponent } from './manage-lessons/manage-lessons.component';
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
     {path: 'login',           component: LoginComponent},
@@ -20,6 +20,7 @@ export const routes: Routes = [
     {path: 'main',     component: AdminControlComponent, 
         children: [
           {path: 'unit',      component: UnitComponent},
+          {path: 'lessons/:id',      component: ManageLessonsComponent},
         ],
       },
 ];

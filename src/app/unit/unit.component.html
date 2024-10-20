@@ -26,8 +26,161 @@
                 <mat-icon>cloud_download</mat-icon>
                 Exportar
             </button>
+            <button (click)="openDialog()" aria-label="add" class="add">
+                <mat-icon>add</mat-icon>
+                Nuevo
+              </button>
         </div>
     </div>
 
+
+    
+  <div
+  class="mat-elevation-z8"
+  style="
+    border-radius: 1.5rem;
+    background-color: #fff;
+    overflow: auto;
+    width: 100%;
+  "
+>
+  <table mat-table style="background: none" [dataSource]="unitListMat" matSort id="content" #content>
+
+
+    
+    <ng-container matColumnDef="order">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">NUMERO</th>
+      <td mat-cell *matCellDef="let item" > Unidad {{ capitalizeWords(item.order) }} </td>
+    </ng-container>
+
+          
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"> TEMA</th>
+      <td mat-cell *matCellDef="let item" > 
+        {{ capitalizeWords(item.name) }}
+     </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="Acciones" >
+      <th mat-header-cell *matHeaderCellDef style="font-weight:bolder;"> ACCIONES </th>
+      <td mat-cell *matCellDef="let item">  
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button (click)="onEditList(item.id)" mat-menu-item>
+            <mat-icon >✎</mat-icon>
+            <span>Editar</span>
+          </button>
+          <button (click)="goToLessons(item.id)" mat-menu-item>
+            <mat-icon >✎</mat-icon>
+            <span>Lecciones</span>
+          </button>
+          <button  (click)="onDropList(item.id)" mat-menu-item>
+            <mat-icon>✂</mat-icon>
+            <span>Desabilitar</span>
+          </button>
+        </mat-menu>      
+      </td>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="['order','name','Acciones']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['order','name','Acciones']"></tr>
+  </table>
+  <mat-paginator style="background: none"  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons >
+  </mat-paginator>
+</div>
+
+
+
+<section *ngIf="showdialog" class="dialog-background">
+
+  <div class="dialog">
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Unidad</h1>
+      <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
+    </div>
+    
+
+    <form [formGroup]="addUnitFormGroup">
+
+      <p>Numero la unidad:</p>
+
+      <div style="display: flex; align-items: center;">
+        <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Unidad: </mat-label>
+        <input type="number"  matInput [disabled]="true" formControlName="order" >
+    </mat-form-field>
+
+    </div>
+
+    <p>Nombre de la unidad:</p>
+
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Nombre de la Unidad</mat-label>
+        <input type="text"  matInput formControlName="name" >
+      </mat-form-field>
+    
+    </form>
+
+
+      <div class="dialog-button-container">
+        <button class="add" (click)="addUnit()"> 
+          <mat-icon>add_circle_outline</mat-icon>
+          Crear Unidad</button>
+
+        <button class="cancel" (click)="hideDialog()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  
+<!------------------------- EDIT ------------------------>
+
+<section *ngIf="showeditdialog" class="dialog-background">
+  <div class="dialog">
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Materia</h1>
+      <mat-icon class="close-icon"  (click)="hideEditDialog()"
+        >backspace</mat-icon
+      >
+    </div>
+
+    <form [formGroup]="addUnitFormGroup">
+      
+      <p>Numero de la unidad:</p>
+
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+        <mat-label>Numero de la unidad</mat-label>
+        <input type="number" matInput formControlName="order"> 
+      </mat-form-field>
+    
+      <p>Nombre de la unidad:</p>
+
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+            <mat-label>Nombre de la Unidad</mat-label>
+            <input type="text"  matInput formControlName="name" >
+          </mat-form-field>
+
+      </div>
+
+    </form>
+
+    <div class="dialog-button-container">
+      <button class="export" (click)="editUnit()"> 
+        <mat-icon>build</mat-icon> 
+        Editar Materia</button>
+
+      <button class="cancel" (click)="hideEditDialog()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+</section>
 
 

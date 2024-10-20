@@ -112,7 +112,7 @@ body {
 
 .dialog-background{
   width: 100%;
-  height: calc(99vh - 64px);
+  height: 100vh;
   background-color: #9b9b9b61;
   position: absolute;
   top: 0;

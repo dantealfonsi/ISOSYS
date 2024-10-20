@@ -4,13 +4,16 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthService } from '../../auth.service';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-navbar',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    MatIconModule
   ],
   templateUrl: './admin-navbar.component.html',
   styleUrl: './admin-navbar.component.css'
@@ -18,8 +21,10 @@ import { AuthService } from '../../auth.service';
 export class AdminNavbarComponent {
   isToggled = false;
   isSmallScreen = window.innerWidth <= 1050;
+  toggleIcon: string  = 'keyboard_arrow_down';
+  toggleBackground: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,private router: Router) {}
 
 
   navItems = [
@@ -35,7 +40,7 @@ export class AdminNavbarComponent {
       expanded: false,
     },
     {
-      iconClass: 'fas fa-envelope',
+      iconClass: 'card_membership',
       name: 'Usuarios',
       subItems: [{ name: 'Administradores' }, { name: 'Usuarios' }],
       expanded: false
@@ -53,6 +58,19 @@ export class AdminNavbarComponent {
 
   toggleSubmenu(item: any) {
     item.expanded = !item.expanded;
+
+    if (item.expanded) {
+      this.toggleIcon = 'keyboard_arrow_up';
+      
+    } else{
+      this.toggleIcon = 'keyboard_arrow_down';
+    }
+
   }
+
+  isActive(route: string | undefined): boolean {
+    return this.router.url === route;
+  }
+
 }
 

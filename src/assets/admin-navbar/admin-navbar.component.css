@@ -93,6 +93,28 @@
   align-items: center;
 }
 
+.menu-item a {
+  color:white !important;
+}
+
+li ul li{
+  color: #fff;
+  border: 1px solid #dd721e4d;
+  padding-left: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: #11111182 !important;
+}
+
+
+.expanded-li {
+  background-color: rgba(216, 130, 60, 0.637); /* Cambia esto por el color que prefieras */
+}
+
+.expanded-li ul li:hover{
+  background-color:rgba(209, 112, 32, 0.76) !important;
+}
+
 .navbar i {
   margin-right: 5px;
 }

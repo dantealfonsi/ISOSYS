@@ -3,13 +3,14 @@
 </nav>
 <div class="sidenav" [class.active]="isToggled">
   <ul>
-    <li *ngFor="let item of navItems" (click)="toggleSubmenu(item)">
+    <li *ngFor="let item of navItems" [ngClass]="{'expanded-li': item.expanded}" (click)="toggleSubmenu(item)">
       <div class="menu-item" >
-        <i [class]="item.iconClass"></i><a [routerLink]="item.route">{{ item.name }}</a> 
-        <i class="fas fa-chevron-down" *ngIf="item.subItems && item.subItems.length > 0"></i>
-      </div>
-      <ul [ngClass]="{'expanded': item.expanded}">
-        <li *ngFor="let subItem of item.subItems" style="border: 1px solid #dd721e4d;padding-left: 3rem;padding-top: 1rem;padding-bottom: 1rem;">{{ subItem.name }}</li>
+        <mat-icon style="color: white;">{{item.iconClass}}</mat-icon><a [routerLink]="item.route">{{ item.name }}</a> 
+      <mat-icon *ngIf="item.subItems && item.subItems.length > 0" style="color: white;">{{toggleIcon}}</mat-icon>
+    </div>
+      <ul [ngClass]="{'expanded': item.expanded}" style="background: rgba(255, 255, 255, 0.719);">
+        <li *ngFor="let subItem of item.subItems" >{{ subItem.name }}</li>
       </ul>
+      <div style="background-color: black;" *ngIf="isActive(item.route?? '')">a</div>
     </li>
   </ul>
