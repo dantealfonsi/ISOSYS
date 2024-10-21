@@ -1,9 +1,9 @@
 <div class="section-outer-container"> 
     <div class="section-container">
       <mat-icon>keyboard_backspace</mat-icon>
-      <mat-icon class="title-icon">school</mat-icon>
-        <div style="display: flex;flex-direction: column;"><h1 class="title">Unidad {{unitData.unit_order}}</h1>
-          <p style="margin:0;">{{firstLetterUpperCase(unitData.name)}}</p></div>
+      <mat-icon class="title-icon" style="display:flex;">school</mat-icon>
+        <div style="display: flex;flex-direction: column;"><h1 class="title">Unidad {{unitData?.unit_order}}</h1>
+          <p style="margin:0;">{{unitData?.name}}</p></div>
         </div>
   
     <img
@@ -14,62 +14,128 @@
 
           <!--add-student content -->  
 
-          <section class="optionsContainer">
-            <div>
-              <h4 style='margin-bottom:0;'>Dia:</h4>
-              <mat-form-field class="example-full-width">
-                <mat-label>Seleccione el Dia</mat-label>
-                <mat-select #day value="1" (valueChange)="changeDay($event)">
-                  <mat-option value=1>Lunes</mat-option>
-                  <mat-option value=2>Martes</mat-option>
-                  <mat-option value=3>Miércoles</mat-option>
-                  <mat-option value=4>Jueves</mat-option>
-                  <mat-option value=5>Viernes</mat-option>
-                  <mat-option value=6>Sábado</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <button (click)="generatePDF()">PDF</button>
-            </div>
-          
-            <div>
-              <h4 style='margin-bottom:0;'>Turno:</h4>
-              <toggle-switch (toggleChange)="onToggleChange()"></toggle-switch>
 
-            </div>
-          </section>
+            <div>
+             <div class="timeThread">
+                <div style='padding: 2rem 0rem;'>
+                    <h1>Nueva Lección </h1>
+                 </div>
+                <div class='green-part'>
+                    <h1 style="color:white;font-size: 6rem;">+</h1>
+                </div>
 
-          <form [formGroup]="scheduleForm">
-            <div formArrayName="timeBlocks">
-              <div *ngFor="let block of timeBlocks.controls | slice:minRange:maxRange+1;  let i = index" [formGroupName]="i+minRange" class="timeThread">
-                <div>
-                  <mat-form-field>
-                    <input type="text" matInput formControlName="subject" [matAutocomplete]="auto" (input)="addSubjectToRoutine(i+minRange)">
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addSubjectToRoutine(i+minRange)">
-                      <mat-option *ngFor="let subject of filteredSubjects | async" [value]="subject.name" [attr.data-id]="subject.id" >{{ subject.name }}</mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="timeBlocks.at(i).get('subject').hasError('notFound')">Esta materia no existe.</mat-error>
-                  </mat-form-field>
-                </div>
-                <div>
-                  <mat-form-field>
-                    <mat-label>Profesor</mat-label>
-                    <input type="text" matInput formControlName="teacher" [matAutocomplete]="teacherAuto" (input)="addTeacherToRoutine(i+minRange)">
-                    <mat-autocomplete #teacherAuto="matAutocomplete" (optionSelected)="addTeacherToRoutine(i+minRange)">
-                      <mat-option *ngFor="let teacher of filteredTeacher | async" [value]="teacher.name + ' ' + teacher.last_name" [attr.data-id]="teacher.id">{{ teacher.name + ' ' + teacher.last_name }}</mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="timeBlocks.at(i).get('teacher').hasError('notFound')">Este nombre no pertenece a un profesor</mat-error>
-                  </mat-form-field>
-                </div>
-                <div style="display: flex; gap: 1rem;">
-                  <mat-form-field style="width: 25%;" class="example-full-width">
-                    <mat-label>Hora de Inicio</mat-label>
-                    <input type="text" matInput style='text-transform: capitalize;' formControlName="start">
-                  </mat-form-field>
-                  <mat-form-field style="width: 25%;" class="example-full-width">
-                    <mat-label>Hora de Fin</mat-label>
-                    <input type="text" style='text-transform: capitalize;' matInput formControlName="end">
-                  </mat-form-field>
-                </div>
               </div>
             </div>
-          </form>
+
+
+
+            <div *ngFor="let lesson of lessonData">
+              <div class="timeThread">
+                <div style='padding: 2rem 0rem;'>
+                  <h1>Lección {{lesson.lesson_order}}: {{lesson.title}}</h1>
+                </div>
+                <div>
+                  <button> BUTTON ONE</button>
+                  <button> BUTTON TWO</button>
+                </div>
+              </div>
+            
+ 
+
+<!-- ADD LESSON FORM GROUP-->        
+
+
+
+<section *ngIf="showdialog" class="dialog-background">
+
+  <div class="dialog">
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Sección</h1>
+      <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
+    </div>
+
+    <form [formGroup]="AddLessonFormGroup">
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Lección Numero</mat-label>
+        <input type="number" style='text-transform: capitalize;' matInput formControlName="lesson_order" >
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
+        <mat-hint>¡Escoge un titulo!</mat-hint>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Url del Video</mat-label>
+        <input type="text" matInput formControlName="url">    
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill" *ngIf="showdialog">
+        <mat-label>Summary</mat-label>
+          <textarea matInput formControlName="summary"></textarea>
+    </mat-form-field>
+      <br>      
+    </form>
+
+
+      <div class="dialog-button-container">
+        <button class="add" (click)="addLesson()"> 
+          <mat-icon>add_circle_outline</mat-icon>
+          Crear Sección</button>
+
+        <button class="cancel" (click)="hideDialog()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  
+<!------------------------- EDIT ------------------------>
+
+<section *ngIf="showeditdialog" class="dialog-background">
+  <div class="dialog">
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Sección</h1>
+      <mat-icon class="close-icon"  (click)="hideEditDialog()"
+        >backspace</mat-icon
+      >
+    </div>
+
+    <form [formGroup]="AddLessonFormGroup">
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Lección Numero</mat-label>
+        <input type="text" style='text-transform: capitalize;' matInput formControlName="lesson_order">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Titulo de la Lecciòn</mat-label>
+        <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showdialog">
+        <mat-label>Url del Video</mat-label>
+        <input type="text" matInput formControlName="url">    
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill" *ngIf="showdialog">
+          <mat-label>Summary</mat-label>
+            <textarea matInput formControlName="summary"></textarea>
+      </mat-form-field>
+      <br>
+      
+    </form>
+
+    <div class="dialog-button-container">
+      <button class="export" (click)="editLesson()"> 
+        <mat-icon>build</mat-icon> 
+        Editar Sección</button>
+
+      <button class="cancel" (click)="hideEditDialog()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+</section>
