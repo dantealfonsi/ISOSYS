@@ -328,6 +328,18 @@ onUpload() {
     });
   });
 }
+
+
+onDeleteFile(fileName: string) {
+  const formData = new FormData();
+  formData.append('fileName', fileName); // Añade el nombre del archivo a borrar
+  formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id); // Añade lesson_id
+
+  this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
+    console.log('File deleted', response);
+    this.fileList = this.fileList.filter((file: { name: string; }) => file.name !== fileName); // Actualiza la lista de archivos en el cliente
+  });
+}
 /**********************************END QUERYS*************************************** */
 
 

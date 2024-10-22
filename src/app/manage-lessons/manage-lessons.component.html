@@ -164,7 +164,7 @@
     </div>
 
     <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data">
-      <input type="file" (change)="onFileSelected($event)" multiple>
+      <input style='padding: 0 0 0rem;border: 1px solid #da642e;' type="file" (change)="onFileSelected($event)" multiple>
       <button type="button" (click)="onUpload()">Upload</button>
     </form>
 
@@ -172,7 +172,7 @@
 
       <ul>
         <li *ngFor="let file of fileList">
-          <span>{{file.name}}</span> <button>Borrar</button>
+          <span>{{file.name}}</span> <button (click)="onDeleteFile(file.name)">Borrar</button>
         </li>
       </ul>
 
