@@ -16,7 +16,7 @@
 
 
             <div>
-             <div class="timeThread">
+             <div class="timeThread" (click)="openDialog()">
                 <div style='padding: 2rem 0rem;'>
                     <h1>Nueva Lección </h1>
                  </div>
@@ -34,13 +34,25 @@
                 <div style='padding: 2rem 0rem;'>
                   <h1>Lección {{lesson.lesson_order}}: {{lesson.title}}</h1>
                 </div>
-                <div>
-                  <button> BUTTON ONE</button>
-                  <button> BUTTON TWO</button>
+                <div style='display: flex;gap: 1.5rem;'>
+                  <button class="export" (click)="onFileList(lesson.id)"><mat-icon>attach_file</mat-icon>Guias</button>
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button (click)="onEditList(lesson.id)" mat-menu-item>
+                      <mat-icon >✎</mat-icon>
+                      <span>Editar</span>
+                    </button>
+                    <button mat-menu-item>
+                      <mat-icon>✂</mat-icon>
+                      <span>Desabilitar</span>
+                    </button>
+                  </mat-menu>      
+
                 </div>
               </div>
-            
- 
+            </div>
 
 <!-- ADD LESSON FORM GROUP-->        
 
@@ -104,22 +116,22 @@
     </div>
 
     <form [formGroup]="AddLessonFormGroup">
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
         <mat-label>Lección Numero</mat-label>
         <input type="text" style='text-transform: capitalize;' matInput formControlName="lesson_order">
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
         <mat-label>Titulo de la Lecciòn</mat-label>
         <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
         <mat-label>Url del Video</mat-label>
         <input type="text" matInput formControlName="url">    
       </mat-form-field>
       <br>
-      <mat-form-field appearance="fill" *ngIf="showdialog">
+      <mat-form-field appearance="fill" *ngIf="showeditdialog">
           <mat-label>Summary</mat-label>
             <textarea matInput formControlName="summary"></textarea>
       </mat-form-field>
@@ -138,4 +150,33 @@
     </div>
   </div>
 
+</section>
+
+
+  
+<!------------------------- FILE MANAGER ------------------------>
+
+<section *ngIf="showFilesdialog" class="dialog-background">
+  <div class="dialog">
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">build</mat-icon> Añadir Archivos</h1>
+      <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
+    </div>
+
+    <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data">
+      <input type="file" (change)="onFileSelected($event)" multiple>
+      <button type="button" (click)="onUpload()">Upload</button>
+    </form>
+
+    <div class="files-container">
+
+      <ul>
+        <li *ngFor="let file of fileList">
+          <span>{{file.name}}</span> <button>Borrar</button>
+        </li>
+      </ul>
+
+    </div>
+    
+  </div>
 </section>

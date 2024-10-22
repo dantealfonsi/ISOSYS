@@ -24,6 +24,8 @@ import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import { MatCardModule } from '@angular/material/card';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http'; // Importa HttpClientModule
 
 @Component({
   selector: 'app-manage-lessons',
@@ -52,7 +54,8 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    MatCardModule
+    MatCardModule,
+    HttpClientModule
   ],
   templateUrl: './manage-lessons.component.html',
   styleUrl: './manage-lessons.component.css'
@@ -61,17 +64,24 @@ export class ManageLessonsComponent {
   itemId!: string | null;
   unitData: any;
   lessonData: any;
+  fileList: any;
+
   AddLessonFormGroup: any;
+  AddFilesFormGroup: any;
   showdialog: boolean = false;
   showeditdialog: boolean = false;
-  dataSource: any;
+  showFilesdialog: boolean = false;
 
-  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,) {}
+  dataSource: any;
+  selectedFiles!: FileList;
+
+  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient) {}
 
 
 
   initializeFormGroups() {
     this.AddLessonFormGroup = this._formBuilder.group({
+      id: [''],
       unitId: [this.itemId = this.route.snapshot.paramMap.get('id')],
       title: ["", Validators.required],
       content: [''],
@@ -79,6 +89,12 @@ export class ManageLessonsComponent {
       summary: ["",Validators.required],
       url: ["",Validators.required],
     });
+
+    this.AddFilesFormGroup = this._formBuilder.group({
+      lesson_id: [""],
+      file: this._formBuilder.array([], Validators.required)
+    });
+
   }
 
 ngOnInit(): void {
@@ -130,6 +146,22 @@ async this_lessons_recover() {
   try {
     const response = await fetch(
       "http://localhost/iso2sys_rest_api/server.php?this_lessons_list=&id="+this.itemId,
+    );
+    if (!response.ok) {
+      throw new Error("Error en la solicitud: " + response.status);
+    }
+    const data = await response.json();
+    console.log("Datos recibidos:", data);
+    return data; // Devuelve los datos
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
+
+async this_lessons_files_recover(id:string) {
+  try {
+    const response = await fetch(
+      "http://localhost/iso2sys_rest_api/server.php?this_lessons_files=&id="+id,
     );
     if (!response.ok) {
       throw new Error("Error en la solicitud: " + response.status);
@@ -200,7 +232,7 @@ onEditList(id: string) {
   const selectedLesson = this.lessonData.find((p: { id: string; }) => p.id === selectedId);
   if (selectedLesson) {
     this.AddLessonFormGroup.patchValue({
-      order: selectedLesson.order,
+      id: id,
       title: selectedLesson.title,
       content: selectedLesson.content,
       lesson_order: selectedLesson.lesson_order,
@@ -209,6 +241,23 @@ onEditList(id: string) {
     });
   }
 }  
+
+
+onFileList(id: string) {
+  this.this_lessons_files_recover(id).then((files: any[]) => {
+    this.fileList = files;
+    this.openFilesDialog();
+    const selectedId = id;
+    const selectedLesson = this.lessonData.find((p: { id: string; }) => p.id === selectedId);
+    if (selectedLesson) {
+      this.AddFilesFormGroup.patchValue({
+        lesson_id: id,
+      });
+    }
+  }).catch(error => {
+    console.error('Error recuperando los archivos de la lección:', error);
+  });
+}
 
 editLesson(){
   const datos = {
@@ -253,37 +302,31 @@ editLesson(){
   }    
 }
 
-get guias() {
-  return this.AddLessonFormGroup.get('guias') as FormArray;
-}
 
-addGuia(file: File) {
-  const url = URL.createObjectURL(file);
-  this.guias.push(this._formBuilder.group({
-    name: file.name,
-    url,
-    type: this.getFileType(file)
-  }));
-}
 
 onFileSelected(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    this.addGuia(file);
-  }
+  this.selectedFiles = event.target.files;
 }
 
-getFileType(file: any): string {
-  const extension = file.name.split('.').pop();
-  if (extension === 'pdf') {
-    return 'pdf';
-  } else if (extension === 'doc' || extension === 'docx') {
-    return 'word';
-  } else if (extension === 'xls' || extension === 'xlsx') {
-    return 'excel';
-  } else {
-    return 'other';
+onUpload() {
+  const formData = new FormData();
+  for (let i = 0; i < this.selectedFiles.length; i++) {
+    formData.append('files[]', this.selectedFiles[i], this.selectedFiles[i].name);
+    this.AddFilesFormGroup.get('file').value.push(this.selectedFiles[i].name);
   }
+  formData.append('addFile', 'true'); // Añade este campo
+  formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id); // Añade este campo
+
+  console.log('epale mano' + this.AddFilesFormGroup.value.lesson_id); // Verifica los valores en el FormGroup
+
+  this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
+    console.log('Upload successful', response);
+    this.this_lessons_files_recover(this.AddFilesFormGroup.value.lesson_id).then((files: any[]) => {
+      this.fileList = files; // Asigna el resultado una vez que la Promise se resuelve
+    }).catch(error => {
+      console.error('Error recuperando los archivos de la lección:', error);
+    });
+  });
 }
 /**********************************END QUERYS*************************************** */
 
@@ -314,6 +357,13 @@ openEditDialog() {
   this.showeditdialog = true;
 }
 
+openFilesDialog() {
+  this.showFilesdialog = true;
+}
+
+hideFilesDialog() {
+  this.showFilesdialog = false;
+}
 
 hideDialog() {
   this.showdialog = false;
