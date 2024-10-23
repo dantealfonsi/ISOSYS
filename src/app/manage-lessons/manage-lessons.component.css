@@ -116,3 +116,12 @@
     color: white;
     background-color:#e66354;
   }
+
+
+  .back-icon{
+    font-size: 2rem;
+  }
+
+  .back-icon:hover{
+    transform: scale(1.2);
+  }

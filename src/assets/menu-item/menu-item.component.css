@@ -1,0 +1,14 @@
+*{
+    transition: all 500ms ease-in-out;
+    }
+    
+    .selected-menu-item{
+        border-left: 5px solid;
+        border-left-color: rgb(79, 79, 182);
+        transition: 0ms !important;
+        background: #f1f1f1 !important;
+    }
+
+    .intended{
+        --mat-list-list-item-leading-icon-start-space:48px;
+    }

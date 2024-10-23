@@ -1,0 +1,128 @@
+<mat-toolbar class="mat-elevation-z3" style='background-color:#39345C; justify-content: space-between;'>
+    <button mat-icon-button (click)="collapsed.set(!collapsed())">
+        <mat-icon style="color: #fff;">menu</mat-icon>
+    </button>
+    <a (click)="logout()" 
+    style="color: white;cursor: pointer;font-size: 1rem;display: flex;align-items: center;gap: .5rem;" 
+    class="logout">	
+      <mat-icon>low_priority</mat-icon> 
+     <span> Cerrar Sesión </span>
+    </a>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
+        <custom-sidenav [collapsed]="collapsed()"></custom-sidenav>
+    </mat-sidenav>
+    
+    <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
+      <router-outlet></router-outlet>
+      
+<button class="info-button" (click)="openToggle()">i</button>
+    </mat-sidenav-content>
+</mat-sidenav-container> 
+
+
+
+<div class='toggleUp' id='toggleUp'  *ngIf="show" [@enterAnimation]> 
+  <button class='footer-btn' id='f-bnt' (click)="closeToggle()"><mat-icon>arrow_drop_down_circle</mat-icon></button> 
+
+  <footer class="pie-pagina" id='toggleUp'>
+      <div class="grupo-1">
+          <div class="box">
+              <h2>Descargar Manual de Usuario</h2>
+              <div class="red-social">
+              <a type="submit" href="manual_usuario.pdf" download="manual_usuario.pdf"> Descargar </a>
+              </div>
+          </div>
+      </div>
+      <div class="grupo-2">
+          <small>&copy; 2024 <b>UPTP "LUIS MARIANO RIVERA"</b> - Todos los Derechos Reservados.</small>
+      </div>
+  </footer>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<p>sidenav works!</p>
+ Toolbar
+<div class="toolbar" role="banner">
+    <span>Angular Dashboard with Material</span>
+    <div class="spacer"></div>
+    <div class="links">
+      <a
+        aria-label="Cube on github"
+        target="_blank"
+        rel="noopener"
+        href="https://github.com/cube-js/cube.js/tree/master/examples/angular-dashboard-with-material-ui"
+        title="Cube on GitHub"
+      >GitHub</a>
+      <a
+        aria-label="Cube on Slack"
+        target="_blank"
+        rel="noopener"
+        href="https://slack.cube.dev/"
+        title="Cube on Slack"
+      >Slack</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-auto bg-light sticky-top">
+        <div class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top">
+            <a routerLink="/Dashboard" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
+              <img src="../assets/img/favicon-32x32.png" alt="" srcset="">
+            </a>
+            <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
+                <li class="nav-item">
+                    <a routerLink="/dashboard" class="nav-link py-3 px-3 bg-light" style="color: grey;" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                        <i class="bi-house fs-3"></i>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/addStudent" class="nav-link py-3 px-3 text-bg-primary" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Dashboard">
+                      <i class="bi bi-person-plus fs-3"></i>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/actionMark" class="nav-link py-3 px-3 bg-light" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Orders" data-bs-original-title="addMark">
+                      <i class="bi bi-cloud-plus fs-3"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link py-3 px-3 bg-light" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Products">
+                      <i class="bi bi-book fs-3"></i>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/studentList" class="nav-link py-3 px-3 bg-light" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Customers">
+                        <i class="bi-people fs-3"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle bg-light" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="https://i.imgur.com/hczKIze.jpg" width="40" class="rounded-circle">
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#" >Log out</a>
+                  </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+-->

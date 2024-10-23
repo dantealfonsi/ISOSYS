@@ -21,6 +21,227 @@ html, body {
   }
 
 
+  
+:host /deep/ .material-icons {
+  font-family: 'Material Icons' !important;
+}
+
+mat-toolbar{
+position: relative;
+z-index: 5;
+}
+
+mat-toolbar a:hover{
+  transform: scale(1.1);
+}
+
+mat-toolbar a span:hover{
+  color: rgb(247, 213, 149);
+}
+
+.content{
+  padding: 24px;
+  background-color: rgb(237, 239, 248);
+}
+
+mat-sidenav-container{
+  height: calc(100vh - 64px);
+}
+
+mat-sidenav, mat-sidenav-content{
+  transition: all 500ms;
+}
+
+.info-button{
+position: fixed;
+bottom: 2rem;
+right: 1rem;
+border-radius: 50%;
+padding: 1rem 1.5rem;
+background: linear-gradient(45deg, #5e44e9, #2544e3);;
+border: none;
+z-index: 10000000;
+color: white; font-size: 3rem; font-weight: bolder;
+box-shadow: -4px -3px 11px 7px lightgray;
+}
+
+.info-button:hover{
+  background: linear-gradient(45deg, #5e44e9, #2544e3);;
+  transform: scale(1.2);
+  transition: ease-in 0.2s;
+}
+
+
+/*******FOOTER************/
+
+
+.toggleUp{
+animation: 1s ease-in;
+z-index: 10000;
+position: absolute;
+top: 0;
+width: 100%;
+}
+
+.pie-pagina{
+width: 100%;
+background:linear-gradient(3deg, rgb(45 45 45) 13%, rgb(18 18 18) 100%);
+position:relative;
+z-index: 100000000;
+top: 0;
+}
+
+.footer-btn{
+position: fixed;
+right: 1rem;
+top: 1rem;
+}
+
+.Devs{
+height: auto;
+background: black;
+display: flex;
+padding-top: 3rem;
+margin: 0;
+align-content: center;
+justify-content: space-evenly;
+align-items: center;
+flex-direction: row;
+flex-wrap: wrap;
+background:#1c1c1c;
+}
+
+.pie-pagina .grupo-1{
+width: 100%;
+max-width: 1200px;
+margin: auto;
+display:grid;
+grid-template-columns: repeat(1, 1fr);
+grid-gap:50px;
+padding: 45px 0px;
+text-align: center;
+}
+.pie-pagina .grupo-1 .box figure{
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.pie-pagina .grupo-1 .box figure img{
+width: 250px;
+}
+.pie-pagina .grupo-1 .box h2{
+color: #fff;
+margin-bottom: 25px;
+font-size: 20px;
+}
+.pie-pagina .grupo-1 .box p{
+color: #efefef;
+margin-bottom: 10px;
+}
+.pie-pagina .grupo-1 .red-social a{
+display: inline-block;
+text-decoration: none;
+width: 49%;
+height: auto;
+padding:1.1rem;
+cursor: pointer;
+border-radius: 7px;
+color: #fff;
+background-color: #0d2033;
+text-align: center;
+transition: all 300ms ease;
+font-size: 1.5rem;
+border: none;
+font-family: button;
+background: linear-gradient(3deg, rgb(40, 212, 251) 28%, rgb(159 214 231) 100%);
+}
+
+.pie-pagina .grupo-2{
+background-color: #232323;
+padding: 15px 10px;
+text-align: center;
+color: #fff;
+}
+
+.pie-pagina .grupo-2 small{
+font-size: 15px;
+}
+
+@media screen and (max-width:800px){
+.pie-pagina .grupo-1{
+    width: 90%;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap:30px;
+    padding: 35px 0px;
+}
+}
+
+.card {
+box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+transition: 0.3s;
+width: 23rem;
+background: #f7f7f71a;
+display: grid;
+align-items: center;
+align-self: start;
+text-align: center;
+border-radius: 1rem;
+gap: 1rem;
+justify-content: center;
+margin-bottom: 6rem;
+padding: 2rem 0 2.5rem 0px;
+}
+
+.card:hover{
+background:#fff;
+}
+
+.card:hover .cargo{
+color:#6a6b6b;
+}
+
+.Devs:hover > .card:not(:hover) , .card-content:not(:hover) .card{
+filter: blur(4px);
+}
+
+
+.img{
+width: 20rem;
+height: 20rem;
+background-repeat: no-repeat;
+background-size: cover;
+border-radius: 1rem;
+}
+
+.card:hover {
+box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.nombre{
+color: #5aacbf;
+font-family: 'roboto';
+font-size: 2.3rem;
+}
+
+.cargo{
+font-family: 'button';
+color: #f1f1f1;
+font-size: 2rem;
+letter-spacing: .15rem;
+}
+
+
+a:hover{
+color:rgb(240, 127, 62);
+}
+
+.logout:hover{
+color:rgb(240, 127, 62);
+}
+
+
   @media (max-width: 1050px) {
     .main-container {
       flex-direction: column; /* Cambiar a columna para que estén uno debajo del otro */

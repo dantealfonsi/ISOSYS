@@ -1,19 +1,27 @@
 
 <div class="section-outer-container">
     <div class="section-container">
-      <mat-icon>keyboard_backspace</mat-icon>
+        <mat-icon class="back-icon" >keyboard_backspace</mat-icon>
       <mat-icon class="title-icon">book</mat-icon>
-      <h1 class="title">Inscripciones</h1>
+      <h1 class="title">Unidades</h1>
     </div>
   
-    <img style="width: 30%; border-radius: 2rem; height: 6rem"/>
+    <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem"/>
   
 </div>
 
    <div class="outside-table">
-        <div style="display: flex;align-items: center;">
-            <div>
-                <mat-icon>search</mat-icon>
+        <div style="display: flex;
+        top: .5rem;
+        position: relative;">
+            <div style="
+            display: flex;
+            background: linear-gradient(45deg, #ec5c1a, #dbad2d);
+            height: 4rem;
+            width: 3rem;
+            align-items: center;
+            justify-content: center;">
+                <mat-icon style="color:white;padding: 0;">search</mat-icon>
             </div>
             <mat-form-field style="width: 100%">
                 <input matInput style="width: 100%; margin-left: 2rem" placeholder="Buscar"/>
@@ -55,7 +63,7 @@
 
           
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"> TEMA</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">TEMA</th>
       <td mat-cell *matCellDef="let item" > 
         {{ capitalizeWords(item.name) }}
      </td>
@@ -73,7 +81,7 @@
             <span>Editar</span>
           </button>
           <button (click)="goToLessons(item.id)" mat-menu-item>
-            <mat-icon >✎</mat-icon>
+            <mat-icon>library_books</mat-icon>            
             <span>Lecciones</span>
           </button>
           <button  (click)="onDropList(item.id)" mat-menu-item>

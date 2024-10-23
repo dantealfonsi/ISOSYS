@@ -95,6 +95,7 @@ body {
   padding: 1rem;
   border-radius: 20px;
   background: var(--lighter-surface);
+  margin-bottom: 2rem;
 }
 
 .search-icon{
@@ -266,7 +267,7 @@ font-weight: bolder !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(45deg, rgb(55 29 224), #dcdaf7);
+  background: linear-gradient(45deg, rgb(224 68 29), #ffffff);
 }
 
 .close-icon{

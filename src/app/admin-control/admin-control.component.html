@@ -1,5 +1,42 @@
-<div class="main-container">
-    <app-admin-navbar></app-admin-navbar>
-    <div class="content">
-      <router-outlet></router-outlet>
+<mat-toolbar class="mat-elevation-z3" style='background: linear-gradient(45deg, #d6471c, #ff6f0e42);justify-content: space-between;'>
+  <button mat-icon-button (click)="collapsed.set(!collapsed())">
+      <mat-icon style="color: #fff;">menu</mat-icon>
+  </button>
+  <a 
+  style="color: white;cursor: pointer;font-size: 1rem;display: flex;align-items: center;gap: .5rem;" 
+  class="logout">	
+    <mat-icon>low_priority</mat-icon> 
+   <span> Cerrar Sesión </span>
+  </a>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
+      <custom-sidenav [collapsed]="collapsed()"></custom-sidenav>
+  </mat-sidenav>
+  
+  <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
+    <router-outlet></router-outlet>
+    
+<button class="info-button" (click)="openToggle()">i</button>
+  </mat-sidenav-content>
+</mat-sidenav-container> 
+
+
+
+<div class='toggleUp' id='toggleUp'  *ngIf="show" [@enterAnimation]> 
+<button class='footer-btn' id='f-bnt' (click)="closeToggle()"><mat-icon>arrow_drop_down_circle</mat-icon></button> 
+
+<footer class="pie-pagina" id='toggleUp'>
+    <div class="grupo-1">
+        <div class="box">
+            <h2>Descargar Manual de Usuario</h2>
+            <div class="red-social">
+            <a type="submit" href="manual_usuario.pdf" download="manual_usuario.pdf"> Descargar </a>
+            </div>
+        </div>
     </div>
+    <div class="grupo-2">
+        <small>&copy; 2024 <b>UPTP "LUIS MARIANO RIVERA"</b> - Todos los Derechos Reservados.</small>
+    </div>
+</footer>
+</div>

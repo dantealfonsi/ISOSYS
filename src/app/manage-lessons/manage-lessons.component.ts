@@ -75,7 +75,7 @@ export class ManageLessonsComponent {
   dataSource: any;
   selectedFiles!: FileList;
 
-  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient) {}
+  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
 
 
 
@@ -397,6 +397,9 @@ onDeleteFile(fileName: string) {
 }
 /**********************************END QUERYS*************************************** */
 
+goBack(){
+  this.router.navigate(['main/unit']);
+}
 
 firstLetterUpperCase(word: string): string {
   return word.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());

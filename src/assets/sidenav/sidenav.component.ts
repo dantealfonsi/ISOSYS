@@ -1,24 +1,21 @@
-import { AdminNavbarComponent} from '../../assets/admin-navbar/admin-navbar.component';
-import { RouterOutlet } from '@angular/router';
-import { Router } from '@angular/router';
-import { AuthService } from '../../auth.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Component,computed,signal,OnInit} from '@angular/core';
 import { MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { CustomSidenavComponent
-  
- } from '../../assets/custom-sidenav/custom-sidenav.component';
+import { CustomSidenavComponent } from '../custom-sidenav/custom-sidenav.component';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from "@angular/common";
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CookieService } from 'ngx-cookie-service';
+
+
 @Component({
-  selector: 'app-admin-control',
+  selector: 'sidenav',
   standalone: true,
-  imports: [RouterOutlet,MatToolbarModule,MatIconModule,MatButtonModule,MatSidenavModule,CustomSidenavComponent,CommonModule],
-  templateUrl: './admin-control.component.html',
-  styleUrl: './admin-control.component.css',
+  imports: [CommonModule,MatToolbarModule,MatIconModule,MatButtonModule,MatSidenavModule,CustomSidenavComponent,RouterOutlet],
+  templateUrl: './sidenav.component.html',
+  styleUrl: './sidenav.component.css',
   animations: [
     trigger('enterAnimation', [
         transition(':enter', [
@@ -32,30 +29,26 @@ import { CookieService } from 'ngx-cookie-service';
     ])
 ],
 })
+export class SidenavComponent {
 
-export class AdminControlComponent {
+  constructor(private cookieService: CookieService,private router: Router) {};
 
-   tokenData:any = {
-    userid: 'pene',
-    
-  };
-  
-  constructor(private authService: AuthService, private router: Router) {}
-
-   token = localStorage.getItem('token');
-
-
-   ngOnInit(): void {
-
-    if (!this.authService.isAdmin()) {
-      this.router.navigate(['home']);
-    } 
-    
-
+  ngOnInit(): void {
+    // Verificar si la cookie está presente
+    if (!this.cookieService.get('user_id')) {
+      // Redirigir al componente de inicio de sesión
+      this.router.navigate(['/login']);
+    }
   }
+  
+logout() {
+  this.cookieService.delete('user_id');
+  this.cookieService.delete('isAdmin');
+  this.router.navigate(['/login']);
+}
 
 
-    
+  
   collapsed = signal(false);
   sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
 
@@ -70,8 +63,7 @@ export class AdminControlComponent {
   closeToggle() {
     this.show = false;
   }
+  
+  
 
-  
-  
-  
 }

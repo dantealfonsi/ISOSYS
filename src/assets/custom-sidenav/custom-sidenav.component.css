@@ -1,0 +1,38 @@
+
+.sidenav-header{
+    padding-top: 24px;
+    text-align: center;
+}
+
+.sidenav-header img{
+    border-radius: 100%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.header-text h2{
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.header-text{
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.hide-header-text{
+    opacity: 0;
+    height: 0px;
+  }
+
+*{
+transition: all 500ms ease-in-out;
+}
+
+.selected-menu-item{
+    border-left: 5px solid;
+    border-left-color: rgb(79, 79, 182);
+    transition: 0ms !important;
+    background: #f1f1f1 !important;
+}
