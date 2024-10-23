@@ -306,7 +306,9 @@ editLesson(){
 
 onFileSelected(event: any) {
   this.selectedFiles = event.target.files;
+  this.onUpload()
 }
+
 
 onUpload() {
   const formData = new FormData();
@@ -314,30 +316,83 @@ onUpload() {
     formData.append('files[]', this.selectedFiles[i], this.selectedFiles[i].name);
     this.AddFilesFormGroup.get('file').value.push(this.selectedFiles[i].name);
   }
-  formData.append('addFile', 'true'); // Añade este campo
-  formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id); // Añade este campo
+  formData.append('addFile', 'true');
+  formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id);
 
-  console.log('epale mano' + this.AddFilesFormGroup.value.lesson_id); // Verifica los valores en el FormGroup
-
-  this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
-    console.log('Upload successful', response);
-    this.this_lessons_files_recover(this.AddFilesFormGroup.value.lesson_id).then((files: any[]) => {
-      this.fileList = files; // Asigna el resultado una vez que la Promise se resuelve
-    }).catch(error => {
-      console.error('Error recuperando los archivos de la lección:', error);
-    });
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: '¿Quieres subir estos archivos?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, subir',
+    cancelButtonText: 'No, cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
+        console.log('Response:', response); // Para verificar la respuesta en la consola
+        if (response.status === 'exists') {
+          Swal.fire({
+            title: '¡Advertencia!',
+            text: `Ya existe un archivo con el nombre ${response.file} en esta lección. ${response.message}`,
+            icon: 'warning',
+            confirmButtonText: 'OK'
+          });
+        } else if (response.status === 'success') {
+          this.this_lessons_files_recover(this.AddFilesFormGroup.value.lesson_id).then((files: any[]) => {
+            this.fileList = files;
+            Swal.fire(
+              '¡Éxito!',
+              'Los archivos se han subido correctamente.',
+              'success'
+            );
+          }).catch(error => {
+            console.error('Error recuperando los archivos de la lección:', error);
+          });
+        } else {
+          console.error('Error del servidor:', response.message);
+          Swal.fire(
+            'Error',
+            `Hubo un problema al subir los archivos: ${response.message}`,
+            'error'
+          );
+        }
+      });
+    } else {
+      Swal.fire(
+        'Cancelado',
+        'No se han subido los archivos.',
+        'error'
+      );
+    }
   });
 }
 
 
 onDeleteFile(fileName: string) {
-  const formData = new FormData();
-  formData.append('fileName', fileName); // Añade el nombre del archivo a borrar
-  formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id); // Añade lesson_id
-
-  this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
-    console.log('File deleted', response);
-    this.fileList = this.fileList.filter((file: { name: string; }) => file.name !== fileName); // Actualiza la lista de archivos en el cliente
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'No podrás revertir esta acción',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminarlo',
+    cancelButtonText: 'No, cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const formData = new FormData();
+      formData.append('fileName', fileName); // Añade el nombre del archivo a borrar
+      formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id); // Añade lesson_id
+      this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
+        console.log('Archivo eliminado', response);
+        this.fileList = this.fileList.filter((file: { name: string; }) => file.name !== fileName); // Actualiza la lista de archivos en el cliente
+        Swal.fire('Eliminado!', 'Tu archivo ha sido eliminado.', 'success');
+      });
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire('Cancelado', 'Tu archivo está seguro', 'error');
+    }
   });
 }
 /**********************************END QUERYS*************************************** */

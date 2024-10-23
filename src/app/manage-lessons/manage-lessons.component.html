@@ -157,22 +157,37 @@
 <!------------------------- FILE MANAGER ------------------------>
 
 <section *ngIf="showFilesdialog" class="dialog-background">
-  <div class="dialog">
+  <div class="dialog" style="width: 40%;">
     <div class="dialog-title-container">
       <h1><mat-icon class="title-icon-lt">build</mat-icon> Añadir Archivos</h1>
       <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
     </div>
 
-    <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data">
-      <input style='padding: 0 0 0rem;border: 1px solid #da642e;' type="file" (change)="onFileSelected($event)" multiple>
-      <button type="button" (click)="onUpload()">Upload</button>
+    <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data" style='width: -webkit-fill-available;
+'>
+      <div class="container">
+        <div class="button-wrap">
+          <label class="button" for="upload"><mat-icon> insert_drive_file</mat-icon>
+            Subir</label>
+          <input  type="file" id="upload" (change)="onFileSelected($event)" multiple>
+        </div>
+      </div>
     </form>
 
-    <div class="files-container">
+    <div class="files-container" style="display: contents;">
 
-      <ul>
-        <li *ngFor="let file of fileList">
-          <span>{{file.name}}</span> <button (click)="onDeleteFile(file.name)">Borrar</button>
+      <ul style="width: 100%;margin-top: 2rem;">
+        <li style="background: linear-gradient(45deg, #d27766, transparent);
+        color: white;
+        padding: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;">Lista de Guias</li>
+        <li *ngFor="let file of fileList" style="padding: 1rem;
+        border-bottom: 1px solid #80808030;
+        background: linear-gradient(45deg, #e0d3ce47, transparent);
+        display: flex;
+        justify-content: space-between;">
+          <span>{{file.name}}</span> <button (click)="onDeleteFile(file.name)" class="button-4"><mat-icon>remove_circle_outline</mat-icon>Borrar</button>
         </li>
       </ul>
 
