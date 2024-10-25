@@ -51,33 +51,98 @@ item: any;
 
     {
       icon: 'recent_actors',
-      label: 'Usuarios',
+      label: 'Personas',
       subItems:[
         {
           icon: 'border_color',
-          label: 'Administradores',
-          route: 'addTeacher',
+          label: 'Usuarios',
+          route: 'user',
         },
         {
           icon: 'border_color',
-          label: 'Usuarios',
-          route: 'viewTeacher'
+          label: 'Administradores',
+          route: 'admin'
         },
       ]
     },
     {
-      icon: 'supervised_user_circle',
+      icon: 'subject',
       label: 'Reportes',
-      route: 'viewUsers'
-
+      route: 'viewSubject'
     },
   ])
 
+
+  menuItemsUser = signal<MenuItem[]>([
+    {
+      icon: 'dashboard',
+      label: 'Inicio',
+      route: 'dashboard'
+    },
+
+    {
+      icon: 'border_color',
+      label: 'Inscribir',
+      subItems: [
+        {
+          icon: 'library_add',
+          label: 'Inscripciones',
+          route: 'addStudent'
+        },
+        {
+          icon: 'mail',
+          label: 'Lista de Inscripcion',
+          route: 'viewRegistration'
+        },
+      ]
+    },
+    
+    {
+      icon: 'face',
+      label: 'Estudiantes',
+      route: 'viewStudent'
+    },
+
+    {
+      icon: 'contact_phone',
+      label: 'Representantes',
+      route: 'viewParent'
+    },
+    {
+      icon: 'class',
+      label: 'Secciones',
+      route: 'viewSection'
+    },
+    {
+      icon: 'recent_actors',
+      label: 'Profesores',
+      route: 'viewTeacher'
+    },
+    {
+      icon: 'subject',
+      label: 'Materias',
+      route: 'viewSubject'
+    },
+    {
+      icon: 'date_range',
+      label: 'Periodos',
+      subItems: [
+        {
+          icon: 'note_add',
+          label: 'Fechar Periodo',
+          route: 'period'
+
+        },
+      ]
+    },
+  ])
   
   profilePicSize = computed(() => this.sideNavCollapsed() ? '60' : '120');
 
 
-
+  readCookie(){
+    return this.cookieService.get('isAdmin');
+  }
 
 
 

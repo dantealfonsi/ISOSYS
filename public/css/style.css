@@ -553,7 +553,7 @@ input::-ms-input-placeholder {
     z-index: 300;
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    background-color:rgba(34, 61, 97, 0.64);
+    background-color:rgba(207, 83, 52, 0.575);
     -webkit-transition:all .3s;
     -moz-transition:all .3s;
     transition:all .3s;
@@ -564,8 +564,10 @@ input::-ms-input-placeholder {
 
 .main_menu_bg{
     margin-top: 0px;
-    background-color: transparent;
+    background: rgba(255, 121, 87, 0.281);
+    height: 5.5rem;
 }
+
 .main_menu_bg .navbar-default {
     background-color: transparent; 
     border-color: transparent; 

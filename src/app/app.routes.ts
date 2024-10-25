@@ -9,18 +9,26 @@ import { AdminControlComponent } from './admin-control/admin-control.component';
 import { UnitComponent } from './unit/unit.component';
 import { AuthGuard } from '../auth.guard';
 import { ManageLessonsComponent } from './manage-lessons/manage-lessons.component';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
+import { AddAdminsComponent } from './add-admins/add-admins.component';
+
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
     {path: 'login',           component: LoginComponent},
     {path: 'register',        component: RegisterComponent},
     {path: 'forgotPassword',  component: ForgotPasswordComponent},
     {path: 'home',           component: LandingPageComponent},
-    {path: 'about-us',           component: TermsComponent},
-    {path: 'terms',           component: AboutUsComponent},
+    {path: 'about-us',           component: AboutUsComponent},
+    {path: 'terms',           component: TermsComponent},
     {path: 'main',     component: AdminControlComponent, 
         children: [
           {path: 'unit',      component: UnitComponent},
           {path: 'lessons/:id',      component: ManageLessonsComponent},
+          {path: 'user',      component: ManageUsersComponent},
+          {path: 'admin',      component: ManageAdminsComponent},
+          {path: 'add-admin',      component: AddAdminsComponent}
+
         ],
       },
 ];

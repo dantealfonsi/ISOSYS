@@ -1,0 +1,204 @@
+
+<ng-template matStepperIcon="edit">
+    <mat-icon>check</mat-icon>
+  </ng-template>
+
+  <div class="container-fluid">
+        <div class="col-sm p-3 min-vh-100">
+
+        <!--add-student content --> 
+        <section class="vh-100">
+
+          <div class="container h-100" style="width:100% !important">
+                        
+          <div class="form-title-container">
+            <div><h5 class="form-title">Añadir Usuarios</h5></div>
+            <div><mat-icon class="close-form" (click)="goToView()">close</mat-icon></div>
+          </div>
+
+            <mat-horizontal-stepper [linear]="true" name="stepper" #stepper="matHorizontalStepper">
+              <ng-template matStepperIcon="edit" >
+                <mat-icon>check</mat-icon>
+              </ng-template>
+              
+            
+              <mat-step [stepControl]="firstFormGroup">
+                <form [formGroup]="firstFormGroup">
+
+                  <ng-template matStepLabel>Paso 1: A quien Pertenece?</ng-template>
+                  <div class="card">
+                    <h1 class="text-center mb-4">Detalles de la Persona</h1>
+                    <div class="row justify-content-between text-left">
+  
+  
+                      <div class="form-group col-sm-6 flex-row d-flex" style="display: flex;">
+                        <mat-form-field style="width: 20% !important;">
+                          <mat-select formControlName="nationality" [(ngModel)]="selectedNationality">
+                            <mat-option *ngFor="let type of nationality" [value]="type.value">{{ type.label }}</mat-option>
+                          </mat-select>
+                      </mat-form-field>
+  
+                        <mat-form-field style="width:80% !important;">
+                        <mat-label>Cedula</mat-label>
+                        <input (change)="onCedulaChange($event)"  matInput list="listperson"  formControlName="cedula" name="cedula" id="cedula" placeholder="Escribe Cedula para buscar...">
+                        <datalist id="listperson">
+                          <option value="">
+                            <option *ngFor="let valor of person" [value]="valor.cedula">
+                        </datalist>
+                        <mat-error *ngIf="firstFormGroup.get('cedula')!.invalid">
+                          La cedula no es valida. Ingresa una real: Ejemplo: 28129366
+                        </mat-error>
+                      </mat-form-field>
+                      </div>
+                      
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Nombre</mat-label>
+                          <input matInput formControlName="name" placeholder="Ingresa nombre del representante">
+                      </mat-form-field>
+                      </div>
+  
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Segundo Nombre</mat-label>
+                        <input matInput formControlName="second_name" placeholder="Ingresa el segundo nombre del Representante">
+                      </mat-form-field>
+                      </div>
+  
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Apellido</mat-label>
+                        <input matInput formControlName="last_name" placeholder="Ingresa el apellido del representante">
+                      </mat-form-field>
+                      </div>
+  
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Segundo Apellido</mat-label>
+                        <input matInput formControlName="second_last_name" placeholder="Ingresa el apellido del representante">
+                      </mat-form-field>
+                      </div> 
+                      
+        
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Teléfono</mat-label>
+                          <input matInput formControlName="phone" placeholder="Teléfono del representante" >
+                          <mat-error *ngIf="firstFormGroup.get('phone')!.invalid">
+                            El teléfono debe ser real. Por ejemplo: 0412-858-1138 o 04128581138.
+                          </mat-error>
+                        </mat-form-field>
+                        </div> 
+  
+  
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field>
+                          <mat-label>Escoge una fecha</mat-label>
+                          <input matInput formControlName="birthday" [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
+                          <mat-hint>DIA/MES/AÑO</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Dirección</mat-label>
+                        <input matInput formControlName="address" placeholder="Enter your address">
+                      </mat-form-field>
+                      </div>
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field>
+                          <mat-label>Genero</mat-label>
+                          <mat-select name="gender">
+                          
+                              <mat-option value="masculino">Masculino</mat-option>
+                              <mat-option value="femenino">Femenino</mat-option>
+
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      
+                    </div>
+                    <div style="display: flex;justify-content: center;">
+                      <button class="cancel" (click)="goBack()"><mat-icon>arrow_back</mat-icon>Atrás</button>
+                      <button class="export" (click)="goForward()" [disabled]="firstFormGroup.invalid"><mat-icon>arrow_forward</mat-icon>Siguiente</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="secondFormGroup">
+                <form [formGroup]="secondFormGroup">
+                  <ng-template matStepLabel>Paso 2: Añada al Usuario</ng-template>
+  
+                  <div class="card">
+                    <h1 class="text-center mb-4">Detalles del Usuario</h1>
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+  
+                
+  
+                      <br>
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                        <mat-label>Correo Electronico</mat-label>
+                        <input matInput formControlName="email" placeholder="Ingresa correo electronico">
+                        <mat-error *ngIf="secondFormGroup.get('email')!.invalid">
+                          Ingresa un email valido: ejemplo&#64;ejemplo.com
+                        </mat-error>
+                        </mat-form-field>
+                      </div>      
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Contraseña</mat-label>
+                        <input matInput formControlName="password" placeholder="Ingresa una contraseña" [matTooltip]="getPasswordError()">
+      
+                      </mat-form-field>
+                  
+                      <p style="color: gray; font-style: italic; font-size: 14px;">Ingrese por lo menos una contraseña que contenga una letra, un numero y un caracter especial***</p>
+
+                      </div>
+  
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Confirmar contraseña</mat-label>
+                        <input matInput formControlName="confirmPassword" placeholder="Confirme Contraseña">
+                      </mat-form-field>
+                      <div style="color: red; font-style: italic; font-size: 14px;" *ngIf="passwordMatchError">
+                        ¡Las Contraseñas no coinciden!
+                      </div>
+                      </div>
+                      
+  
+  
+                      <div class="form-group col-sm-6 flex-column d-flex">
+                        <mat-form-field>
+                          <mat-label>Cargo del Usuario</mat-label>
+                          <mat-select matNativeControl required formControlName="isAdmin">
+                            <mat-option value="1">Administrador</mat-option>
+                            <mat-option value="0">Usuario</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div> 
+                      
+                      
+                
+  
+                    </div>
+                    <div style="display: flex;justify-content: center;">
+                      <button class="cancel" (click)="goBack()"><mat-icon>arrow_back</mat-icon>Atrás</button>
+                      <button class="add" (click)="addUser()" [disabled]="secondFormGroup.invalid"><mat-icon>add_circle_outline</mat-icon>Agregar Usuario</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step>
+            </mat-horizontal-stepper>
+          </div>
+        </section>
+  

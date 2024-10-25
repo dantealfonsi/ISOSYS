@@ -202,8 +202,8 @@ addLesson() {
   
       console.log(data);
       Swal.fire({
-        title: 'Seccion añadida!',
-        text: 'La sección fue añadida con exito.',
+        title: 'Lección añadida!',
+        text: 'La Lección fue añadida con exito.',
         icon: 'success'
       });
       this.loadList();

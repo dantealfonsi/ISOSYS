@@ -40,7 +40,7 @@ export class AdminControlComponent {
     
   };
   
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
    token = localStorage.getItem('token');
 
