@@ -1,0 +1,9 @@
+h3 a{
+    font-weight: 600;
+    color: #3027a1;
+    cursor: pointer;
+}
+
+h3 a:hover{
+text-decoration: underline;
+}

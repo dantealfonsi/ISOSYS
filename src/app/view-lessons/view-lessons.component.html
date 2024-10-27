@@ -4,6 +4,8 @@
     <div>
       <youtube-player [videoId]="lesson.url" width="560" height="315"></youtube-player>
 
+      <div>
+
       {{lesson.url}}
     </div>
     <div class="description">
@@ -14,7 +16,7 @@
       <h2>Archivos de descarga</h2>
       <ul>
         <li *ngFor="let file of lesson.files">
-          <a [href]="file.file" download>{{ file.name }}</a>
+          <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}</a>
         </li>
       </ul>
     </div>

@@ -17,6 +17,8 @@ export class ViewLessonsComponent implements OnInit {
   itemId: any;
   lesson_order: any;
   url!: string;
+  videoUrl: string = 'http://localhost/iso2sys_rest_api/videos/prueba.mp4';
+
 
   constructor(
     private route: ActivatedRoute,
