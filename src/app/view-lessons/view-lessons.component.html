@@ -1,24 +1,97 @@
-<div class="container">
-  <div *ngIf="lesson">
-    <h1>{{ lesson.title }}</h1>
-    <div>
-      <youtube-player [videoId]="lesson.url" width="560" height="315"></youtube-player>
+
+<div class="culmn">
+  <header id="main_menu" class="header navbar-fixed-top">            
+      <div class="main_menu_bg">
+          <div class="container">
+              <div class="row">
+               <app-user-navbar></app-user-navbar>
+              </div>
+
+          </div>
+
+      </div>
+  </header> <!--End of header -->
+
+
+  
+<div style="display: flex;margin-top: 5.5rem;">
+
+  <div class="lesson_menu" style="height: 100vh;background:red;width: 30%;">
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container" style="padding-top: 2rem;padding-bottom: 2rem;">
+
+      <div class="section-outer-container">
+        <div class="section-container">
+            <mat-icon class="back-icon" >keyboard_backspace</mat-icon>
+          <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
+          <div>
+            <h1 class="title">{{capitalizeWords(lesson.title) }}</h1>
+            <p style="margin: 0;
+            font-weight: 900;
+            font-family: 'Montserrat';">Unidad {{itemId}}</p>
+          </div>
+        </div>
+      
+        <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;"/>
+      
+    </div>
+
+
+
 
       <div>
 
-      {{lesson.url}}
+        <div style='margin:auto;'>
+          <youtube-player  [videoId]="lesson.url" width="560" height="315"></youtube-player>
+          <div>
+        </div>
+        <div class="description" style="display: flex; flex-direction: column;">
+          <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
+          padding-left: 1rem;
+          border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon> Descripción</h2></div>
+
+          <div style="background-color: white; padding: 1rem; text-align: justify;">
+            <p>{{ lesson.summary }}</p>
+          </div>
+        </div>
+        <div class="files" style="display: flex; flex-direction: column;">
+          <div style="display: flex; flex-direction: column;">
+            <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
+            padding-left: 1rem;
+            border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>ballot</mat-icon> Guias Adjuntas</h2></div>
+        
+          <ul style="background-color: white;">
+            <li *ngFor="let file of lesson.files" class="download-li" >
+              <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }} <mat-icon style="color: #ff3d009c;">cloud_download</mat-icon></a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="description">
-      <h2>Descripción</h2>
-      <p>{{ lesson.summary }}</p>
     </div>
-    <div class="files">
-      <h2>Archivos de descarga</h2>
-      <ul>
-        <li *ngFor="let file of lesson.files">
-          <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}</a>
-        </li>
-      </ul>
-    </div>
-  </div>
+
+
+
 </div>
+
+
+</div>
+<app-footer></app-footer>
