@@ -33,8 +33,16 @@ export class UserNavbarComponent {
     this.router.navigate(['/login']);
     }
     
+    goToUnits() {
+      this.router.navigate(['/view-units']);
+      }
+
     goToRegister() {
       this.router.navigate(['/register']);
     }
 
+    
+    goToLanding() {
+      this.router.navigate(['/home']);
+    }
 }

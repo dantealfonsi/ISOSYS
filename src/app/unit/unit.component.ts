@@ -54,7 +54,8 @@ interface unit{
     MatRadioModule,
     MatMenuModule,
     MatListModule,
-    MatButtonModule],
+    MatButtonModule
+  ],
   templateUrl: './unit.component.html',
   styleUrl: './unit.component.css'
 })
@@ -299,7 +300,6 @@ addUnit() {
     this.unitListMat.filter = filterValue.trim().toLowerCase();
   }
 
-
   downloadPdf(){
     var doc = new jsPDF();
     autoTable(doc,{html:"#content"});
@@ -313,7 +313,6 @@ addUnit() {
   openEditDialog() {
     this.showeditdialog = true;
   }
-
 
   hideDialog() {
     this.showdialog = false;

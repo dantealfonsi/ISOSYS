@@ -21,8 +21,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a>Inicio</a></li>
-                    <li><a>Clases</a></li>
+                    <li><a (click)="goToLanding()">Inicio</a></li>
+                    <li><a (click)="goToUnits()">Clases</a></li>
                     <li><a>Perfil</a></li>
                     <li *ngIf="!authService.getToken('token')"><a (click)="goToLogin()">Iniciar Sesión</a></li>
                     <li *ngIf="!authService.getToken('token')"><a (click)="goToRegister()">Registrarse</a></li>

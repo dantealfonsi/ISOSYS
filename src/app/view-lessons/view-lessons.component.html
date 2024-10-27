@@ -1,0 +1,22 @@
+<div class="container">
+  <div *ngIf="lesson">
+    <h1>{{ lesson.title }}</h1>
+    <div>
+      <youtube-player [videoId]="lesson.url" width="560" height="315"></youtube-player>
+
+      {{lesson.url}}
+    </div>
+    <div class="description">
+      <h2>Descripción</h2>
+      <p>{{ lesson.summary }}</p>
+    </div>
+    <div class="files">
+      <h2>Archivos de descarga</h2>
+      <ul>
+        <li *ngFor="let file of lesson.files">
+          <a [href]="file.file" download>{{ file.name }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

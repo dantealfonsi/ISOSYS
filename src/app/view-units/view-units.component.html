@@ -1,0 +1,27 @@
+
+<div class="culmn">
+    <header id="main_menu" class="header navbar-fixed-top">            
+        <div class="main_menu_bg">
+            <div class="container">
+                <div class="row">
+                 <app-user-navbar></app-user-navbar>
+                </div>
+
+            </div>
+
+        </div>
+    </header> <!--End of header -->
+
+    <section>
+        <div class="container">
+            <div *ngFor="let unit of unitsAndLessons">
+              <h1>{{ unit.name }}</h1>
+              <div *ngFor="let lesson of unit.lessons">
+                <h3><a (click)="goToLesson(unit.id,lesson.lesson_order)">{{ lesson.title }}</a></h3>
+              </div>
+            </div>
+          </div>
+    </section>
+
+
+    <app-footer></app-footer>

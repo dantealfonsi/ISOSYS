@@ -12,6 +12,8 @@ import { ManageLessonsComponent } from './manage-lessons/manage-lessons.componen
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
 import { AddAdminsComponent } from './add-admins/add-admins.component';
+import { ViewLessonsComponent } from './view-lessons/view-lessons.component';
+import { ViewUnitsComponent } from './view-units/view-units.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -21,6 +23,8 @@ export const routes: Routes = [
     {path: 'home',           component: LandingPageComponent},
     {path: 'about-us',           component: AboutUsComponent},
     {path: 'terms',           component: TermsComponent},
+    {path: 'view-lessons/:id/:lesson_order',           component: ViewLessonsComponent},
+    {path: 'view-units',           component: ViewUnitsComponent},
     {path: 'main',     component: AdminControlComponent, 
         children: [
           {path: 'unit',      component: UnitComponent},
