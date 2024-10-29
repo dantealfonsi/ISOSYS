@@ -14,25 +14,42 @@
 
 
   
-<div style="display: flex;margin-top: 5.5rem;">
+<div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
 
-  <div class="lesson_menu" style="height: 100vh;background:red;width: 30%;">
+  <div class="lesson_menu" style="
+  height: 95vh;
+  background: rgb(255, 255, 255);
+  width: 30%;
+  margin-top: 2rem;
+  border-radius: 1.5rem;">
 
+    <ul> 
+      <li>Ingenieria de Software</li>
+      <li style="display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;">
+        <div>
+          <a>Curso: ISO > Unidad {{unitsAndLessons[0].order}}</a>
+        </div>
+        <div>
+          <b>Lección: {{ lesson.title }} </b>
+        </div>
+      </li>
+
+      <li *ngFor="let lesson of unitsAndLessons[0].lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li">         
+        <mat-icon style='border: 1px solid gray;
+                  border-radius: 4px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-right: 1rem;'>play_arrow</mat-icon>   {{ lesson.title }} 
+    </li> 
+  </ul>
 
 
 
   </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -46,7 +63,7 @@
             <h1 class="title">{{capitalizeWords(lesson.title) }}</h1>
             <p style="margin: 0;
             font-weight: 900;
-            font-family: 'Montserrat';">Unidad {{itemId}}</p>
+            font-family: 'Montserrat';">Unidad {{unitsAndLessons[0].order}}</p>
           </div>
         </div>
       

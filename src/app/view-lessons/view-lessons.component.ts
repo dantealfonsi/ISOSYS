@@ -16,6 +16,9 @@ import { FooterComponent } from '../../assets/footer/footer.component';
 })
 
 export class ViewLessonsComponent implements OnInit {
+goToLesson(arg0: any,arg1: any) {
+  alert('aasdasd');
+}
   lesson: any;
   itemId: any;
   lesson_order: any;
@@ -85,16 +88,19 @@ async this_specific_lesson_recover() {
         console.error('Error en la solicitud:', error);
     }
 }
+
+filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLessons.filter(unit => unit.id === itemId);}
   
   async ngOnInit() {
     this.itemId = this.route.snapshot.paramMap.get('id');
     this.lesson_order = this.route.snapshot.paramMap.get('lesson_order');
     this.lesson = await this.this_specific_lesson_recover();
 
-    this.unitsAndLessonsListRecover().then(data => {
-      this.unitsAndLessons = data;
-    }).catch(error => {
-      console.error('Error recuperando las unidades y lecciones:', error);
+    this.unitsAndLessonsListRecover().then(data => { 
+      this.unitsAndLessons = this.filterUnitsAndLessons(data, this.itemId); 
+      console.log("Unidades y lecciones filtradas:", this.unitsAndLessons); 
+    }).catch(error => { console.error('Error recuperando las unidades y lecciones:', error); 
+
     });
 
     this.url = this.lesson.url;

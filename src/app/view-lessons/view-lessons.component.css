@@ -44,3 +44,18 @@
   align-items: center;
   justify-content: space-between;
 }
+
+
+.menu-li{
+  padding: 1.2rem 0.6rem;
+  border-bottom: 1px solid #0000002e;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-weight:600;
+}
+
+.menu-li:hover{
+  background: rgba(255, 68, 0, 0.089);
+}

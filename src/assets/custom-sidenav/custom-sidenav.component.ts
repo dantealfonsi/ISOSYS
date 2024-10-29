@@ -67,6 +67,11 @@ item: any;
     },
     {
       icon: 'subject',
+      label: 'Examenes',
+      route: 'exam'
+    },
+    {
+      icon: 'subject',
       label: 'Reportes',
       route: 'viewSubject'
     },

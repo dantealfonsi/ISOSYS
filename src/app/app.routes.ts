@@ -14,6 +14,7 @@ import { ManageAdminsComponent } from './manage-admins/manage-admins.component';
 import { AddAdminsComponent } from './add-admins/add-admins.component';
 import { ViewLessonsComponent } from './view-lessons/view-lessons.component';
 import { ViewUnitsComponent } from './view-units/view-units.component';
+import { ViewExamComponent } from './view-exam/view-exam.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -23,7 +24,7 @@ export const routes: Routes = [
     {path: 'home',           component: LandingPageComponent},
     {path: 'about-us',           component: AboutUsComponent},
     {path: 'terms',           component: TermsComponent},
-    {path: 'view-lessons/:id/:lesson_order',           component: ViewLessonsComponent},
+    {path: 'view-lessons/:id/:lesson_order', component: ViewLessonsComponent},
     {path: 'view-units',           component: ViewUnitsComponent},
     {path: 'main',     component: AdminControlComponent, 
         children: [
@@ -31,7 +32,8 @@ export const routes: Routes = [
           {path: 'lessons/:id',      component: ManageLessonsComponent},
           {path: 'user',      component: ManageUsersComponent},
           {path: 'admin',      component: ManageAdminsComponent},
-          {path: 'add-admin',      component: AddAdminsComponent}
+          {path: 'add-admin',      component: AddAdminsComponent},
+          {path: 'exam',      component: ViewExamComponent}
 
         ],
       },

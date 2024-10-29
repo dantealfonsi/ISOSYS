@@ -1,9 +1,8 @@
-
 <div class="section-outer-container">
     <div class="section-container">
         <mat-icon class="back-icon" >keyboard_backspace</mat-icon>
       <mat-icon class="title-icon">book</mat-icon>
-      <h1 class="title">Unidades</h1>
+      <h1 class="title">Exams</h1>
     </div>
   
     <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem"/>
@@ -52,20 +51,20 @@
     width: 100%;
   "
 >
-  <table mat-table style="background: none" [dataSource]="unitListMat" matSort id="content" #content>
+  <table mat-table style="background: none" [dataSource]="examListMat" matSort id="content" #content>
 
 
     
-    <ng-container matColumnDef="order">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">NUMERO</th>
-      <td mat-cell *matCellDef="let item" > Unidad {{ capitalizeWords(item.order) }} </td>
+    <ng-container matColumnDef="unit_name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">UNIDAD</th>
+      <td mat-cell *matCellDef="let item" > {{ capitalizeWords(item.unit_name) }} </td>
     </ng-container>
 
           
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">TEMA</th>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">TITULO</th>
       <td mat-cell *matCellDef="let item" > 
-        {{ capitalizeWords(item.name) }}
+        {{ capitalizeWords(item.title) }}
      </td>
     </ng-container>
     
@@ -92,8 +91,8 @@
       </td>
     </ng-container>
     
-    <tr mat-header-row *matHeaderRowDef="['order','name','Acciones']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['order','name','Acciones']"></tr>
+    <tr mat-header-row *matHeaderRowDef="['unit_name','title','Acciones']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['unit_name','title','Acciones']"></tr>
   </table>
   <mat-paginator style="background: none"  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons >
   </mat-paginator>
@@ -105,37 +104,49 @@
 
   <div class="dialog">
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Unidad</h1>
+      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Examen</h1>
       <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
     </div>
     
 
-    <form [formGroup]="addUnitFormGroup">
+    <form [formGroup]="addExamFormGroup">
 
-      <p>Numero la unidad:</p>
+      <div style="display: flex; flex-direction: column; gap:1rem;">
 
-      <div style="display: flex; align-items: center;">
-        <mat-form-field class="example-full-width" *ngIf="showdialog">
-        <mat-label>Unidad: </mat-label>
-        <input type="number"  matInput [disabled]="true" formControlName="order" >
-    </mat-form-field>
+        <mat-form-field  *ngIf="showdialog">
+            <mat-label>Unidad</mat-label>
+            <mat-select required formControlName="unit_id">
+              @for (unit of unitList; track unit) {
+                <mat-option [value]="unit.id">
+                    Unidad {{unit.unit_order}}: {{unit.name}}
+                   </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field class="example-full-width" *ngIf="showdialog">
+            <mat-label>Titulo del examen</mat-label>
+            <input type="text"  matInput formControlName="title" >
+          </mat-form-field>
 
-    </div>
+          <mat-form-field appearance="fill" *ngIf="showdialog">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
 
-    <p>Nombre de la unidad:</p>
+          <mat-form-field class="example-full-width" *ngIf="showdialog">
+            <mat-label>Nota total</mat-label>
+            <input type="number" matInput formControlName="total_score"> 
+          </mat-form-field>
+      </div>
 
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
-        <mat-label>Nombre de la Unidad</mat-label>
-        <input type="text"  matInput formControlName="name" >
-      </mat-form-field>
-    
     </form>
 
 
       <div class="dialog-button-container">
-        <button class="add" (click)="addUnit()"> 
+        <button class="add" (click)="addExam()"> 
           <mat-icon>add_circle_outline</mat-icon>
-          Crear Unidad</button>
+          Crear Examen</button>
 
         <button class="cancel" (click)="hideDialog()">
           Cancelar
@@ -157,29 +168,41 @@
       >
     </div>
 
-    <form [formGroup]="addUnitFormGroup">
+    <form [formGroup]="addExamFormGroup">
       
-      <p>Numero de la unidad:</p>
+      <div style="display: flex; flex-direction: column; gap:1rem;">
 
-      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
-        <mat-label>Numero de la unidad</mat-label>
-        <input type="number" matInput formControlName="order"> 
-      </mat-form-field>
-    
-      <p>Nombre de la unidad:</p>
-
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <mat-form-field class="example-full-width" *ngIf="showeditdialog">
-            <mat-label>Nombre de la Unidad</mat-label>
-            <input type="text"  matInput formControlName="name" >
+        <mat-form-field  *ngIf="showeditdialog">
+            <mat-label>Unidad</mat-label>
+            <mat-select required formControlName="unit_id">
+              @for (unit of unitList; track unit) {
+                <mat-option [value]="unit.id">
+                    Unidad {{unit.unit_order}}: {{unit.name}}
+                   </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+            <mat-label>Titulo del examen</mat-label>
+            <input type="text"  matInput formControlName="title" >
           </mat-form-field>
 
+          <mat-form-field appearance="fill" *ngIf="showeditdialog">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+            <mat-label>Nota total</mat-label>
+            <input type="number" matInput formControlName="total_score"> 
+          </mat-form-field>
       </div>
 
     </form>
 
     <div class="dialog-button-container">
-      <button class="export" (click)="editUnit()"> 
+      <button class="export" (click)="editExam()"> 
         <mat-icon>build</mat-icon> 
         Editar Materia</button>
 
@@ -190,5 +213,6 @@
   </div>
 
 </section>
+
 
 
