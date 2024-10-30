@@ -38,6 +38,12 @@ item: any;
 
   menuItems = signal<MenuItem[]>([
     {
+      icon: 'eject',
+      label: 'Sitio',
+      route: '/home'
+    },
+
+    {
       icon: 'dashboard',
       label: 'Inicio',
       route: 'dashboard'
@@ -54,19 +60,24 @@ item: any;
       label: 'Personas',
       subItems:[
         {
-          icon: 'border_color',
+          icon: 'add',
+          label: 'Añadir Nueva',
+          route: 'add-admin'
+        },
+        {
+          icon: 'person',
           label: 'Usuarios',
           route: 'user',
         },
         {
-          icon: 'border_color',
+          icon: 'verified_user',
           label: 'Administradores',
           route: 'admin'
         },
       ]
     },
     {
-      icon: 'subject',
+      icon: 'assignment',
       label: 'Examenes',
       route: 'exam'
     },

@@ -103,7 +103,7 @@ export class ManageUsersComponent {
     this.editUserFormGroup = this._formBuilder.group({
       id: ['0'],
       email: ["", Validators.required],
-      password: [""],
+      password: ["", Validators.required],
       isAdmin: ["",Validators.required]
     });
   }
@@ -118,7 +118,7 @@ export class ManageUsersComponent {
     var doc = new jsPDF();
 
       autoTable(doc,{html:"#content"});
-      doc.save("testPdf");
+      doc.save("Usuarios");
   }
 
 
@@ -214,7 +214,7 @@ export class ManageUsersComponent {
       this.editUserFormGroup.patchValue({
         id: selectedUser.user_id,
         email: selectedUser.email ,
-        //password: selectedUser.password,
+        password: selectedUser.password,
         isAdmin: parseInt(selectedUser.isAdmin, 10)
       });
     }
@@ -318,4 +318,19 @@ export class ManageUsersComponent {
       }
     });
   }
+
+
+
+  firstLetterUpperCase(word: string): string {
+    return word.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+  } 
+
+  capitalizeWords(str : string) : string {
+    return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+
+
+
+
 }

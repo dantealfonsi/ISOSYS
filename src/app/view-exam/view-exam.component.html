@@ -29,7 +29,7 @@
         </div>
     
         <div class="button-container">
-            <button aria-label="download" class="export">
+            <button aria-label="download" class="export" (click)="downloadPdf()">
                 <mat-icon>cloud_download</mat-icon>
                 Exportar
             </button>
@@ -198,7 +198,6 @@
             <input type="number" matInput formControlName="total_score"> 
           </mat-form-field>
       </div>
-
     </form>
 
     <div class="dialog-button-container">

@@ -37,5 +37,9 @@ export class LandingPageComponent {
     goToRegister() {
       this.router.navigate(['/register']);
     }
+
+    goToClass(){
+      this.router.navigate(['/view-units']);
+    }
     
 }

@@ -311,7 +311,7 @@ addExam() {
   downloadPdf(){
     var doc = new jsPDF();
     autoTable(doc,{html:"#content"});
-    doc.save("testPdf");
+    doc.save("Examenes");
   }
  
   openDialog() {

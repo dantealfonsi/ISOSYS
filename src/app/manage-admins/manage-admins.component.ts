@@ -118,7 +118,7 @@ export class ManageAdminsComponent {
     var doc = new jsPDF();
 
       autoTable(doc,{html:"#content"});
-      doc.save("testPdf");
+      doc.save("Administradores");
   }
 
 
@@ -213,7 +213,7 @@ export class ManageAdminsComponent {
       this.editUserFormGroup.patchValue({
         id: selectedUser.user_id,
         email: selectedUser.email ,
-        //password: selectedUser.password,
+        password: selectedUser.password,
         isAdmin: parseInt(selectedUser.isAdmin, 10)
       });
     }
@@ -320,4 +320,20 @@ export class ManageAdminsComponent {
       }  
     });
   }
+
+
+  firstLetterUpperCase(word: string): string {
+    return word.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+  } 
+
+capitalizeWords(str : string) : string {
+  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+
+
+
+
+
+
 }

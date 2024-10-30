@@ -303,7 +303,7 @@ addUnit() {
   downloadPdf(){
     var doc = new jsPDF();
     autoTable(doc,{html:"#content"});
-    doc.save("testPdf");
+    doc.save("Unidades");
   }
  
   openDialog() {

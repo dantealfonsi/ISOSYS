@@ -30,7 +30,7 @@
         </div>
     
         <div class="button-container">
-            <button aria-label="download" class="export">
+            <button aria-label="download" class="export" (click)="downloadPdf()">
                 <mat-icon>cloud_download</mat-icon>
                 Exportar
             </button>
@@ -53,17 +53,15 @@
   "
 >
   <table mat-table style="background: none" [dataSource]="unitListMat" matSort id="content" #content>
-
-
     
     <ng-container matColumnDef="order">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">NUMERO</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>NUMERO</b></th>
       <td mat-cell *matCellDef="let item" > Unidad {{ capitalizeWords(item.order) }} </td>
     </ng-container>
 
           
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">TEMA</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>TEMA</b></th>
       <td mat-cell *matCellDef="let item" > 
         {{ capitalizeWords(item.name) }}
      </td>

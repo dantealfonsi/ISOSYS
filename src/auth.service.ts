@@ -55,11 +55,15 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
-  isAdmin(): boolean {
-    const obj = JSON.parse(this.getToken('token'));
-    if (obj.isAdmin === '1') {
-      return true;
+
+
+
+  isAdmin(): boolean  {
+  const token = this.getToken('token');
+     if (token) { 
+      const obj = JSON.parse(token); 
+      return obj && obj.isAdmin === '1'; // Verifica que obj no sea null y que isAdmin sea '1' } return false; // Retorna false si no hay token o si obj es null }
+     }
+     return false; // Retorna false si no hay token o si obj es null }
     }
-    return false;
-  }
 }

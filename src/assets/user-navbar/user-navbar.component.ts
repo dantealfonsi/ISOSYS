@@ -41,6 +41,9 @@ export class UserNavbarComponent {
       this.router.navigate(['/register']);
     }
 
+    goToMain() {
+      this.router.navigate(['/main']);
+    }
     
     goToLanding() {
       this.router.navigate(['/home']);

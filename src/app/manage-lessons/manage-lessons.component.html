@@ -15,9 +15,9 @@
           <!--add-student content -->  
 
 
-            <div>
-             <div class="timeThread" (click)="openDialog()">
-                <div style='padding: 2rem 0rem;'>
+            <div style="display: flex;justify-content: center; cursor:pointer;">
+             <div class="timeThread" (click)="openDialog()" style="width: auto;">
+                <div style='padding: 2rem 1rem;'>
                     <h1>Nueva Lección </h1>
                  </div>
                 <div class='green-part'>
@@ -60,29 +60,36 @@
 
 <section *ngIf="showdialog" class="dialog-background">
 
-  <div class="dialog">
+  <div class="dialog" style='width:40%;'>
     <div class="dialog-title-container">
       <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Lección</h1>
       <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
     </div>
 
-    <form [formGroup]="AddLessonFormGroup">
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
+    <form [formGroup]="AddLessonFormGroup" style='width:100%;'>
+      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
         <mat-label>Lección Numero</mat-label>
-        <input type="number" style='text-transform: capitalize;' matInput formControlName="lesson_order" >
+        <input type="number" min="1" matInput formControlName="lesson_order">
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('required')">
+          Necesitas un número para esta sección.
+        </mat-error>
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('min')">
+          Necesitas un número mayor a 0.
+        </mat-error>
       </mat-form-field>
+      
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
+      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
         <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
         <mat-hint>¡Escoge un titulo!</mat-hint>
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showdialog">
+      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
         <mat-label>Url del Video</mat-label>
         <input type="text" matInput formControlName="url">    
       </mat-form-field>
       <br>
-      <mat-form-field appearance="fill" *ngIf="showdialog">
+      <mat-form-field appearance="fill" *ngIf="showdialog" style="width:100%;">
         <mat-label>Summary</mat-label>
           <textarea matInput formControlName="summary"></textarea>
     </mat-form-field>
@@ -107,7 +114,7 @@
 <!------------------------- EDIT ------------------------>
 
 <section *ngIf="showeditdialog" class="dialog-background">
-  <div class="dialog">
+  <div class="dialog" style='width:40%;'>
     <div class="dialog-title-container">
       <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Lección</h1>
       <mat-icon class="close-icon"  (click)="hideEditDialog()"
@@ -115,23 +122,32 @@
       >
     </div>
 
-    <form [formGroup]="AddLessonFormGroup">
-      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+    <form [formGroup]="AddLessonFormGroup" style='width:100%;'>
+   
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
         <mat-label>Lección Numero</mat-label>
-        <input type="text" style='text-transform: capitalize;' matInput formControlName="lesson_order">
+        <input type="number" min="1" matInput formControlName="lesson_order">
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('required')">
+          Necesitas un número para esta sección.
+        </mat-error>
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('min')">
+          Necesitas un número mayor a 0.
+        </mat-error>
       </mat-form-field>
+
+
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
         <mat-label>Titulo de la Lecciòn</mat-label>
         <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
         <mat-label>Url del Video</mat-label>
         <input type="text" matInput formControlName="url">    
       </mat-form-field>
       <br>
-      <mat-form-field appearance="fill" *ngIf="showeditdialog">
+      <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">
           <mat-label>Summary</mat-label>
             <textarea matInput formControlName="summary"></textarea>
       </mat-form-field>

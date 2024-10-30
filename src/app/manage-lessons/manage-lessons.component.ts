@@ -85,7 +85,7 @@ export class ManageLessonsComponent {
       unitId: [this.itemId = this.route.snapshot.paramMap.get('id')],
       title: ["", Validators.required],
       content: [''],
-      lesson_order: ["",Validators.required],
+      lesson_order: ['', [Validators.required, Validators.min(1)]],      
       summary: ["",Validators.required],
       url: ["",Validators.required],
     });
