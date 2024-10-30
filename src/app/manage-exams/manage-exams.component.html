@@ -1,0 +1,213 @@
+<div class="section-outer-container"> 
+    <div class="section-container">
+      <mat-icon class="back-icon" matTooltip="Ir atras" (click)="goBack()">keyboard_backspace</mat-icon>
+      <mat-icon class="title-icon" style="display:flex;">school</mat-icon>
+        <div style="display: flex;flex-direction: column;"><h1 class="title">Examen  {{unitData?.data_exam.title}}</h1>
+          <p style="margin:0;">{{unitData?.data_exam.title}}</p></div>
+        </div>
+  
+    <img
+      style="width: 30%; border-radius: 2rem; height: 6rem"
+      src="img/lesson.png"
+    />
+  </div>
+
+          <!--add-student content -->  
+
+
+            <div style="display: flex;justify-content: center; cursor:pointer;">
+             <div class="timeThread" (click)="openDialog()" style="width: auto;">
+                <div style='padding: 2rem 1rem;'>
+                    <h1>Nueva Pregunta </h1>
+                 </div>
+                <div class='green-part'>
+                    <h1 style="color:white;font-size: 6rem;">+</h1>
+                </div>
+
+              </div>
+            </div>
+
+
+
+            <div *ngFor="let lesson of unitData.question">
+              <div class="timeThread">
+                <div style='padding: 2rem 0rem;'>
+                  <h1>Pregunta {{lesson.question_order}}: {{lesson.text}}</h1>
+                </div>
+                <div style='display: flex;gap: 1.5rem;'>
+                  <button class="export" (click)="onFileList(lesson.id)"><mat-icon>attach_file</mat-icon>Guias</button>
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button (click)="onEditList(lesson.id)" mat-menu-item>
+                      <mat-icon >✎</mat-icon>
+                      <span>Editar</span>
+                    </button>
+                    <button mat-menu-item>
+                      <mat-icon>✂</mat-icon>
+                      <span>Desabilitar</span>
+                    </button>
+                  </mat-menu>      
+
+                </div>
+              </div>
+            </div>
+
+<!-- ADD LESSON FORM GROUP-->        
+
+
+
+<section *ngIf="showdialog" class="dialog-background">
+
+  <div class="dialog" style='width:40%;'>
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Lección</h1>
+      <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
+    </div>
+
+    <form [formGroup]="AddLessonFormGroup" style='width:100%;'>
+      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
+        <mat-label>Lección Numero</mat-label>
+        <input type="number" min="1" matInput formControlName="lesson_order">
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('required')">
+          Necesitas un número para esta sección.
+        </mat-error>
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('min')">
+          Necesitas un número mayor a 0.
+        </mat-error>
+      </mat-form-field>
+      
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
+        <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
+        <mat-hint>¡Escoge un titulo!</mat-hint>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
+        <mat-label>Url del Video</mat-label>
+        <input type="text" matInput formControlName="url">    
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill" *ngIf="showdialog" style="width:100%;">
+        <mat-label>Summary</mat-label>
+          <textarea matInput formControlName="summary"></textarea>
+    </mat-form-field>
+      <br>      
+    </form>
+
+
+      <div class="dialog-button-container">
+        <button class="add" (click)="addLesson()"> 
+          <mat-icon>add_circle_outline</mat-icon>
+          Crear Lección</button>
+
+        <button class="cancel" (click)="hideDialog()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  
+<!------------------------- EDIT ------------------------>
+
+<section *ngIf="showeditdialog" class="dialog-background">
+  <div class="dialog" style='width:40%;'>
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Lección</h1>
+      <mat-icon class="close-icon"  (click)="hideEditDialog()"
+        >backspace</mat-icon
+      >
+    </div>
+
+    <form [formGroup]="AddLessonFormGroup" style='width:100%;'>
+   
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
+        <mat-label>Lección Numero</mat-label>
+        <input type="number" min="1" matInput formControlName="lesson_order">
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('required')">
+          Necesitas un número para esta sección.
+        </mat-error>
+        <mat-error *ngIf="AddLessonFormGroup.get('lesson_order').hasError('min')">
+          Necesitas un número mayor a 0.
+        </mat-error>
+      </mat-form-field>
+
+
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
+        <mat-label>Titulo de la Lecciòn</mat-label>
+        <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
+        <mat-label>Url del Video</mat-label>
+        <input type="text" matInput formControlName="url">    
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">
+          <mat-label>Summary</mat-label>
+            <textarea matInput formControlName="summary"></textarea>
+      </mat-form-field>
+      <br>
+      
+    </form>
+
+    <div class="dialog-button-container">
+      <button class="export" (click)="editLesson()"> 
+        <mat-icon>build</mat-icon> 
+        Editar Sección</button>
+
+      <button class="cancel" (click)="hideEditDialog()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+</section>
+
+
+  
+<!------------------------- FILE MANAGER ------------------------>
+
+<section *ngIf="showFilesdialog" class="dialog-background">
+  <div class="dialog" style="width: 40%;">
+    <div class="dialog-title-container">
+      <h1><mat-icon class="title-icon-lt">build</mat-icon> Añadir Archivos</h1>
+      <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
+    </div>
+
+    <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data" style='width: -webkit-fill-available;
+'>
+      <div class="container">
+        <div class="button-wrap">
+          <label class="button" for="upload"><mat-icon> insert_drive_file</mat-icon>
+            Subir</label>
+          <input  type="file" id="upload" (change)="onFileSelected($event)" multiple>
+        </div>
+      </div>
+    </form>
+
+    <div class="files-container" style="display: contents;">
+
+      <ul style="width: 100%;margin-top: 2rem;">
+        <li style="background: linear-gradient(45deg, #d27766, transparent);
+        color: white;
+        padding: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;">Lista de Guias</li>
+        <li *ngFor="let file of fileList" style="padding: 1rem;
+        border-bottom: 1px solid #80808030;
+        background: linear-gradient(45deg, #e0d3ce47, transparent);
+        display: flex;
+        justify-content: space-between;">
+          <span>{{file.name}}</span> <button (click)="onDeleteFile(file.name)" class="button-4"><mat-icon>remove_circle_outline</mat-icon>Borrar</button>
+        </li>
+      </ul>
+
+    </div>
+    
+  </div>
+</section>

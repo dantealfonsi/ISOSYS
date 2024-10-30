@@ -6,6 +6,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
 import { MatIconModule } from '@angular/material/icon';
 import { UserNavbarComponent } from '../../assets/user-navbar/user-navbar.component';
 import { FooterComponent } from '../../assets/footer/footer.component';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-view-lessons',
@@ -16,9 +17,7 @@ import { FooterComponent } from '../../assets/footer/footer.component';
 })
 
 export class ViewLessonsComponent implements OnInit {
-goToLesson(arg0: any,arg1: any) {
-  alert('aasdasd');
-}
+
   lesson: any;
   itemId: any;
   lesson_order: any;
@@ -28,7 +27,8 @@ goToLesson(arg0: any,arg1: any) {
 
   constructor(
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    public router: Router
   ) {}
 
   unitsAndLessons!: any[];
@@ -114,6 +114,10 @@ filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLess
     return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
   }
 
+  goToLesson(unitId: string, lessonOrder: string): void {
+    this.router.navigate(['/view-lessons', unitId, lessonOrder]);
+    location.reload();
+  }
 
 
 }  

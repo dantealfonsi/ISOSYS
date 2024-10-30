@@ -176,7 +176,7 @@ register(){
         icon: data['icon']
       }).then(() => {
         if (!data['message'].includes('Error')) {
-          this.router.navigate(['/app/viewUsers']);
+          this.router.navigate(['/login']);
         }else{
           this.stepper.selectedIndex = 1;
         }

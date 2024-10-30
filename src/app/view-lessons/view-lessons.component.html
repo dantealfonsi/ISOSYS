@@ -24,7 +24,21 @@
   border-radius: 1.5rem;">
 
     <ul> 
-      <li>Ingenieria de Software</li>
+      <li style="
+      padding: 1rem;
+      border-bottom: 1px solid #0000001f;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.6rem;
+      font-weight: 600;"><mat-icon style='background: linear-gradient(45deg, #ff380b, #ffa00ca3);
+    padding: 1rem;
+    border-radius: 7px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;'>devices_other</mat-icon>
+        Ingenieria de Software</li>
       <li style="display: flex;
       flex-direction: column;
       align-content: center;
@@ -37,13 +51,14 @@
         </div>
       </li>
 
-      <li *ngFor="let lesson of unitsAndLessons[0].lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li">         
+      <li *ngFor="let lesson of unitsAndLessons[0].lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">         
         <mat-icon style='border: 1px solid gray;
                   border-radius: 4px;
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  margin-right: 1rem;'>play_arrow</mat-icon>   {{ lesson.title }} 
+                  margin-right: 1rem;'
+                  >play_arrow</mat-icon>   {{ lesson.title }} 
     </li> 
   </ul>
 

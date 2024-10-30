@@ -1,0 +1,131 @@
+
+.timeThread{
+    display: flex;align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-radius: 2rem;
+    margin-bottom: 2rem;
+    padding-left: 1.2rem;
+    border: double 6px rgba(153, 153, 153, 0.466); 
+  }
+
+  .timeThread:hover {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-radius: 2rem;
+    margin-bottom: 2rem;
+    padding-left: 1.2rem;
+    border: double 6px rgb(242 90 41 / 47%);
+    box-shadow: -4px 0px 9px 3px #f4433636;
+    transform: scale(1.01);
+    transition: ease 0.5s;
+
+  }
+  
+
+
+  h1{
+    margin: 0;
+  }
+  
+  
+  .optionsContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    padding-top: 1.2rem;
+    border-radius: 2rem;
+    margin-bottom: 2rem;
+  }
+
+
+  
+  .green-part{
+    height: 6.2rem;
+    background: #74ba92;
+    border-radius: 0 1.2rem 1.2rem 0rem;    
+    width: 13rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timeThread:hover > .green-part{
+    background: #1dce75;
+    transition: ease 0.5s;
+  }
+
+  .container {
+    display: contents;
+    width: 100%;
+  }
+  input[type="file"] {
+    position: absolute;
+    z-index: 0;
+    top: 0px;
+    left: 0px;
+    font-size: 17px;
+    color: #b8b8b8;
+    border: 1px solid #d27766;
+    padding: 10px;
+    width: -webkit-fill-available;
+  }
+  .button-wrap {
+    position: relative;
+  }
+  .button {
+    display: flex;
+    background: #d27766;
+    border-radius: 0;
+    border: 4px double #cccccc;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 8px;
+    width: 140px;
+    gap: 0.2rem;
+    transition: all 0.5s;
+    cursor: pointer;
+    /* margin: 5px; */
+    position: relative;
+    z-index: 2;
+    align-items: center;
+  }
+  .button:hover {
+    background-color: #00ab97;
+  }
+
+
+
+  .button-4{
+    color: #e6635487;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    background: none;
+    border: solid #e6635487;
+    font-weight: 700;
+  }
+
+  .button-4:hover{
+    color: white;
+    background-color:#e66354;
+  }
+
+
+  .back-icon{
+    font-size: 2rem;
+  }
+
+  .back-icon:hover{
+    transform: scale(1.2);
+  }
+
+    ::ng-deep thead{
+    background: rgba(255, 68, 0, 0.116) !important;
+  }

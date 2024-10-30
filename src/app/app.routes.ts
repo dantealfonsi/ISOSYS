@@ -15,6 +15,7 @@ import { AddAdminsComponent } from './add-admins/add-admins.component';
 import { ViewLessonsComponent } from './view-lessons/view-lessons.component';
 import { ViewUnitsComponent } from './view-units/view-units.component';
 import { ViewExamComponent } from './view-exam/view-exam.component';
+import { ManageExamsComponent } from './manage-exams/manage-exams.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -33,7 +34,8 @@ export const routes: Routes = [
           {path: 'user',      component: ManageUsersComponent},
           {path: 'admin',      component: ManageAdminsComponent},
           {path: 'add-admin',      component: AddAdminsComponent},
-          {path: 'exam',      component: ViewExamComponent}
+          {path: 'exam',      component: ViewExamComponent},
+          {path: 'manage-exams/:id',      component: ManageExamsComponent}
 
         ],
       },

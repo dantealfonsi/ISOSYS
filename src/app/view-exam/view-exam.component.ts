@@ -296,7 +296,7 @@ addExam() {
 
 
   goToLessons(itemId: string) {
-    this.router.navigate(['main/lessons', itemId]);
+    this.router.navigate(['main/manage-exams', itemId]);
   }
 
 
