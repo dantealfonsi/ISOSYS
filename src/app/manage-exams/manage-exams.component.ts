@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -57,40 +57,46 @@ import Swal from 'sweetalert2';
   styleUrl: './manage-exams.component.css'
 })
 export class ManageExamsComponent {
+
+
   itemId!: string | null;
-  unitData: any;
-  lessonData: any;
+  examData: any;
+  questionData: any;
   fileList: any;
 
-  AddLessonFormGroup: any;
-  AddFilesFormGroup: any;
+  AddExamFormGroup: any;
+  AddAnswerFormGroup: any;
   showdialog: boolean = false;
   showeditdialog: boolean = false;
   showFilesdialog: boolean = false;
 
   dataSource: any;
   selectedFiles!: FileList;
+  currentIndex: number=0;
+  totalValueExam: number=0;
+  maxValueQuestion: number=0;
 
   constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
 
 
 
   initializeFormGroups() {
-    this.AddLessonFormGroup = this._formBuilder.group({
-      id: [''],
-      unitId: [this.itemId = this.route.snapshot.paramMap.get('id')],
-      title: ["", Validators.required],
-      content: [''],
-      lesson_order: ['', [Validators.required, Validators.min(1)]],      
-      summary: ["",Validators.required],
-      url: ["",Validators.required],
+    this.AddExamFormGroup = this._formBuilder.group({
+      id: [""],
+      exam_id: [this.itemId],
+      question_order: ["", Validators.required],
+      question_mark: ["", Validators.required],
+      text: ["", Validators.required],
     });
 
-    this.AddFilesFormGroup = this._formBuilder.group({
-      lesson_id: [""],
-      file: this._formBuilder.array([], Validators.required)
+    this.AddAnswerFormGroup = this._formBuilder.group({
+      question_id: [""],
+      exam_id: [""],
+      type: ["", Validators.required],
+      answer: ["", Validators.required],
+      true_response: ["", Validators.required],
     });
-
+    
   }
 
 ngOnInit(): void {
@@ -98,14 +104,19 @@ ngOnInit(): void {
   this.itemId = this.route.snapshot.paramMap.get('id');
   this.initializeFormGroups();
   this.loadList();
-  
 }
-
 
 async loadList() {
   try {
-      this.unitData = await this.this_exams_recover();
-      //this.lessonData = await this.this_lessons_recover();      
+    this.examData = await this.this_exams_recover();
+    
+    //se incrementa el count
+    this.currentIndex += Number(this.examData.count);
+
+    //obtengo el valor total del examen
+    this.totalValueExam = Number(this.examData.data_exam.total_score);
+    //resto el valor total del examen al total de question que existen
+    this.maxValueQuestion = this.totalValueExam - Number(this.examData.totalQuestionMark);
   
   } catch (error) {
     console.error('Error al recuperar los datos de la lista:', error);
@@ -174,16 +185,16 @@ async this_lessons_files_recover(id:string) {
 /*********************************START QUERYS*************************************** */
 
 
-addLesson() {
+addQuestion() {
 
   const datos = {
-    addLesson: "",
-    lesson: this.AddLessonFormGroup.value
+    addQuestion: "",
+    question: this.AddExamFormGroup.value
   };
 
-  console.log(datos.lesson);
+  console.log(datos.question);
 
-  if (this.AddLessonFormGroup.valid) {
+  if (this.AddExamFormGroup.valid) {
     // El formulario tiene valores válidos
     // Aquí envia los datos al backend
     fetch('http://localhost/iso2sys_rest_api/server.php', {
@@ -219,49 +230,50 @@ addLesson() {
   }    
 }
 
-
-
-
 onEditList(id: string) {
   this.openEditDialog();
   const selectedId = id;
-  const selectedLesson = this.lessonData.find((p: { id: string; }) => p.id === selectedId);
-  if (selectedLesson) {
-    this.AddLessonFormGroup.patchValue({
-      id: id,
-      title: selectedLesson.title,
-      content: selectedLesson.content,
-      lesson_order: selectedLesson.lesson_order,
-      summary: selectedLesson.summary,
-      url: selectedLesson.url 
-    });
-  }
-}  
 
+  if (Array.isArray(this.examData.question)) {  // Verificar que this.examData es un array
+    const selectedQuestion = this.examData.question.find((p: { id: string; }) => p.id === selectedId);
+
+    if (selectedQuestion) {
+      this.AddExamFormGroup.patchValue({
+        id: id,
+        question_order: selectedQuestion.question_order,
+        question_mark: selectedQuestion.question_mark,
+        text: selectedQuestion.text
+      });
+    } else {
+      console.error('Pregunta seleccionada no encontrada');
+    }
+  } else {
+    console.error('this.examData no es un array');
+  }
+}
 
 onFileList(id: string) {
-  this.this_lessons_files_recover(id).then((files: any[]) => {
-    this.fileList = files;
-    this.openFilesDialog();
     const selectedId = id;
-    const selectedLesson = this.lessonData.find((p: { id: string; }) => p.id === selectedId);
-    if (selectedLesson) {
-      this.AddFilesFormGroup.patchValue({
-        lesson_id: id,
+    const selectedQuestion = this.examData.question.find((p: { id: string; }) => p.id === selectedId);
+    if (selectedQuestion) {
+      this.AddAnswerFormGroup.patchValue({
+        question_id: selectedQuestion.id,
+        exam_id: selectedQuestion.exam_id
       });
+
+      this.openFilesDialog();
     }
-  }).catch(error => {
-    console.error('Error recuperando los archivos de la lección:', error);
-  });
+
 }
+
 
 editLesson(){
   const datos = {
-    editLesson: "",
-    lesson: this.AddLessonFormGroup.value
+    editQuestion: "",
+    question: this.AddExamFormGroup.value
   };
 
-  if (this.AddLessonFormGroup.valid) {
+  if (this.AddExamFormGroup.valid) {
     // El formulario tiene valores válidos
     // Aquí envia los datos al backend
     fetch('http://localhost/iso2sys_rest_api/server.php', {
@@ -274,7 +286,7 @@ editLesson(){
     .then(response => response.json())
     .then(data => {
   
-      console.log(data);
+      console.log("error en edicion: "+data);
       Swal.fire({
         title: 'Sección Editada con Exito!',
         text: 'Esta sección ha sido editada con exito.',
@@ -310,10 +322,10 @@ onUpload() {
   const formData = new FormData();
   for (let i = 0; i < this.selectedFiles.length; i++) {
     formData.append('files[]', this.selectedFiles[i], this.selectedFiles[i].name);
-    this.AddFilesFormGroup.get('file').value.push(this.selectedFiles[i].name);
+    this.AddAnswerFormGroup.get('file').value.push(this.selectedFiles[i].name);
   }
   formData.append('addFile', 'true');
-  formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id);
+  formData.append('lesson_id', this.AddAnswerFormGroup.value.lesson_id);
 
   Swal.fire({
     title: '¿Estás seguro?',
@@ -336,7 +348,7 @@ onUpload() {
             confirmButtonText: 'OK'
           });
         } else if (response.status === 'success') {
-          this.this_lessons_files_recover(this.AddFilesFormGroup.value.lesson_id).then((files: any[]) => {
+          this.this_lessons_files_recover(this.AddAnswerFormGroup.value.lesson_id).then((files: any[]) => {
             this.fileList = files;
             Swal.fire(
               '¡Éxito!',
@@ -365,32 +377,46 @@ onUpload() {
   });
 }
 
+deleteAnswer(id: any) {
+  const datos = {
+    delete: id,
+    tabla: "questions_data",
+  };
 
-onDeleteFile(fileName: string) {
   Swal.fire({
-    title: '¿Estás seguro?',
-    text: 'No podrás revertir esta acción',
-    icon: 'warning',
+    title: "¿Estás seguro de Deshabilitarla?",
+    text: "¡Esta Respuesta no seguirá apareciendo en la lista!",
+    icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Sí, eliminarlo',
-    cancelButtonText: 'No, cancelar'
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, Deshabilítala"
   }).then((result) => {
     if (result.isConfirmed) {
-      const formData = new FormData();
-      formData.append('fileName', fileName); // Añade el nombre del archivo a borrar
-      formData.append('lesson_id', this.AddFilesFormGroup.value.lesson_id); // Añade lesson_id
-      this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
-        console.log('Archivo eliminado', response);
-        this.fileList = this.fileList.filter((file: { name: string; }) => file.name !== fileName); // Actualiza la lista de archivos en el cliente
-        Swal.fire('Eliminado!', 'Tu archivo ha sido eliminado.', 'success');
+      Swal.fire({
+        title: "¡Completado!",
+        text: "La respuesta ha sido deshabilitada.",
+        icon: "success"
       });
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      Swal.fire('Cancelado', 'Tu archivo está seguro', 'error');
+      fetch('http://localhost/iso2sys_rest_api/server.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.loadList();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     }
   });
 }
+
 /**********************************END QUERYS*************************************** */
 
 goBack(){
@@ -405,18 +431,16 @@ capitalizeWords(str : string) : string {
 return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 }
 
-
 openDialog() {
-  this.AddLessonFormGroup.patchValue({
-    order: 0,
-    title: "",
-    content: "",
-    lesson_order: 0,
-    summary: "",
-    url: ""
-  }); 
-
-  this.showdialog = true;
+  if(this.maxValueQuestion > 0){
+    this.AddExamFormGroup.patchValue({
+      question_order: +this.examData.count+1,
+    }); 
+  
+    this.showdialog = true;
+  }else{
+    Swal.fire('Sin Cupo', 'Has alcanzado el maximo de preguntas segun la ponderacion del examen', 'error');
+  }
 }
 
 openEditDialog() {
@@ -437,6 +461,116 @@ hideDialog() {
 
 hideEditDialog() {
   this.showeditdialog = false;
+}
+  
+insertAnswerText() {
+  //inserta en una pregunta si es autocomplete
+  const datos = {
+    addQuestionDataComplete: "",
+    questionData: this.AddAnswerFormGroup.value
+  };
+
+  console.log(datos.questionData);
+
+  if (this.AddAnswerFormGroup.valid) {
+    // El formulario tiene valores válidos
+    // Aquí envia los datos al backend
+    fetch('http://localhost/iso2sys_rest_api/server.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+  
+      console.log(data);
+      Swal.fire({
+        title: 'Pregunta añadida!',
+        text: 'La Pregunta fue añadida con exito.',
+        icon: 'success'
+      });
+      this.loadList();
+      this.hideFilesDialog();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+  } else {
+    // El formulario no tiene valores válidos
+    Swal.fire({
+      title: '¡Faltan Datos en este formulario!',
+      text: 'No puedes agregar debido a que no has ingesado todos los datos.',
+      icon: 'error'
+    });    
+  }
+}
+
+insertAnswerRadius() {
+  //inserta en una pregunta si es autocomplete
+  const datos = {
+    addQuestionDataComplete: "",
+    questionData: this.AddAnswerFormGroup.value
+  };
+
+  console.log(datos.questionData);
+
+  if (this.AddAnswerFormGroup.valid) {
+    // El formulario tiene valores válidos
+    // Aquí envia los datos al backend
+    fetch('http://localhost/iso2sys_rest_api/server.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+  
+      console.log(data);
+      Swal.fire({
+        title: 'Pregunta añadida!',
+        text: 'La Pregunta fue añadida con exito.',
+        icon: 'success'
+      });
+      this.loadList();
+      //this.hideFilesDialog();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+  } else {
+    // El formulario no tiene valores válidos
+    Swal.fire({
+      title: '¡Faltan Datos en este formulario!',
+      text: 'No puedes agregar debido a que no has ingesado todos los datos.',
+      icon: 'error'
+    });    
+  }
+}
+
+customValidators(): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const type = group.get('type')?.value;
+    const simpleAnswer = group.get('simple_answer')?.value;
+    const completeAnswer = group.get('complete_answer')?.value;
+
+    let errors: ValidationErrors = {};
+
+    if (type === 'simple' && !simpleAnswer) {
+      errors['simpleAnswerRequired'] = 'Simple answer is required when type is simple';
+    } else if (type === 'complete' && !completeAnswer) {
+      errors['completeAnswerRequired'] = 'Complete answer is required when type is complete';
+    } else if (type === 'multiple' && (simpleAnswer || completeAnswer)) {
+      errors['noAnswersForMultiple'] = 'No answers should be provided when type is multiple';
+    }
+
+    return Object.keys(errors).length ? errors : null;
+  };
 }
 
 
