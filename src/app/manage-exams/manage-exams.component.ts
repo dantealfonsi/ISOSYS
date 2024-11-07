@@ -21,6 +21,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
+import { stringify } from 'node:querystring';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -61,6 +62,8 @@ export class ManageExamsComponent {
 
   itemId!: string | null;
   examData: any;
+  examDatafind: any;
+  idQuestionActual: string = "1";
   questionData: any;
   fileList: any;
 
@@ -75,7 +78,9 @@ export class ManageExamsComponent {
   currentIndex: number=0;
   totalValueExam: number=0;
   maxValueQuestion: number=0;
-
+  selectedQuestionList: any;
+  isSelectDisabled: boolean = true;
+  
   constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
 
 
@@ -103,8 +108,12 @@ ngOnInit(): void {
   
   this.itemId = this.route.snapshot.paramMap.get('id');
   this.initializeFormGroups();
-  this.loadList();
+  this.loadList();  
 }
+
+/*isSelectDisabled(): boolean {
+  return this.examDatafind && this.examDatafind.block_select > 0; 
+}*/
 
 async loadList() {
   try {
@@ -116,7 +125,17 @@ async loadList() {
     //obtengo el valor total del examen
     this.totalValueExam = Number(this.examData.data_exam.total_score);
     //resto el valor total del examen al total de question que existen
-    this.maxValueQuestion = this.totalValueExam - Number(this.examData.totalQuestionMark);
+    this.maxValueQuestion = this.totalValueExam - Number(this.examData.totalQuestionMark);    
+
+    const selectedQ = this.examData.question.find((p: { id: string; }) => p.id === this.idQuestionActual);
+    this.examDatafind = selectedQ;
+
+    //traigo del back la informacion si se bloquea el select
+    if(this.examDatafind && this.examDatafind.block_select >0){
+      this.AddAnswerFormGroup.get('type').disable();
+    }
+
+    console.log("id cuest: "+JSON.stringify(this.examDatafind, null, 2));
   
   } catch (error) {
     console.error('Error al recuperar los datos de la lista:', error);
@@ -255,17 +274,25 @@ onEditList(id: string) {
 onFileList(id: string) {
     const selectedId = id;
     const selectedQuestion = this.examData.question.find((p: { id: string; }) => p.id === selectedId);
+    this.examDatafind = selectedQuestion;
+    this.idQuestionActual = selectedQuestion.id;
+
+    this.selectedQuestionList =  this.examData.question.find((p: { id: string; }) => p.id === selectedId);
+
     if (selectedQuestion) {
       this.AddAnswerFormGroup.patchValue({
         question_id: selectedQuestion.id,
         exam_id: selectedQuestion.exam_id
       });
 
+      console.log('examDataFind:', JSON.stringify(this.examDatafind, null, 2));
+
+      //coloca enables el select
+      this.AddAnswerFormGroup.get('type').enable();
       this.openFilesDialog();
     }
 
 }
-
 
 editLesson(){
   const datos = {
@@ -390,7 +417,8 @@ deleteAnswer(id: any) {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Sí, Deshabilítala"
+    confirmButtonText: "Sí, Deshabilítala",
+    cancelButtonText: "No, Cancelar"
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
@@ -509,10 +537,19 @@ insertAnswerText() {
 }
 
 insertAnswerRadius() {
+
+  if (this.examDatafind.block_radius==='1' && this.AddAnswerFormGroup.get('true_response').value==='true') {
+    Swal.fire({
+      title: 'Respuesta Verdadera ya asignada!',
+      text: 'En esta modalidad, solo puedes añadir una respuesta true.',
+      icon: 'warning'
+    });
+  }else{
   //inserta en una pregunta si es autocomplete
+  //getRawValue() este metodo te lee los controles desabilitados
   const datos = {
     addQuestionDataComplete: "",
-    questionData: this.AddAnswerFormGroup.value
+    questionData: this.AddAnswerFormGroup.getRawValue()
   };
 
   console.log(datos.questionData);
@@ -529,15 +566,13 @@ insertAnswerRadius() {
     })
     .then(response => response.json())
     .then(data => {
-  
-      console.log(data);
+      console.log("Verga",data);
       Swal.fire({
         title: 'Pregunta añadida!',
         text: 'La Pregunta fue añadida con exito.',
         icon: 'success'
-      });
-      this.loadList();
-      //this.hideFilesDialog();
+      });      
+      this.loadList();    
     })
     .catch(error => {
       console.error('Error:', error);
@@ -552,6 +587,11 @@ insertAnswerRadius() {
     });    
   }
 }
+}
+
+
+
+
 
 customValidators(): ValidatorFn {
   return (group: AbstractControl): ValidationErrors | null => {
@@ -572,6 +612,10 @@ customValidators(): ValidatorFn {
     return Object.keys(errors).length ? errors : null;
   };
 }
+
+
+
+///////////////AJUSTAR BACKGROUND///////////////////////////////
 
 
 }

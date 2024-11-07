@@ -58,10 +58,10 @@
                   <ul>
                     <li style="background: linear-gradient(45deg, #f54f0f, transparent); padding: 1rem; color: white; font-weight: 900;">Respuestas</li>
                     <li *ngFor="let answer of exam.question_data" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-top: 1px solid #7f7f7fe8;">
-                      <div>
-                        {{answer.answer}} {{answer.true_response}}
+                      <div> 
+                        {{answer.answer}} - <span style='font-weight: 600;'>Validación: </span> <span *ngIf="answer.true_response === 'true'; else typeCheck" style="color:rgb(99, 214, 99);font-weight: 600;">Verdadero</span> <ng-template #typeCheck> <span *ngIf="answer.type === 'text'; else falso" style="font-weight: 800;">Complete</span> <ng-template #falso> <span style='color: rgb(240, 32, 32);font-weight: 800;'>Falso</span> </ng-template> </ng-template> 
                       </div>
-                      <button (click)="deleteAnswer(answer.id)">Borrar</button>
+                      <button (click)="deleteAnswer(answer.id)" class='button-4'><mat-icon>remove_circle_outline</mat-icon>Borrar</button>
                     </li>
                   </ul>
                 </div>
@@ -100,37 +100,6 @@
           <textarea matInput formControlName="text"></textarea>
     </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Tipo de la Pregunta</mat-label>
-        <mat-select  formControlName="type">
-          <mat-option value="simple">Verdadero/Falso</mat-option>
-          <mat-option value="multiple">Multiple</mat-option>
-          <mat-option value="complete">Complete</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      
-      <mat-form-field *ngIf="AddExamFormGroup.get('type')?.value === 'complete'" appearance="fill" style="width:100%;">
-        <mat-label>Texto</mat-label>
-        <textarea matInput formControlName="complete_answer"></textarea>
-        <mat-error *ngIf="AddExamFormGroup.hasError('completeAnswerRequired')">Respuesta completa es requerida.</mat-error>
-      </mat-form-field>
-      
-      <mat-form-field *ngIf="AddExamFormGroup.get('type')?.value === 'simple'">
-        <mat-label>Esta Pregunta es:</mat-label>
-        <mat-select formControlName="simple_answer">
-          <mat-option value="0">Verdadera</mat-option>
-          <mat-option value="1">Falsa</mat-option>
-        </mat-select>
-        <mat-error *ngIf="AddExamFormGroup.hasError('simpleAnswerRequired')">Respuesta simple es requerida.</mat-error>
-      </mat-form-field>
-
-      <!-- Otros campos -->
-
-      <div *ngIf="AddExamFormGroup.hasError('noAnswersForMultiple')">
-        <mat-error>No se deben proporcionar respuestas cuando el tipo es múltiple.</mat-error>
-      </div>
-    
 
       <br>      
     </form>
@@ -213,52 +182,50 @@
       <h1><mat-icon class="title-icon-lt">build</mat-icon> Añadir Respuestas</h1>
       <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
     </div>
-
+    <div>{{examDatafind.text}}?</div>
     <form [formGroup]="AddAnswerFormGroup" style='width: -webkit-fill-available;'>
-
       <mat-form-field>
         <mat-label>Tipo de la Pregunta</mat-label>
-        <mat-select  formControlName="type">
+        <mat-select formControlName="type">
           <mat-option value="radius">Verdadero/Falso</mat-option>
           <mat-option value="checkbox">Multiple</mat-option>
           <mat-option value="text">Complete</mat-option>
         </mat-select>
       </mat-form-field>
-
-       <!-- opciones si se elige una completacion-->
+    
+      <!-- opciones si se elige una completacion -->
       <mat-form-field *ngIf="AddAnswerFormGroup.get('type')?.value === 'text'" appearance="fill" style="width:100%;"> 
-        <mat-label>Pregunta:</mat-label> 
+        <mat-label>Respuesta:</mat-label> 
         <textarea matInput formControlName="answer"></textarea> 
         <mat-error *ngIf="AddExamFormGroup.hasError('completeAnswerRequired')">Respuesta completa es requerida.</mat-error> 
       </mat-form-field> 
-      
+    
       <mat-form-field *ngIf="AddAnswerFormGroup.get('type')?.value === 'text'" appearance="fill" style="width:100%;"> 
         <mat-label>Respuesta Verdadera:</mat-label> 
         <input matInput formControlName="true_response"> 
         <mat-error *ngIf="AddExamFormGroup.hasError('completeAnswerRequired')">Respuesta completa es requerida.</mat-error> 
       </mat-form-field>
-
-      <ng-container *ngIf="AddAnswerFormGroup.get('type')?.value === 'text'" appearance="fill" style="width:100%;"> 
+    
+      <ng-container *ngIf="AddAnswerFormGroup.get('type')?.value === 'text'" style="width:100%;"> 
         <div class="dialog-button-container">
-          <button class="export" (click)="insertAnswerText()"> 
+          <button class="add" (click)="insertAnswerText()"> 
             <mat-icon>build</mat-icon> 
             Insertar</button>
-    
           <button class="cancel" (click)="hideFilesDialog()">
             Cancelar
           </button>
         </div>
-      </ng-container>      
-
+      </ng-container>
+      
       <!-- opciones si se elige verdadero o falso los (radius)-->
       <mat-form-field *ngIf="AddAnswerFormGroup.get('type')?.value === 'radius'" appearance="fill" style="width:100%;"> 
-        <mat-label>Pregunta:</mat-label> 
+        <mat-label>Respuesta:</mat-label> 
         <textarea matInput formControlName="answer"></textarea> 
         <mat-error *ngIf="AddExamFormGroup.hasError('completeAnswerRequired')">Respuesta completa es requerida.</mat-error> 
       </mat-form-field>
 
       <mat-form-field *ngIf="AddAnswerFormGroup.get('type')?.value === 'radius'">
-        <mat-label>Esta Pregunta es:</mat-label>
+        <mat-label>Esta Respuesta es:</mat-label>
         <mat-select formControlName="true_response">
           <mat-option value="true">Correcta</mat-option>
           <mat-option value="false">Falsa</mat-option>
@@ -269,26 +236,27 @@
       <ng-container *ngIf="AddAnswerFormGroup.get('type')?.value === 'radius'" appearance="fill" style="width:100%;"> 
       <!--Aqui va la tabla de los grupos de preguntas insertados de tipo radius-->
 
-      <div class='answer_container' style="width: 100%;" >
+      <div  class='answer_container' style="width: 100%;" *ngIf="examDatafind.question_data?.length">
         <ul>
-          <li style="background: linear-gradient(45deg, #f54f0f, transparent); padding: 1rem; color: white; font-weight: 900;">Respuestas</li>
-            
-          <li *ngFor="let answer of examData?.question.question_data" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-top: 1px solid #7f7f7fe8;">
+          {{examDatafind.question_data.true_response}}
+          <li style="background: linear-gradient(45deg, #f54f0f, transparent); padding: 1rem; color: white; font-weight: 900;">Respuestas</li>                   
+          <li *ngFor="let answer of examDatafind.question_data" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-top: 1px solid #7f7f7fe8;flex-wrap: wrap;">
             <div>
-              {{answer.answer}} {{answer.true_response}}
+              {{answer.answer}} - <span style='font-weight: 600;'>Validación: </span> <span *ngIf="answer.true_response === 'true'; else falso" style="color:rgb(99, 214, 99);font-weight: 600;">Verdadero</span> <ng-template #falso><span style='color: rgb(240, 32, 32);font-weight: 800;'>Falso</span></ng-template>
             </div>
-            <button (click)="deleteAnswer(answer.id)">Borrar</button>
+            <button (click)="deleteAnswer(answer.id)" class='button-4'><mat-icon>remove_circle_outline</mat-icon>Borrar</button>
           </li>
         </ul>
       </div>
 
       </ng-container>
 
+
       <ng-container *ngIf="AddAnswerFormGroup.get('type')?.value === 'radius'" appearance="fill" style="width:100%;"> 
         <div class="dialog-button-container">
-          <button class="export" style="background:green;" (click)="insertAnswerRadius()"> 
+          <button class="add" (click)="insertAnswerRadius()"> 
             <mat-icon>build</mat-icon> 
-            Añadir (+)</button>
+            Añadir</button>
     
           <button class="cancel" (click)="hideFilesDialog()">
             Listo
@@ -298,13 +266,13 @@
 
       <!-- opciones si se elige una opcion multiple (los checkbox)-->      
         <mat-form-field *ngIf="AddAnswerFormGroup.get('type')?.value === 'checkbox'" appearance="fill" style="width:100%;">        
-        <mat-label>Pregunta:</mat-label> 
+        <mat-label>Respuesta:</mat-label> 
         <textarea matInput formControlName="answer"></textarea> 
         <mat-error *ngIf="AddExamFormGroup.hasError('completeAnswerRequired')">Respuesta completa es requerida.</mat-error> 
       </mat-form-field>
 
       <mat-form-field *ngIf="AddAnswerFormGroup.get('type')?.value === 'checkbox'">
-        <mat-label>Esta Pregunta es:</mat-label>
+        <mat-label>Esta Respuesta es:</mat-label>
         <mat-select formControlName="true_response">
           <mat-option value="true">Correcta</mat-option>
           <mat-option value="false">Falsa</mat-option>
@@ -313,12 +281,26 @@
       </mat-form-field>
       
       <ng-container *ngIf="AddAnswerFormGroup.get('type')?.value === 'checkbox'" appearance="fill" style="width:100%;"> 
-        <!--Aqui va la tabla de los grupos de preguntas insertados de tipo checkbox-->
-      </ng-container>
+        <!--Aqui va la tabla de los grupos de preguntas insertados de tipo radius-->
+  
+        <div  class='answer_container' style="width: 100%;" *ngIf="examDatafind.question_data?.length">
+          <ul>
+            {{examDatafind.question_data.true_response}}
+            <li style="background: linear-gradient(45deg, #f54f0f, transparent); padding: 1rem; color: white; font-weight: 900;">Respuestas</li>         
+            <li *ngFor="let answer of examDatafind.question_data" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-top: 1px solid #7f7f7fe8;flex-wrap: wrap;">
+              <div>
+                {{answer.answer}} - <span style='font-weight: 600;'>Validación: </span> <span *ngIf="answer.true_response === 'true'; else falso" style="color:rgb(99, 214, 99);font-weight: 600;">Verdadero</span> <ng-template #falso><span style='color: rgb(240, 32, 32);font-weight: 800;'>Falso</span></ng-template>
+              </div>
+              <button class='button-4' (click)="deleteAnswer(answer.id)"><mat-icon>remove_circle_outline</mat-icon>Borrar</button>
+            </li>
+          </ul>
+        </div>
+  
+        </ng-container>
 
       <ng-container *ngIf="AddAnswerFormGroup.get('type')?.value === 'checkbox'" appearance="fill" style="width:100%;"> 
         <div class="dialog-button-container">
-          <button class="export" style="background:green;" (click)="insertAnswerRadius()"> <mat-icon>build</mat-icon> Añadir (+)</button>
+          <button class="add" (click)="insertAnswerRadius()"> <mat-icon>build</mat-icon> Añadir</button>
     
           <button class="cancel" (click)="hideFilesDialog()">Listo</button>
 
