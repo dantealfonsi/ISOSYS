@@ -31,6 +31,15 @@
                   justify-content: center;
                   margin-right: 1rem;'>play_arrow</mat-icon>    <a (click)="goToLesson(unit.id,lesson.lesson_order)">Lección {{lesson.lesson_order}}: {{ lesson.title }}</a></h3>
               </div>
+              <hr>
+              <div *ngFor="let exam of unit.exams">
+                <h3 style="padding-left: 2rem; display: flex;"><mat-icon style='border: 1px solid gray;
+                  border-radius: 4px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-right: 1rem;'>play_arrow</mat-icon>    <a (click)="goToExam(unit.id,exam.id)">Examen {{exam.exam_order}}: {{ exam.title }}</a></h3>
+              </div>
             </div>
           </div>
     </section>

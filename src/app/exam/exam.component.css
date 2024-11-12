@@ -1,0 +1,61 @@
+
+video {
+    display: block;
+    margin: 0 auto 20px;
+  }
+  
+  .description, .files {
+    margin-top: 20px;
+  }
+  
+  h2 {
+    margin-top: 20px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 10px ;
+  }
+
+  :host /deep/ .youtube-player-placeholder{
+    margin: auto !important;
+  } 
+
+
+  .download-li{ 
+    display: flex;
+    margin: 0;
+    padding: 1.2rem;
+    border-bottom: 1px solid #0000002e;
+  }
+
+  .download-li:hover{
+    background-color: rgba(255, 68, 0, 0.137);
+  }
+
+
+.download-li a {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.menu-li{
+  padding: 1.2rem 0.6rem;
+  border-bottom: 1px solid #0000002e;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-weight:600;
+}
+
+.menu-li:hover{
+  background: rgba(255, 68, 0, 0.089);
+}

@@ -66,6 +66,9 @@ export class ViewUnitsComponent {
     this.router.navigate(['/view-lessons', unitId, lessonOrder]);
   }
 
+  goToExam(unitId: string, examId: string): void {
+    this.router.navigate(['/view-exam', unitId, examId]);
+  }
 
   unitsAndLessons!: any[];
 

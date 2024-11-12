@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -7,16 +7,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserNavbarComponent } from '../../assets/user-navbar/user-navbar.component';
 import { FooterComponent } from '../../assets/footer/footer.component';
 import { Router } from "@angular/router";
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { MatStepperModule } from '@angular/material/stepper';
+import {MatRadioModule} from '@angular/material/radio';
+import { ReactiveFormsModule } from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
-  selector: 'app-view-lessons',
+  selector: 'app-exam',
   standalone: true,
-  imports: [CommonModule,YouTubePlayerModule,MatIconModule,UserNavbarComponent, FooterComponent,],
-  templateUrl: './view-lessons.component.html',
-  styleUrl: './view-lessons.component.css'
+  imports: [CommonModule,YouTubePlayerModule,MatIconModule,UserNavbarComponent, FooterComponent,MatStepperModule,MatRadioModule,ReactiveFormsModule,MatCheckboxModule],
+  templateUrl: './exam.component.html',
+  styleUrl: './exam.component.css'
 })
+export class ExamComponent {
 
-export class ViewLessonsComponent implements OnInit {
 
   unitsAndLessons: any[] = []; 
   itemId!: string | null; 
@@ -24,15 +29,27 @@ export class ViewLessonsComponent implements OnInit {
   lesson: any; 
   url: string | undefined;
 
-  videoUrl: string = 'http://localhost/iso2sys_rest_api/videos/prueba.mp4';
+  exam_id!: string | null;
+  @Input() exam: any; 
+  questions?: any[];
+  stepCtrl!: FormGroup[];
+
+
+////////////////VALIDADORES DE EXAMENES///////////////
+selectedRadio!: string;
+
+
 
 
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    public router: Router
+    public router: Router,
+    private fb: FormBuilder
   ) {}
 
+
+  
 
   async unitsAndLessonsListRecover(){
     try {
@@ -51,72 +68,63 @@ export class ViewLessonsComponent implements OnInit {
   }
 
 
-async this_specific_lesson_recover() {
-    function extractVideoId(url: string) {
-        let videoId;
 
-        if (url.includes('youtu.be')) {
-            // Shortened URL
-            videoId = url.split('youtu.be/')[1];
-        } else if (url.includes('youtube.com')) {
-            // Standard URL
-            const urlParams = new URLSearchParams(new URL(url).search);
-            videoId = urlParams.get('v');
-        }
-
-        return videoId;
-    }
+  async this_specific_exam_recover() {
 
     try {
         const response = await fetch(
-            `http://localhost/iso2sys_rest_api/server.php?this_specific_lesson_list=&id=${this.itemId}&lesson_order=${this.lesson_order}`
+            `http://localhost/iso2sys_rest_api/server.php?this_exams_data=&id=${this.exam_id}`
         );
         if (!response.ok) {
             throw new Error('Error en la solicitud: ' + response.status);
         }
         const data = await response.json();
         console.log('Datos recibidos:', data);
-
-        // Assuming data.url contains the video URL
-        if (data.url) {
-            const videoId = extractVideoId(data.url);
-            console.log('Extracted Video ID:', videoId);
-            data.url = videoId; // Add the videoId to the data object
-        }
-
+      
         return data;
     } catch (error) {
         console.error('Error en la solicitud:', error);
     }
 }
 
+
+
+
+
+
 filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLessons.filter(unit => unit.id === itemId);}
   
 
 async ngOnInit() {
   this.itemId = this.route.snapshot.paramMap.get('id');
-  this.lesson_order = this.route.snapshot.paramMap.get('lesson_order');
-  this.lesson = await this.this_specific_lesson_recover();
+  this.exam_id = this.route.snapshot.paramMap.get('exam_id');
 
   this.unitsAndLessonsListRecover()
     .then(data => { 
       this.unitsAndLessons = this.filterUnitsAndLessons(data, this.itemId); 
       console.log("Unidades y lecciones filtradas:", this.unitsAndLessons); 
-
-      // Aseguramos que unitsAndLessons y sus propiedades están definidos
-      if (this.unitsAndLessons.length > 0 && this.unitsAndLessons[0].lessons.length > 0) {
-        this.url = this.unitsAndLessons[0].lessons[0].url;
-      }
     })
     .catch(error => { 
       console.error('Error recuperando las unidades y lecciones:', error); 
     });
 
   // Aseguramos que lesson no es undefined antes de acceder a url
-  if (this.lesson) {
-    this.url = this.lesson.url;
-  }
+
+    this.exam = await this.this_specific_exam_recover();
+    console.log("Datos de los Examenes:", this.exam); 
+
+    if (this.exam) {
+      this.initializeExam();
+    }
 }
+
+
+
+initializeExam() {
+  this.questions = Array.isArray(this.exam.question) ? this.exam.question : [];
+  this.stepCtrl = this.questions!.map(() => this.fb.group({}));
+}
+
 
   firstLetterUpperCase(word: string): string {
     return word.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
@@ -132,13 +140,17 @@ async ngOnInit() {
 
   goToLesson(unitId: string, lessonOrder: string): void {
     this.router.navigate(['/view-lessons', unitId, lessonOrder]);
-    location.reload();
+  }
+
+  hasRadiusOptions: boolean[] = [];
+
+  checkRadioOptions() {
+    this.questions?.forEach((question, index) => {
+      this.hasRadiusOptions[index] = question.question_data.some((answer: { type: string; }) => answer.type === 'radius');
+    });
   }
 
 
-}  
-
-
-
-
+  
+}
 

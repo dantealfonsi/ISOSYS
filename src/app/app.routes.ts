@@ -16,6 +16,7 @@ import { ViewLessonsComponent } from './view-lessons/view-lessons.component';
 import { ViewUnitsComponent } from './view-units/view-units.component';
 import { ViewExamComponent } from './view-exam/view-exam.component';
 import { ManageExamsComponent } from './manage-exams/manage-exams.component';
+import { ExamComponent } from './exam/exam.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -26,6 +27,7 @@ export const routes: Routes = [
     {path: 'about-us',           component: AboutUsComponent},
     {path: 'terms',           component: TermsComponent},
     {path: 'view-lessons/:id/:lesson_order', component: ViewLessonsComponent},
+    {path: 'view-exam/:id/:exam_id', component: ExamComponent},
     {path: 'view-units',           component: ViewUnitsComponent},
     {path: 'main',     component: AdminControlComponent, 
         children: [

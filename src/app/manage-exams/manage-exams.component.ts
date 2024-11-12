@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component,ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { stringify } from 'node:querystring';
 import Swal from 'sweetalert2';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-manage-exams',
@@ -52,6 +53,7 @@ import Swal from 'sweetalert2';
     MatTooltipModule,
     ReactiveFormsModule,
     MatCardModule,
+    MatCheckboxModule,
     HttpClientModule
   ],
   templateUrl: './manage-exams.component.html',
@@ -81,13 +83,13 @@ export class ManageExamsComponent {
   selectedQuestionList: any;
   isSelectDisabled: boolean = true;
   
-  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
+  constructor(private cdr: ChangeDetectorRef,private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
 
 
 
   initializeFormGroups() {
     this.AddExamFormGroup = this._formBuilder.group({
-      id: [""],
+      id:[''],
       exam_id: [this.itemId],
       question_order: ["", Validators.required],
       question_mark: ["", Validators.required],
@@ -101,7 +103,7 @@ export class ManageExamsComponent {
       answer: ["", Validators.required],
       true_response: ["", Validators.required],
     });
-    
+
   }
 
 ngOnInit(): void {
@@ -114,29 +116,31 @@ ngOnInit(): void {
 /*isSelectDisabled(): boolean {
   return this.examDatafind && this.examDatafind.block_select > 0; 
 }*/
-
 async loadList() {
   try {
     this.examData = await this.this_exams_recover();
-    
-    //se incrementa el count
-    this.currentIndex += Number(this.examData.count);
 
-    //obtengo el valor total del examen
-    this.totalValueExam = Number(this.examData.data_exam.total_score);
-    //resto el valor total del examen al total de question que existen
-    this.maxValueQuestion = this.totalValueExam - Number(this.examData.totalQuestionMark);    
+    // se incrementa el count
+    this.currentIndex += this.convertToNumber(this.examData.count);
+
+    // Verificar y convertir el total_score
+    const totalScoreStr: string = this.examData?.data_exam?.total_score?.toString().trim() || "0";
+
+    this.totalValueExam = Number(totalScoreStr);
+
+    // Resto el valor total del examen al total de question que existen
+    this.maxValueQuestion = this.totalValueExam - this.convertToNumber(this.examData.totalQuestionMark);
 
     const selectedQ = this.examData.question.find((p: { id: string; }) => p.id === this.idQuestionActual);
     this.examDatafind = selectedQ;
 
-    //traigo del back la informacion si se bloquea el select
-    if(this.examDatafind && this.examDatafind.block_select >0){
+    // Traigo del back la información si se bloquea el select
+    if (this.examDatafind && this.examDatafind.block_select > 0) {
       this.AddAnswerFormGroup.get('type').disable();
     }
 
-    console.log("id cuest: "+JSON.stringify(this.examDatafind, null, 2));
-  
+    console.log(this.examDatafind);
+
   } catch (error) {
     console.error('Error al recuperar los datos de la lista:', error);
     // Maneja el error según tus necesidades
@@ -145,7 +149,6 @@ async loadList() {
   // this.dataSource = new MatTableDataSource(this.sectionList);
   // this.dataSource.paginator = this.paginator;
 }
-
 
 
 /************************START RECOVERS************************************/
@@ -203,15 +206,13 @@ async this_lessons_files_recover(id:string) {
 
 /*********************************START QUERYS*************************************** */
 
-
 addQuestion() {
-
   const datos = {
     addQuestion: "",
     question: this.AddExamFormGroup.value
   };
 
-  console.log(datos.question);
+  console.log('Datos que se enviarán:', datos);
 
   if (this.AddExamFormGroup.valid) {
     // El formulario tiene valores válidos
@@ -225,8 +226,7 @@ addQuestion() {
     })
     .then(response => response.json())
     .then(data => {
-  
-      console.log(data);
+      console.log('Respuesta del servidor:', data);
       Swal.fire({
         title: 'Lección añadida!',
         text: 'La Lección fue añadida con exito.',
@@ -245,9 +245,10 @@ addQuestion() {
       title: '¡Faltan Datos en este formulario!',
       text: 'No puedes agregar debido a que no has ingesado todos los datos.',
       icon: 'error'
-    });    
-  }    
+    });
+  }
 }
+
 
 onEditList(id: string) {
   this.openEditDialog();
@@ -448,7 +449,7 @@ deleteAnswer(id: any) {
 /**********************************END QUERYS*************************************** */
 
 goBack(){
-  this.router.navigate(['main/unit']);
+  this.router.navigate(['main/exam']);
 }
 
 firstLetterUpperCase(word: string): string {
@@ -459,15 +460,23 @@ capitalizeWords(str : string) : string {
 return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 }
 
+
 openDialog() {
-  if(this.maxValueQuestion > 0){
+  console.log('Se llamó a openDialog');
+  console.log('Valor de maxValueQuestion:', this.maxValueQuestion);
+  console.log('Estructura de AddExamFormGroup antes de patchValue:', this.AddExamFormGroup.value);
+  if (this.maxValueQuestion > 0) {
     this.AddExamFormGroup.patchValue({
-      question_order: +this.examData.count+1,
-    }); 
-  
+      question_order: +this.examData.count + 1,
+    });
+    console.log('Estructura de AddExamFormGroup después de patchValue:', this.AddExamFormGroup.value);
     this.showdialog = true;
-  }else{
-    Swal.fire('Sin Cupo', 'Has alcanzado el maximo de preguntas segun la ponderacion del examen', 'error');
+    this.cdr.detectChanges();
+    console.log('Valor de showdialog:', this.showdialog);
+
+
+  } else {
+    Swal.fire('Sin Cupo', 'Has alcanzado el máximo de preguntas según la ponderación del examen', 'error');
   }
 }
 
@@ -485,6 +494,7 @@ hideFilesDialog() {
 
 hideDialog() {
   this.showdialog = false;
+  this.cdr.detectChanges();
 }
 
 hideEditDialog() {
@@ -612,6 +622,25 @@ customValidators(): ValidatorFn {
     return Object.keys(errors).length ? errors : null;
   };
 }
+
+
+ convertToNumber(value: any): number {
+  if (typeof value === 'string') {
+    const num = Number(value.trim());
+    if (isNaN(num)) {
+      console.error(`Error: No se pudo convertir "${value}" a número.`);
+      return 0; // O cualquier valor predeterminado adecuado
+    }
+    return num;
+  } else if (typeof value === 'number') {
+    return value; // Si ya es un número, simplemente devuélvelo
+  } else {
+    console.error(`Error: El valor no es una cadena ni un número. Valor:`, value);
+    return 0; // O cualquier valor predeterminado adecuado
+  }
+}
+
+
 
 
 
