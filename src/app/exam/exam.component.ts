@@ -8,10 +8,11 @@ import { UserNavbarComponent } from '../../assets/user-navbar/user-navbar.compon
 import { FooterComponent } from '../../assets/footer/footer.component';
 import { Router } from "@angular/router";
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-exam',
@@ -32,24 +33,28 @@ export class ExamComponent {
   exam_id!: string | null;
   @Input() exam: any; 
   questions?: any[];
-  stepCtrl!: FormGroup[];
-
+  stepCtrl: FormGroup[]; 
+  selectedType: string | null = null;
 
 ////////////////VALIDADORES DE EXAMENES///////////////
 selectedRadio!: string;
 
 
-
+selectedAnswers: { [step: number]: { [questionId: string]: any } } = {};
+correctAnswers: { [key: string]: string } = {};
+checkboxCounts: { [step: number]: { positives: number; negatives: number } } = {};
 
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     public router: Router,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private _formBuilder: FormBuilder
+  ) { 
+    this.questions = this.questions || [];
+    this.stepCtrl = this.questions.map(() => this._formBuilder.group({}));
+  }
 
-
-  
 
   async unitsAndLessonsListRecover(){
     try {
@@ -68,28 +73,23 @@ selectedRadio!: string;
   }
 
 
-
   async this_specific_exam_recover() {
 
     try {
         const response = await fetch(
-            `http://localhost/iso2sys_rest_api/server.php?this_exams_data=&id=${this.exam_id}`
+            `http://localhost/iso2sys_rest_api/server.php?evaluation_exams_data=&id=${this.exam_id}`
         );
         if (!response.ok) {
             throw new Error('Error en la solicitud: ' + response.status);
         }
         const data = await response.json();
-        console.log('Datos recibidos:', data);
+        console.log('Datos recibidos:', data); 
       
         return data;
     } catch (error) {
         console.error('Error en la solicitud:', error);
     }
 }
-
-
-
-
 
 
 filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLessons.filter(unit => unit.id === itemId);}
@@ -99,25 +99,25 @@ async ngOnInit() {
   this.itemId = this.route.snapshot.paramMap.get('id');
   this.exam_id = this.route.snapshot.paramMap.get('exam_id');
 
-  this.unitsAndLessonsListRecover()
-    .then(data => { 
-      this.unitsAndLessons = this.filterUnitsAndLessons(data, this.itemId); 
-      console.log("Unidades y lecciones filtradas:", this.unitsAndLessons); 
-    })
-    .catch(error => { 
-      console.error('Error recuperando las unidades y lecciones:', error); 
-    });
-
-  // Aseguramos que lesson no es undefined antes de acceder a url
+  try {
+    this.unitsAndLessons = this.filterUnitsAndLessons(await this.unitsAndLessonsListRecover(), this.itemId);
+    console.log("Unidades y lecciones filtradas:", this.unitsAndLessons);
 
     this.exam = await this.this_specific_exam_recover();
-    console.log("Datos de los Examenes:", this.exam); 
+    console.log("Datos de los Examenes:", this.exam);
 
     if (this.exam) {
       this.initializeExam();
     }
-}
+  } catch (error) {
+    console.error('Error recuperando las unidades y lecciones:', error);
+  }
 
+  // Asegúrate de que questions no es undefined
+  if (this.questions) {
+    this.stepCtrl = this.questions.map(() => this._formBuilder.group({}));
+  }
+}
 
 
 initializeExam() {
@@ -151,6 +151,271 @@ initializeExam() {
   }
 
 
+  onSelectionChange(answer: any, step: number, type: string, checkbox_true: string, questionId: string, true_response: boolean, isChecked?: boolean): void {
+    if (!this.selectedAnswers[step]) {
+      this.selectedAnswers[step] = {}; // Inicializa el objeto de respuestas seleccionadas para el paso si no existe
+    }
   
+    if (type === 'checkbox' && isChecked !== undefined) {
+      // Si es un checkbox, actualiza la respuesta seleccionada
+      if (!this.selectedAnswers[step][questionId]) {
+        this.selectedAnswers[step][questionId] = [];
+      }
+  
+      const existingIndex = this.selectedAnswers[step][questionId].findIndex((ans: any) => ans.answerId === answer.id);
+      if (isChecked && existingIndex === -1) {
+        // Si está checkeado y no está en la lista, agrégalo
+        this.selectedAnswers[step][questionId].push({
+          answerId: answer.id,
+          isChecked: isChecked,
+          true_response: true_response,
+          type: type,
+          checkbox_true: checkbox_true
+        });
+      } else if (!isChecked && existingIndex !== -1) {
+        // Si no está checkeado y está en la lista, elimínalo
+        this.selectedAnswers[step][questionId].splice(existingIndex, 1);
+      }
+    } else {
+      // Si no es checkbox, actualiza la respuesta directamente
+      this.selectedAnswers[step][questionId] = {
+        ...answer,
+        type: type,
+        checkbox_true: checkbox_true,
+        true_response: true_response
+      };
+    }
+  
+    console.log('Selected Step Answers => ', this.selectedAnswers);
+    //console.log(`Step: ${step}, Selected type: ${type}, Question ID: ${questionId}, Is Correct: ${answer.true_response === 'true'}, Is Checked: ${isChecked}`);
+  }
+  
+
+// Método para capturar el valor del input
+onTextInput(event: any, step: number, questionId: string, answer: any): void {
+  const inputValue = event.target.value;
+  if (!this.selectedAnswers[step]) {
+    this.selectedAnswers[step] = {};
+  }
+  this.selectedAnswers[step][questionId] = { ...answer, user_response: inputValue, type: 'text' };
+  console.log(`Input for question ${questionId}: ${inputValue}`);
+  console.log(`Selected Answers:`, this.selectedAnswers);
 }
+
+onRadioChange(event: any, step: number, question: any): void {
+  const selectedAnswer = question.question_data.find((answer: any) => answer.id === event.value);
+  if (selectedAnswer) {
+    this.onSelectionChange(selectedAnswer,step, selectedAnswer.type, selectedAnswer.checkbox_true, question.id, selectedAnswer);
+  }
+}
+
+/*
+checkAllAnswersTrue(step: number): boolean {
+  const selectedStepAnswers = this.selectedAnswers[step] || {};
+  console.log('Selected Step Answers:', selectedStepAnswers);
+
+  // Inicializar contadores
+  let trueCount = 0;
+  let falseCount = 0;
+  const checkboxTrueCount = this.questions[step].checkbox_true;
+  
+  // Recorrer todas las respuestas seleccionadas
+  for (const [questionId, answer] of Object.entries(selectedStepAnswers)) {
+    console.log('Processing aqui:', answer.checkbox_true);
+
+    if (answer.type === 'checkbox' && answer.isChecked) {
+      console.log('es un checkbox');
+      // Contar respuestas verdaderas y falsas de los checkboxes
+      if (answer.true_response === 'true') {
+        trueCount++;
+        console.log(trueCount);
+      } else if (answer.true_response === 'false') {
+        falseCount++;
+        console.log(falseCount);
+
+      }
+    } else if (answer.type === 'radius') {
+      console.log('es un radius');
+      // Contar respuesta del radio button
+      if (answer.true_response === 'true') {
+        trueCount++;
+      } else if (answer.true_response === 'false') {
+        falseCount++;
+      }
+    } else if (answer.type === 'text') {
+      console.log('es un text');
+      // Contar respuesta de tipo texto
+      console.log(`text: ${answer.user_response}, text compare: ${answer.true_response}`);
+      if (answer.user_response === answer.true_response) {
+        console.log("aprobado......");
+        trueCount++;
+      } else {
+        falseCount++;
+      }
+    }
+  }
+
+  // Validar que haya más respuestas verdaderas que falsas seleccionadas
+  const checkboxesValid = trueCount > falseCount;
+
+  console.log(`True Count: ${trueCount}, False Count: ${falseCount}`);
+
+  // Actualizar la verificación de todas las respuestas
+  const allCorrect = Object.values(selectedStepAnswers).every((answer: any) => {
+    if (answer.type === 'checkbox') {
+      return answer.isChecked ? answer.true_response === 'true' : true;
+    }
+    if (answer.type === 'radius') {
+      return answer.true_response === 'true';
+    }
+    if (answer.type === 'text') {
+      return answer.user_response === answer.true_response;
+    }
+    return true;
+  });
+
+  console.log(`allCorrect: ${allCorrect}, checkboxesValid: ${checkboxesValid}`);
+
+  return allCorrect && checkboxesValid;
+}
+
+*/
+
+checkboxAllAnswers(step: number): boolean {
+  const selectedStepAnswers = this.selectedAnswers[step] || {};
+  console.log('Selected Step Answers:', selectedStepAnswers);
+
+  // Inicializar el contador de respuestas verdaderas
+  let trueCount = 0;
+
+  // Obtener el número de respuestas verdaderas requeridas del backend
+  let checkboxTrueCount = '0';
+  console.log('checkbox_true:', checkboxTrueCount);
+
+  // Recorrer todas las respuestas seleccionadas
+  for (const answers of Object.values(selectedStepAnswers)) {    
+    if (Array.isArray(answers)) {
+      for (const answer of answers) {
+        checkboxTrueCount = answer.checkbox_true;
+        if (answer.type === 'checkbox' && answer.isChecked) {
+          // Contar respuestas verdaderas de los checkboxes
+          if (answer.true_response === 'true') {
+            trueCount++;
+            console.log('trueCount:', trueCount);
+          } else {
+            // Si alguna respuesta falsa está seleccionada, la pregunta es incorrecta
+            console.log('Una respuesta falsa está seleccionada');
+            return false;
+          }
+        }
+      }
+    }
+  }
+
+  // Verificar si el número de respuestas verdaderas seleccionadas coincide con checkbox_true
+  const isCorrect = trueCount === parseInt(checkboxTrueCount, 10);
+  console.log(`¿Número de respuestas verdaderas seleccionadas es correcto?: ${isCorrect}`);
+
+  return isCorrect;
+}
+
+
+
+checkAllAnswersTrue(step: number): boolean {
+  /*const selectedStepAnswers = this.selectedAnswers[step] || {};
+  
+  console.log('Selected Step Answers:', selectedStepAnswers);
+
+  // Inicializar contadores
+  let trueCount = 0;
+  let falseCount = 0;
+  const checkboxTrueCount = this.questions![step].checkbox_true;
+
+  // Recorrer todas las respuestas seleccionadas
+  for (const answer of Object.values(selectedStepAnswers)) {
+    if (answer.type === 'checkbox' && answer.isChecked) {
+      console.log('es un checkbox');
+      // Contar respuestas verdaderas y falsas de los checkboxes
+      if (answer.true_response === 'true') {
+        trueCount++;
+        console.log('trueCount:', trueCount);
+      } else if (answer.true_response === 'false') {
+        falseCount++;
+        console.log('falseCount:', falseCount);
+      }
+    } else if (answer.type === 'radius') {
+      console.log('es un radius');
+      // Contar respuesta del radio button
+      if (answer.true_response === 'true') {
+        trueCount++;
+      } else if (answer.true_response === 'false') {
+        falseCount++;
+      }
+    } else if (answer.type === 'text') {
+      console.log('es un text');
+      // Contar respuesta de tipo texto
+      console.log(`text: ${answer.user_response}, text compare: ${answer.true_response}`);
+      if (answer.user_response === answer.true_response) {
+        console.log("aprobado......");
+        trueCount++;
+      } else {
+        falseCount++;
+      }
+    }
+  }
+
+  // Validar si el número de respuestas verdaderas de los checkboxes coincide con checkbox_true
+  const checkboxesValid = trueCount === checkboxTrueCount && falseCount === 0;
+  console.log(`checkboxesValid: ${checkboxesValid}`);
+
+  // Actualizar la verificación de todas las respuestas
+  const allCorrect = Object.values(selectedStepAnswers).every((answer: any) => {
+    if (answer.type === 'checkbox') {
+      return answer.isChecked ? answer.true_response === 'true' : true;
+    }
+    if (answer.type === 'radius') {
+      return answer.true_response === 'true';
+    }
+    if (answer.type === 'text') {
+      return answer.user_response === answer.true_response;
+    }
+    return true;
+  });
+
+  console.log(`allCorrect: ${allCorrect}, checkboxesValid: ${checkboxesValid}`);
+
+  return allCorrect && checkboxesValid;*/
+  
+  return this.checkboxAllAnswers(step);
+
+}
+
+  validateAndProceed(event: Event, index: number, stepper: MatStepper): void {
+    event.preventDefault();
+
+    Swal.fire({
+      title: '¿Tu respuesta es definitiva?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const allAnswersTrue = this.checkAllAnswersTrue(index);
+        if (allAnswersTrue) {
+          Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success').then(() => {
+            stepper.next();
+          });
+        } else {
+          Swal.fire('¡Error!', 'Hay respuestas incorrectas.', 'error');
+        }
+        this.stepCtrl[index].markAsTouched();
+      }
+    });
+  }
+
+}
+
+
+
 

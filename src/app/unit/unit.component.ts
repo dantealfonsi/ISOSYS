@@ -73,6 +73,8 @@ export class UnitComponent {
   unitList: any;
   unitListMat: any;
 
+  history: any;
+
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router
@@ -83,7 +85,9 @@ export class UnitComponent {
 
   ngOnInit() {    
     this.initializeFormGroups();
-    this.loadList();    
+    this.loadList(); 
+    
+    this.history = { user: JSON.parse(localStorage.getItem('token') || '{}')?.id, person_id: JSON.parse(localStorage.getItem('token') || '{}')?.person_id };
   }
 
   
@@ -156,7 +160,8 @@ addUnit() {
 
   const datos = {
     addUnit: '',
-    unit: this.addUnitFormGroup.value
+    unit: this.addUnitFormGroup.value,
+    history: this.history
   };
 
     if (this.addUnitFormGroup.valid){
@@ -207,7 +212,9 @@ addUnit() {
   editUnit() {
     const datos = {
       editUnit: '',
-      unit: this.addUnitFormGroup.value
+      unit: this.addUnitFormGroup.value,
+      history: this.history
+
     };
   
       if (this.addUnitFormGroup.valid){
@@ -245,11 +252,13 @@ addUnit() {
       
   onDropList(id: any) {
     const datos = {
-      updateSingleField: id,
+      updateSingleFieldUnit: id,
       tabla: "units",
       campo: "isDeleted",
       whereCondition: `id = ${id}`,
-      valor: 1
+      valor: 1,
+      history: this.history
+
     };
 
     Swal.fire({

@@ -17,6 +17,9 @@ import { ViewUnitsComponent } from './view-units/view-units.component';
 import { ViewExamComponent } from './view-exam/view-exam.component';
 import { ManageExamsComponent } from './manage-exams/manage-exams.component';
 import { ExamComponent } from './exam/exam.component';
+import { ProfileComponent } from './profile/profile.component';
+import { IndexComponent } from './index/index.component';
+import { ReportComponent } from './report/report.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -29,6 +32,7 @@ export const routes: Routes = [
     {path: 'view-lessons/:id/:lesson_order', component: ViewLessonsComponent},
     {path: 'view-exam/:id/:exam_id', component: ExamComponent},
     {path: 'view-units',           component: ViewUnitsComponent},
+    {path: 'profile',           component: ProfileComponent},
     {path: 'main',     component: AdminControlComponent, 
         children: [
           {path: 'unit',      component: UnitComponent},
@@ -37,7 +41,10 @@ export const routes: Routes = [
           {path: 'admin',      component: ManageAdminsComponent},
           {path: 'add-admin',      component: AddAdminsComponent},
           {path: 'exam',      component: ViewExamComponent},
-          {path: 'manage-exams/:id',      component: ManageExamsComponent}
+          {path: 'manage-exams/:id',      component: ManageExamsComponent},
+          {path: 'report',      component: ReportComponent},
+          {path: 'index',      component: IndexComponent}
+
 
         ],
       },

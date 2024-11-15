@@ -46,7 +46,7 @@ item: any;
     {
       icon: 'dashboard',
       label: 'Inicio',
-      route: 'dashboard'
+      route: 'index'
     },
 
     {
@@ -84,8 +84,9 @@ item: any;
     {
       icon: 'subject',
       label: 'Reportes',
-      route: 'viewSubject'
+      route: 'report'
     },
+  
   ])
 
 

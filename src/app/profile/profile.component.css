@@ -1,0 +1,1 @@
+.custom-hr { display: flex; align-items: center; text-align: center; } .custom-hr::before, .custom-hr::after { content: ""; flex: 1; border-bottom: 1px solid #000; } .custom-hr::before { margin-right: 10px; } .custom-hr::after { margin-left: 10px; }

@@ -89,14 +89,14 @@
 
 
       <section>
-        <mat-horizontal-stepper linear *ngIf="questions && questions.length > 0">
+        <mat-horizontal-stepper #stepper linear *ngIf="questions && questions.length > 0">
           <mat-step *ngFor="let question of questions; let index = index" [stepControl]="stepCtrl[index]">
             <form [formGroup]="stepCtrl[index]">
               <ng-template matStepLabel>{{ question.text }}</ng-template>
               <div>
                 <p>{{ question.text }}</p>
-      
-                <mat-radio-group>
+        
+                <mat-radio-group (change)="onRadioChange($event, index, question)">
                   <ng-container *ngFor="let answer of question.question_data">
                     <ng-container *ngIf="answer.type === 'radius'">
                       <mat-radio-button [value]="answer.id">
@@ -104,26 +104,58 @@
                       </mat-radio-button>
                     </ng-container>
                   </ng-container>
-                </mat-radio-group>
-                
-      
+                </mat-radio-group> 
+        
                 <!-- Opciones adicionales fuera del mat-radio-group -->
                 <div *ngFor="let answer of question.question_data" [ngSwitch]="answer.type">
                   <div *ngSwitchCase="'checkbox'">
-                    <mat-checkbox>{{ answer.answer }}</mat-checkbox>
-                  </div>
-                  <div *ngSwitchCase="'text'">
+                    <mat-checkbox (change)="onSelectionChange(answer,index, answer.type, answer.checkbox_true, question.id, answer.true_response, $event.checked)">
+                      {{ answer.answer }}
+                    </mat-checkbox>
+                  </div>                  
+                  <div *ngSwitchCase="'text'"> 
                     <p>{{ answer.answer }}</p>
-                    <input matInput placeholder="Respuesta">
-                  </div>
+                    <input matInput placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)">
+                  </div>                                                    
                 </div>
               </div>
               <div>
-                <button mat-button matStepperNext>Next</button>
+                <button mat-button (click)="validateAndProceed($event, index, stepper)">Next</button>
               </div>
             </form>
           </mat-step>
         </mat-horizontal-stepper>
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
+        <!-- Mostrar el tipo de pregunta seleccionado -->
+        <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
+        
         <div *ngIf="!questions || questions.length === 0">
           <p>No hay preguntas disponibles.</p>
         </div>
@@ -132,7 +164,7 @@
 
   
   
-  
+   
   
         <div>
   

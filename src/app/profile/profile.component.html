@@ -1,0 +1,134 @@
+
+<div class="culmn">
+  <header id="main_menu" class="header navbar-fixed-top">            
+      <div class="main_menu_bg">
+          <div class="container">
+              <div class="row">
+               <app-user-navbar></app-user-navbar>
+              </div>
+
+          </div>
+
+      </div>
+  </header> <!--End of header -->
+
+  <mat-tab-group style="margin-top: 10rem;margin-bottom: 5rem;">
+    <mat-tab label="Datos Personales"> 
+
+      <section style="display: flex;flex-flow: column wrap;padding: 4rem;flex-direction: column;align-content: center;">
+
+    
+
+      <form [formGroup]="editPersonFormGroup">
+        <div style="display: flex;flex-direction: row;align-items: center;">
+      <mat-form-field style="width: 5rem;">
+        <mat-select formControlName="nationality" [(value)]="selectedNationality" [(ngModel)]="selectedNationality">
+          <mat-option *ngFor="let option of nationality" [value]="option.value">{{ option.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" style="width:10rem;">
+        <mat-label>Cedula</mat-label>
+        <input type="text" matInput formControlName="cedula"/>
+      </mat-form-field>
+    </div>
+      <br />
+      <div class="two-inputs">
+        <mat-form-field class="example-full-width">
+          <mat-label>Nombre</mat-label>
+          <input type="text" matInput formControlName="name" style="text-transform: capitalize;"/>
+        </mat-form-field>
+        <br />
+        <mat-form-field  class="example-full-width">
+          <mat-label>Segundo Nombre</mat-label>
+          <input type="text" matInput formControlName="second_name" style="text-transform: capitalize;"/>
+        </mat-form-field>
+      </div>
+      <br />
+
+      <div class="two-inputs">
+        <mat-form-field class="example-full-width">
+          <mat-label>Apellido</mat-label>
+          <input type="text" matInput formControlName="last_name" style="text-transform: capitalize;"/>
+        </mat-form-field>
+        <br />
+        <mat-form-field class="example-full-width">
+          <mat-label>Segundo Apellido</mat-label>
+          <input type="text" matInput formControlName="second_last_name" style="text-transform: capitalize;"/>
+        </mat-form-field>
+      </div>
+
+      <br />
+
+      <div class="two-inputs">
+        <mat-form-field class="example-full-width">
+          <mat-label>Teléfono</mat-label>
+          <input type="text" matInput formControlName="phone" />
+          <mat-error *ngIf="editPersonFormGroup.get('phone')?.invalid">
+            Ejemplo: 0412-858-1138 o 04128581138.
+          </mat-error>
+        </mat-form-field>
+        <br />
+
+        <mat-form-field>
+          <mat-label>Escoge una fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="birthday" />
+          <mat-hint>DIA/MES/AÑO</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+   
+      </div>
+
+      <mat-form-field
+        style="width: 100%"
+        class="example-full-width"
+      >
+        <mat-label>Dirección</mat-label>
+        <input type="text" matInput formControlName="address" />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <mat-label>Elige un genero</mat-label>
+        <mat-select matNativeControl required formControlName="gender" aria-label="Select an option">
+          <mat-option [value]="'masculino'">Masculino</mat-option>
+          <mat-option [value]="'femenino'">Femenino</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br /><br />
+    </form>
+
+    <!--<div class="custom-hr" style="margin-bottom: 2rem;"> Datos de usuario </div>
+
+      <form [formGroup]="editUserFormGroup" style="display:flex;flex-direction: column;">
+      
+        <mat-form-field class="example-full-width">
+          <mat-label>Nombre de Usuario</mat-label>
+          <input type="text" matInput formControlName="email" >
+        </mat-form-field>
+        <br>
+  
+        <mat-form-field class="example-full-width">
+          <mat-label>Contraseña</mat-label>
+          <input  type="password" placeholder="**********" matInput formControlName="password">
+        </mat-form-field>
+        <br>
+        
+      </form> -->
+
+      <button (click)="editUser()">Guardar</button>
+
+    </section>
+
+    </mat-tab>
+    <mat-tab label="Avances">Notas</mat-tab>
+  </mat-tab-group>
+
+
+  <app-footer></app-footer>
+

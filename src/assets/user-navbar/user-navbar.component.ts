@@ -48,4 +48,9 @@ export class UserNavbarComponent {
     goToLanding() {
       this.router.navigate(['/home']);
     }
+
+        
+    goToProfile() {
+      this.router.navigate(['/profile']);
+    }
 }
