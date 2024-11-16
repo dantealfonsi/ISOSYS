@@ -59,3 +59,8 @@ video {
 .menu-li:hover{
   background: rgba(255, 68, 0, 0.089);
 }
+
+
+::ng-deep .mat-horizontal-stepper-header{
+  pointer-events: none !important;
+}

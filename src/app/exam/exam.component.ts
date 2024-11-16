@@ -115,7 +115,7 @@ async ngOnInit() {
 
   // Asegúrate de que questions no es undefined
   if (this.questions) {
-    this.stepCtrl = this.questions.map(() => this._formBuilder.group({}));
+    this.stepCtrl = this.questions.map(() => this._formBuilder.group({selectedAnswer: ['', Validators.required]}));
   }
 }
 
@@ -393,30 +393,91 @@ checkAllAnswersTrue(step: number): boolean {
   //return this.checkboxAllAnswers(step);
 }
 
+  colorChange: boolean = false;
+  firstAttempt: boolean = true;
+  userMark: number = 0;
+
+  isLastStep(index: number): boolean { return index === this.questions!.length - 1; }
+
+  isStepValid(index: number): boolean { const formGroup = this.stepCtrl[index]; return formGroup.valid; }
+
   validateAndProceed(event: Event, index: number, stepper: MatStepper): void {
     event.preventDefault();
-
-    Swal.fire({
-      title: '¿Tu respuesta es definitiva?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const allAnswersTrue = this.checkAllAnswersTrue(index);
-        if (allAnswersTrue) {
-          Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success').then(() => {
-            stepper.next();
-          });
-        } else {
-          Swal.fire('¡Error!', 'Hay respuestas incorrectas.', 'error');
+  
+    const confirmResponse = () => {
+      Swal.fire({
+        title: '¿Tu respuesta es definitiva?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Activa el cambio de color después de la confirmación
+          this.colorChange = true;
+  
+          const allAnswersTrue = this.checkAllAnswersTrue(index);
+          if (allAnswersTrue) {
+            Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success');
+          } else {
+            Swal.fire('¡Error!', 'Hay respuestas incorrectas.', 'error');
+          }
+          this.stepCtrl[index].markAsTouched();
+          this.firstAttempt = false;  // Marca que la primera vez ya ha pasado
         }
-        this.stepCtrl[index].markAsTouched();
+      });
+    };
+  
+    if (this.firstAttempt) {
+      confirmResponse();
+    } else {
+      const allAnswersTrue = this.checkAllAnswersTrue(index);
+      if (allAnswersTrue) {
+        const hiddenInput = document.getElementById(`hidden-mark-${index}`) as HTMLInputElement; 
+        this.userMark += Number(hiddenInput.value);
+        console.log(this.userMark);
+        Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success').then(() => {
+          stepper.next();
+          // Restablece el fondo a blanco y desactiva el cambio de color después de avanzar
+          setTimeout(() => {
+            this.colorChange = false;
+            this.firstAttempt = true;  // Restablece para el siguiente step
+          }, 100);
+        });
+      } else {
+        Swal.fire({
+          title: '¡Error!',
+          text: 'Hay respuestas incorrectas.',
+          icon: 'error',
+          confirmButtonText: 'Continuar'
+        }).then(() => {
+          stepper.next();
+          // Restablece el fondo a blanco y desactiva el cambio de color después de avanzar
+          setTimeout(() => {
+            this.colorChange = false;
+            this.firstAttempt = true;  // Restablece para el siguiente step
+          }, 100);
+        });
       }
-    });
+      this.stepCtrl[index].markAsTouched();
+    }
   }
 
+  preventNavigation(event: MouseEvent): void {
+    event.stopImmediatePropagation();
+    event.preventDefault();
+  }
+  
+
+
+  // El resto del código del componente...
+
+
+  
+  
+  
+
+  
 }
 
 
