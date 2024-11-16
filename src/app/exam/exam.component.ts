@@ -13,6 +13,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { ExamCompletionDialogComponent } from '../exam-completion-dialog/exam-completion-dialog.component';
 
 @Component({
   selector: 'app-exam',
@@ -33,7 +35,14 @@ export class ExamComponent {
   exam_id!: string | null;
   @Input() exam: any; 
   questions?: any[];
-  stepCtrl: FormGroup[]; 
+  stepCtrl: FormGroup[];
+
+
+  ////AÑADIR NOTAS///////
+  addMarkFormGroup!: FormGroup; 
+  userId: any = JSON.parse(localStorage.getItem('token') || '{}')?.id;
+
+  /////FIN AÑADIR NOTAS//////
   selectedType: string | null = null;
 
 ////////////////VALIDADORES DE EXAMENES///////////////
@@ -49,7 +58,8 @@ checkboxCounts: { [step: number]: { positives: number; negatives: number } } = {
     private sanitizer: DomSanitizer,
     public router: Router,
     private fb: FormBuilder,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    public examResults: MatDialog
   ) { 
     this.questions = this.questions || [];
     this.stepCtrl = this.questions.map(() => this._formBuilder.group({}));
@@ -98,7 +108,7 @@ filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLess
 async ngOnInit() {
   this.itemId = this.route.snapshot.paramMap.get('id');
   this.exam_id = this.route.snapshot.paramMap.get('exam_id');
-
+  console.log(this.userId);
   try {
     this.unitsAndLessons = this.filterUnitsAndLessons(await this.unitsAndLessonsListRecover(), this.itemId);
     console.log("Unidades y lecciones filtradas:", this.unitsAndLessons);
@@ -109,6 +119,7 @@ async ngOnInit() {
     if (this.exam) {
       this.initializeExam();
     }
+
   } catch (error) {
     console.error('Error recuperando las unidades y lecciones:', error);
   }
@@ -144,12 +155,12 @@ initializeExam() {
 
   hasRadiusOptions: boolean[] = [];
 
+
   checkRadioOptions() {
     this.questions?.forEach((question, index) => {
       this.hasRadiusOptions[index] = question.question_data.some((answer: { type: string; }) => answer.type === 'radius');
     });
   }
-
 
   onSelectionChange(answer: any, step: number, type: string, checkbox_true: string, questionId: string, true_response: boolean, isChecked?: boolean): void {
     if (!this.selectedAnswers[step]) {
@@ -210,77 +221,6 @@ onRadioChange(event: any, step: number, question: any): void {
 
 }
 
-/*
-checkAllAnswersTrue(step: number): boolean {
-  const selectedStepAnswers = this.selectedAnswers[step] || {};
-  console.log('Selected Step Answers:', selectedStepAnswers);
-
-  // Inicializar contadores
-  let trueCount = 0;
-  let falseCount = 0;
-  const checkboxTrueCount = this.questions[step].checkbox_true;
-  
-  // Recorrer todas las respuestas seleccionadas
-  for (const [questionId, answer] of Object.entries(selectedStepAnswers)) {
-    console.log('Processing aqui:', answer.checkbox_true);
-
-    if (answer.type === 'checkbox' && answer.isChecked) {
-      console.log('es un checkbox');
-      // Contar respuestas verdaderas y falsas de los checkboxes
-      if (answer.true_response === 'true') {
-        trueCount++;
-        console.log(trueCount);
-      } else if (answer.true_response === 'false') {
-        falseCount++;
-        console.log(falseCount);
-
-      }
-    } else if (answer.type === 'radius') {
-      console.log('es un radius');
-      // Contar respuesta del radio button
-      if (answer.true_response === 'true') {
-        trueCount++;
-      } else if (answer.true_response === 'false') {
-        falseCount++;
-      }
-    } else if (answer.type === 'text') {
-      console.log('es un text');
-      // Contar respuesta de tipo texto
-      console.log(`text: ${answer.user_response}, text compare: ${answer.true_response}`);
-      if (answer.user_response === answer.true_response) {
-        console.log("aprobado......");
-        trueCount++;
-      } else {
-        falseCount++;
-      }
-    }
-  }
-
-  // Validar que haya más respuestas verdaderas que falsas seleccionadas
-  const checkboxesValid = trueCount > falseCount;
-
-  console.log(`True Count: ${trueCount}, False Count: ${falseCount}`);
-
-  // Actualizar la verificación de todas las respuestas
-  const allCorrect = Object.values(selectedStepAnswers).every((answer: any) => {
-    if (answer.type === 'checkbox') {
-      return answer.isChecked ? answer.true_response === 'true' : true;
-    }
-    if (answer.type === 'radius') {
-      return answer.true_response === 'true';
-    }
-    if (answer.type === 'text') {
-      return answer.user_response === answer.true_response;
-    }
-    return true;
-  });
-
-  console.log(`allCorrect: ${allCorrect}, checkboxesValid: ${checkboxesValid}`);
-
-  return allCorrect && checkboxesValid;
-}
-
-*/
 
 checkboxAllAnswers(step: number): boolean {
   const selectedStepAnswers = this.selectedAnswers[step] || {};
@@ -459,9 +399,19 @@ checkAllAnswersTrue(step: number): boolean {
           }, 100);
         });
       }
+  
+      if (this.isLastStep(index)) {
+        this.addMark().then(() => {
+          this.openExamResults(this.userMark);
+        }).catch(error => {
+          console.error('Error al añadir la puntuación:', error);
+        });
+      }
+  
       this.stepCtrl[index].markAsTouched();
     }
   }
+
 
   preventNavigation(event: MouseEvent): void {
     event.stopImmediatePropagation();
@@ -470,15 +420,62 @@ checkAllAnswersTrue(step: number): boolean {
   
 
 
+  openExamResults(userMark: number): void { 
+    const dialogRef = this.examResults.open(ExamCompletionDialogComponent, 
+      { width: '300px', 
+        data: { userMark: userMark } 
+      }); dialogRef.afterClosed().subscribe(
+        result => { console.log('El diálogo se cerró'); }
+          // Realiza alguna acción después de cerrar el diálogo si es necesario }); }
+        )}
+
+
+
+        addMark(): Promise<void> {
+          return new Promise((resolve, reject) => {
+            const datos = {
+              addMark: "",
+              score: this.userMark,
+              exam_id: this.exam_id,
+              user_id: this.userId
+            };
+        
+            console.log(datos);
+            fetch('http://localhost/iso2sys_rest_api/server.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              Swal.fire({
+                title: 'Puntuación añadida!',
+                text: 'La puntuación fue añadida con éxito.',
+                icon: 'success'
+              }).then(() => {
+                resolve();  // Resuelve la promesa cuando los datos se envían con éxito
+              });
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              reject(error);  // Rechaza la promesa si hay un error
+            });
+          });
+        }
+        
+
+
+
+
+
+}
   // El resto del código del componente...
 
-
-  
-  
   
 
-  
-}
 
 
 
