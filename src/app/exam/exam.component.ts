@@ -205,8 +205,9 @@ onTextInput(event: any, step: number, questionId: string, answer: any): void {
 onRadioChange(event: any, step: number, question: any): void {
   const selectedAnswer = question.question_data.find((answer: any) => answer.id === event.value);
   if (selectedAnswer) {
-    this.onSelectionChange(selectedAnswer,step, selectedAnswer.type, selectedAnswer.checkbox_true, question.id, selectedAnswer);
+    this.onSelectionChange(selectedAnswer,step, selectedAnswer.type, selectedAnswer.checkbox_true, question.id, selectedAnswer.true_response);
   }
+
 }
 
 /*
@@ -293,7 +294,7 @@ checkboxAllAnswers(step: number): boolean {
   console.log('checkbox_true:', checkboxTrueCount);
 
   // Recorrer todas las respuestas seleccionadas
-  for (const answers of Object.values(selectedStepAnswers)) {    
+  for (const answers of Object.values(selectedStepAnswers)) {
     if (Array.isArray(answers)) {
       for (const answer of answers) {
         checkboxTrueCount = answer.checkbox_true;
@@ -322,56 +323,61 @@ checkboxAllAnswers(step: number): boolean {
 
 
 checkAllAnswersTrue(step: number): boolean {
-  /*const selectedStepAnswers = this.selectedAnswers[step] || {};
-  
-  console.log('Selected Step Answers:', selectedStepAnswers);
+  const selectedStepAnswers = this.selectedAnswers[step] || {};
 
   // Inicializar contadores
   let trueCount = 0;
   let falseCount = 0;
-  const checkboxTrueCount = this.questions![step].checkbox_true;
-
+  let checkboxTrueCount = '0';
+  let checkbox_active = false;
+  
   // Recorrer todas las respuestas seleccionadas
-  for (const answer of Object.values(selectedStepAnswers)) {
-    if (answer.type === 'checkbox' && answer.isChecked) {
-      console.log('es un checkbox');
-      // Contar respuestas verdaderas y falsas de los checkboxes
-      if (answer.true_response === 'true') {
-        trueCount++;
-        console.log('trueCount:', trueCount);
-      } else if (answer.true_response === 'false') {
-        falseCount++;
-        console.log('falseCount:', falseCount);
+  for (const answers of Object.values(selectedStepAnswers)) {
+    if (Array.isArray(answers)) {
+      for (const answer of answers) {
+        checkboxTrueCount = answer.checkbox_true;
+        if (answer.type === 'checkbox' && answer.isChecked) {
+          checkbox_active = true;
+          // Contar respuestas verdaderas de los checkboxes
+          if (answer.true_response === 'true') {
+            trueCount++;
+            console.log('trueCount:', trueCount);
+          } else {
+            // Si alguna respuesta falsa está seleccionada, la pregunta es incorrecta
+            return false;
+          }
+        }
       }
-    } else if (answer.type === 'radius') {
-      console.log('es un radius');
-      // Contar respuesta del radio button
-      if (answer.true_response === 'true') {
-        trueCount++;
-      } else if (answer.true_response === 'false') {
-        falseCount++;
+    }else{
+      if (answers.type === 'radius') {
+        console.log('es un radius');
+        // Contar respuesta del radio button
+        if (answers.true_response === 'true') {
+          trueCount++;
+        } else if (answers.true_response === 'false') {
+          falseCount++;
+        }
+      } else if (answers.type === 'text') {
+        console.log('es un text');
+        // Contar respuesta de tipo texto
+        console.log(`text: ${answers.user_response}, text compare: ${answers.true_response}`);
+        if (answers.user_response === answers.true_response) {
+          console.log("aprobado......");
+          trueCount++;
+        } else {
+          falseCount++;
+        }
       }
-    } else if (answer.type === 'text') {
-      console.log('es un text');
-      // Contar respuesta de tipo texto
-      console.log(`text: ${answer.user_response}, text compare: ${answer.true_response}`);
-      if (answer.user_response === answer.true_response) {
-        console.log("aprobado......");
-        trueCount++;
-      } else {
-        falseCount++;
-      }
-    }
+    } 
   }
 
-  // Validar si el número de respuestas verdaderas de los checkboxes coincide con checkbox_true
-  const checkboxesValid = trueCount === checkboxTrueCount && falseCount === 0;
-  console.log(`checkboxesValid: ${checkboxesValid}`);
-
   // Actualizar la verificación de todas las respuestas
+  
   const allCorrect = Object.values(selectedStepAnswers).every((answer: any) => {
-    if (answer.type === 'checkbox') {
-      return answer.isChecked ? answer.true_response === 'true' : true;
+    if (checkbox_active) {
+    const isCorrect = trueCount === parseInt(checkboxTrueCount, 10);
+     console.log('isCorrect -->',isCorrect);
+      return isCorrect;
     }
     if (answer.type === 'radius') {
       return answer.true_response === 'true';
@@ -382,12 +388,9 @@ checkAllAnswersTrue(step: number): boolean {
     return true;
   });
 
-  console.log(`allCorrect: ${allCorrect}, checkboxesValid: ${checkboxesValid}`);
-
-  return allCorrect && checkboxesValid;*/
-  
-  return this.checkboxAllAnswers(step);
-
+  console.log('allCorrect -->',allCorrect);
+  return allCorrect;  
+  //return this.checkboxAllAnswers(step);
 }
 
   validateAndProceed(event: Event, index: number, stepper: MatStepper): void {
