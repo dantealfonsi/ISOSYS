@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
 
 @Component({
   selector: 'app-index',
@@ -12,10 +16,13 @@ export class IndexComponent {
 
   cardData: any;
 
-    
+
   ngOnInit() {
+    
     this.loadData();
   }
+
+
 
 
 
@@ -41,11 +48,12 @@ export class IndexComponent {
 async loadData() {
 
   this.cardData = await this.cardRecover();
-  console.log('CardData:', this.cardRecover); // Verifica el contenido de userData
+
+  console.log('CardData:', this.cardRecover); // Verifica el contenido de cardata
+
+
 
 }
-
-
 
 
 }

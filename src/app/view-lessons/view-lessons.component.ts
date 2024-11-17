@@ -93,30 +93,37 @@ async this_specific_lesson_recover() {
 filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLessons.filter(unit => unit.id === itemId);}
   
 
-async ngOnInit() {
-  this.itemId = this.route.snapshot.paramMap.get('id');
-  this.lesson_order = this.route.snapshot.paramMap.get('lesson_order');
-  this.lesson = await this.this_specific_lesson_recover();
-
-  this.unitsAndLessonsListRecover()
-    .then(data => { 
-      this.unitsAndLessons = this.filterUnitsAndLessons(data, this.itemId); 
-      console.log("Unidades y lecciones filtradas:", this.unitsAndLessons); 
-
-      // Aseguramos que unitsAndLessons y sus propiedades están definidos
-      if (this.unitsAndLessons.length > 0 && this.unitsAndLessons[0].lessons.length > 0) {
-        this.url = this.unitsAndLessons[0].lessons[0].url;
-      }
-    })
-    .catch(error => { 
-      console.error('Error recuperando las unidades y lecciones:', error); 
-    });
-
-  // Aseguramos que lesson no es undefined antes de acceder a url
-  if (this.lesson) {
-    this.url = this.lesson.url;
-  }
+ ngOnInit() {
+  this.route.params.subscribe(params => {
+    this.itemId = this.route.snapshot.paramMap.get('id');
+    this.lesson_order = this.route.snapshot.paramMap.get('lesson_order');
+  this.loadLesson();
+  });
 }
+
+  async loadLesson(){
+
+    this.lesson = await this.this_specific_lesson_recover();
+  
+    this.unitsAndLessonsListRecover()
+      .then(data => { 
+        this.unitsAndLessons = this.filterUnitsAndLessons(data, this.itemId); 
+        console.log("Unidades y lecciones filtradas:", this.unitsAndLessons); 
+  
+        // Aseguramos que unitsAndLessons y sus propiedades están definidos
+        if (this.unitsAndLessons.length > 0 && this.unitsAndLessons[0].lessons.length > 0) {
+          this.url = this.unitsAndLessons[0].lessons[0].url;
+        }
+      })
+      .catch(error => { 
+        console.error('Error recuperando las unidades y lecciones:', error); 
+      });
+  
+    // Aseguramos que lesson no es undefined antes de acceder a url
+    if (this.lesson) {
+      this.url = this.lesson.url;
+    }
+  }
 
   firstLetterUpperCase(word: string): string {
     return word.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
@@ -132,9 +139,11 @@ async ngOnInit() {
 
   goToLesson(unitId: string, lessonOrder: string): void {
     this.router.navigate(['/view-lessons', unitId, lessonOrder]);
-    location.reload();
   }
 
+  goToExam(unitId: string, lesson_id: string): void {
+    this.router.navigate(['/view-exam', unitId, lesson_id]);
+  }
 
 }  
 

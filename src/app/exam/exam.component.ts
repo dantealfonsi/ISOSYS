@@ -467,9 +467,10 @@ checkAllAnswersTrue(step: number): boolean {
         }
         
 
-
-
-
+        goToExam(unitId: string, lesson_id: string): void {
+          this.router.navigate(['/view-exam', unitId, lesson_id]);
+        }
+    
 
 }
   // El resto del código del componente...

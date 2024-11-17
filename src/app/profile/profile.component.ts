@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component,computed,signal,OnInit} from '@angular/core';
+import { Component,computed,signal,OnInit, ViewChild} from '@angular/core';
 import { MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,10 +41,18 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
+
+interface Marks {
+  unit_name: string;  
+  unit_order: string;
+  exam_title: string;
+  score: string;
+}
+
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule,MatNativeDateModule,MatDatepickerModule,FormsModule,ReactiveFormsModule,MatListModule,MatSelectModule,MatInputModule,MatFormFieldModule,MatTabsModule, MatIconModule, MatButtonModule, MatSidenavModule, CustomSidenavComponent, CommonModule, UserNavbarComponent, FooterComponent],
+  imports: [RouterOutlet,MatPaginatorModule,MatTableModule,MatSortModule,MatToolbarModule,MatNativeDateModule,MatDatepickerModule,FormsModule,ReactiveFormsModule,MatListModule,MatSelectModule,MatInputModule,MatFormFieldModule,MatTabsModule, MatIconModule, MatButtonModule, MatSidenavModule, CustomSidenavComponent, CommonModule, UserNavbarComponent, FooterComponent],
   templateUrl: './profile.component.html',
   animations: [
     trigger('enterAnimation', [
@@ -65,11 +73,17 @@ export class ProfileComponent {
   userId?: string;
   userData?: any;
 
+  markData: any;
+  markDataMat: any;
+
   editUserFormGroup!: FormGroup;
   editPersonFormGroup!: FormGroup;
 
   constructor(private router: Router,private _formBuilder: FormBuilder,private cookieService: CookieService) {}
 
+  @ViewChild(MatPaginator) paginator! : MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
       
   collapsed = signal(false);
   sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
@@ -202,6 +216,23 @@ firstLetterUpperCase(word: string): string {
 }
 
 
+async markListRecover() {
+  try {
+    const response = await fetch(
+      `http://localhost/iso2sys_rest_api/server.php?mark_list=&user_id=${this.userId}`
+    );
+    if (!response.ok) {
+      throw new Error("Error en la solicitud: " + response.status);
+    }
+    const data = await response.json();
+    console.log("Datos recibidos:", data);
+    return data; // Devuelve los datos
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
+
+
 
 async loadData() {
   // Paso 1: Obtener el valor del local storage
@@ -225,7 +256,11 @@ async loadData() {
 
   // Asegúrate de que this_user_recover se complete antes de seguir
   this.userData = await this.this_user_recover();
+  this.markData = await this.markListRecover();
+  this.markDataMat = new MatTableDataSource<Marks>(this.markData);
+
   console.log('userData:', this.userData); // Verifica el contenido de userData
+  console.log('MarkData:', this.markListRecover); // Verifica el contenido de marklist
 
   if (this.userData && this.userData.person_id) {
     this.patchValues(); // Llámalo solo después de que userData esté definido
@@ -279,6 +314,22 @@ async editUser(){
     });    
   }    
 }
+
+
+
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this.markDataMat.filter = filterValue.trim().toLowerCase();
+}
+
+
+downloadPdf(){
+  var doc = new jsPDF();
+
+    autoTable(doc,{html:"#content"});
+    doc.save("Usuarios");
+}
+
 
 
 
