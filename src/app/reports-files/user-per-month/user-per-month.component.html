@@ -1,0 +1,36 @@
+<div>
+    <canvas
+      baseChart
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [type]="barChartType"
+      (chartHover)="chartHovered($event)"
+      (chartClick)="chartClicked($event)"
+    >
+    </canvas>
+  
+  </div>
+  
+  
+<section>
+    <div>
+        <h2 style="text-decoration: underline;">Usuarios por Mes</h2>
+        <table border='1'>
+          <thead>
+            <tr style="background: #ff6c007d;">
+              <th>Mes</th>
+              <th>Nombre del Mes</th>
+              <th>Cantidad de Usuarios</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of reportList">
+              <td>{{ report.month }}</td>
+              <td>{{ report.month_name }}</td>
+              <td>{{ report.user_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+</section>

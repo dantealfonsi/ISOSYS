@@ -23,12 +23,10 @@
               <mat-form-field class="example-full-width">
                 <mat-label>Reporte</mat-label>
                 <mat-select #report (valueChange)="change($event)">
-                  <mat-option [value]="1">Genero por Alumnos</mat-option>
-                  <mat-option [value]="2">Genero por Profesores</mat-option>
-                  <mat-option [value]="3">Alumnos por periodo</mat-option>
-                  <mat-option [value]="4">Jueves</mat-option>
-                  <mat-option value=5>Viernes</mat-option>
-                  <mat-option value=6>Sábado</mat-option>
+                  <mat-option [value]="1">Historial de Usuario</mat-option>
+                  <mat-option [value]="2">Usuarios por mes</mat-option>
+                  <mat-option [value]="3">Examenes Mejor Calificados</mat-option>
+                  <mat-option [value]="4">Examenes Peor Calificados</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -38,6 +36,7 @@
           </section>
 
           <div style='background-color: #fff;border-radius: 2rem;'>
-       
+            <app-user-history *ngIf="report.value === 1"></app-user-history>
+            <app-user-per-month *ngIf="report.value === 2"></app-user-per-month>
           </div>
 

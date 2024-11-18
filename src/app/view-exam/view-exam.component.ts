@@ -73,6 +73,7 @@ export class ViewExamComponent {
   examList: any;
   unitList: any;
   examListMat: any;
+  history: any;
 
 
   constructor(
@@ -86,6 +87,8 @@ export class ViewExamComponent {
   ngOnInit() {    
     this.initializeFormGroups();
     this.loadList();    
+    this.history = { user: JSON.parse(localStorage.getItem('token') || '{}')?.id, person_id: JSON.parse(localStorage.getItem('token') || '{}')?.person_id };
+
   }
 
   
@@ -164,7 +167,8 @@ addExam() {
 
   const datos = {
     addExam: '',
-    exam: this.addExamFormGroup.value
+    exam: this.addExamFormGroup.value,
+    history: this.history
   };
 
     if (this.addExamFormGroup.valid){
@@ -215,7 +219,8 @@ addExam() {
   editExam() {
     const datos = {
       editExam: '',
-      exam: this.addExamFormGroup.value
+      exam: this.addExamFormGroup.value,
+      history: this.history
     };
   
       if (this.addExamFormGroup.valid){
@@ -253,11 +258,13 @@ addExam() {
       
   onDropList(id: any) {
     const datos = {
-      updateSingleField: id,
+      updateSingleFieldExam: id,
       tabla: "exams",
       campo: "isDeleted",
       whereCondition: `id = ${id}`,
-      valor: 1
+      valor: 1,
+      history: this.history
+
     };
 
     Swal.fire({

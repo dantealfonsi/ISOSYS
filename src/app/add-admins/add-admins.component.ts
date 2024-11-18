@@ -64,6 +64,8 @@ export class AddAdminsComponent {
   secondFormGroup!: FormGroup;
   formattedDate!:  string;
   person!: any[];
+  history: any;
+
 
   private readonly _currentYear = new Date().getFullYear();
   readonly minDate = new Date(this._currentYear - 100, 0, 1);
@@ -77,6 +79,7 @@ export class AddAdminsComponent {
   ngOnInit() {
     this.initializeFormGroups();
     this.loadParentList();
+    this.history = { user: JSON.parse(localStorage.getItem('token') || '{}')?.id, person_id: JSON.parse(localStorage.getItem('token') || '{}')?.person_id };
   }
 
   
@@ -210,7 +213,8 @@ export class AddAdminsComponent {
     const datos = {
       addAdmin: "",
       person: this.firstFormGroup.value,
-      userData: this.secondFormGroup.value
+      userData: this.secondFormGroup.value,
+      history: this.history
     };
 
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {

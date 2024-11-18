@@ -87,6 +87,8 @@ export class ManageAdminsComponent {
   addUsers!: string|any[];
   showeditdialog: boolean = false;
   editUserFormGroup!: FormGroup;
+  history: any;
+
 
   goToAdd(){
     this.router.navigate(['main/add-admin']);
@@ -97,6 +99,8 @@ export class ManageAdminsComponent {
   ngOnInit() {
     this.loadList();   
     this.initializeFormGroups();
+    this.history = { user: JSON.parse(localStorage.getItem('token') || '{}')?.id, person_id: JSON.parse(localStorage.getItem('token') || '{}')?.person_id };
+
   }
 
   initializeFormGroups() {
@@ -145,10 +149,12 @@ export class ManageAdminsComponent {
     if (elemento.isBlocked === '1') valor = '0';
   
     const datos = {
-      update: id,
+      updateBlockUser: id,
       tabla: "user",
       campo: "isBlocked",
-      valor: valor
+      valor: valor,
+      history: this.history
+
     };
   
     console.log(JSON.stringify(datos)); // Asegúrate de que sea JSON válido
@@ -225,7 +231,8 @@ export class ManageAdminsComponent {
   async editUser(){
     const datos = {
       editUser: "",
-      user: this.editUserFormGroup.value
+      user: this.editUserFormGroup.value,
+      history: this.history
     };
 
 
@@ -275,10 +282,12 @@ export class ManageAdminsComponent {
 
   onDropList(id: any) {  
     const datos = {    
-      update: id,    
+      updateEraseUser: id,
       tabla: "user",    
       campo: "isDeleted",    
-      valor: 1  
+      valor: 1,
+      history: this.history
+
     };  
     
     Swal.fire({    

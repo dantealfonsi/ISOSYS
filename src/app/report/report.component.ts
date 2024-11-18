@@ -21,7 +21,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BarController, Colors, Legend } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import {provideCharts,} from 'ng2-charts';
-
+import { UserHistoryComponent } from '../reports-files/user-history/user-history.component';
+import { UserPerMonthComponent } from '../reports-files/user-per-month/user-per-month.component';
 @Component({
   selector: 'app-report',
   standalone: true,
@@ -48,7 +49,9 @@ import {provideCharts,} from 'ng2-charts';
     MatStepperModule,
     MatTableModule,
     MatTooltipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UserHistoryComponent,
+    UserPerMonthComponent
   ],
   templateUrl: './report.component.html',
   styleUrl: './report.component.css'

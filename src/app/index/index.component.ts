@@ -2,13 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
+import { DisplayUserChartComponent } from '../reports-files/display-user-chart/display-user-chart.component';
 
 
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [MatCardModule,DisplayUserChartComponent],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css'
 })
