@@ -44,7 +44,7 @@
                       <mat-icon >✎</mat-icon>
                       <span>Editar</span>
                     </button>
-                    <button mat-menu-item>
+                    <button mat-menu-item (click)="onDropList(lesson.id)">
                       <mat-icon>✂</mat-icon>
                       <span>Desabilitar</span>
                     </button>
@@ -84,13 +84,41 @@
         <mat-hint>¡Escoge un titulo!</mat-hint>
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
-        <mat-label>Url del Video</mat-label>
-        <input type="text" matInput formControlName="url">    
+      
+      <mat-form-field>
+        <mat-label>Video</mat-label>
+        <mat-select (selectionChange)="onSelectionChange($event)">
+            <mat-option (click)="onOptionChange('video')">Link de Youtube</mat-option>
+            <mat-option (click)="onOptionChange('subir')">Subir MP4</mat-option>
+        </mat-select>
       </mat-form-field>
+
+      <div class="display-upload-video" *ngIf="selectedOption === 'subir'">
+        <form [formGroup]="AddVideoFormGroup" id="uploadForm" enctype="multipart/form-data" style='width: -webkit-fill-available;'>
+          <div class="container">
+            <div class="button-wrap">
+              <label class="button" for="upload"><mat-icon> insert_drive_file</mat-icon>
+                Subir</label>
+              <input  type="file" id="upload" (change)="onSelectVideos($event)" multiple>
+            </div>
+          </div>
+        </form>
+  
+      </div>
+      
+      <div class="display-url-video"  *ngIf="selectedOption === 'subir' || selectedOption === 'video'">
+        <mat-form-field class="example-full-width" *ngIf="showdialog" style="width:100%;">
+          <mat-label>Url del Video</mat-label>
+          <input type="text" matInput formControlName="url" [readonly]="selectedOption === 'subir'">
+        </mat-form-field>
+      </div>
+      
+
+
+
       <br>
       <mat-form-field appearance="fill" *ngIf="showdialog" style="width:100%;">
-        <mat-label>Summary</mat-label>
+        <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="summary"></textarea>
     </mat-form-field>
       <br>      
@@ -142,13 +170,39 @@
         <input type="text" style='text-transform: capitalize;' matInput formControlName="title">
       </mat-form-field>
       <br>
-      <mat-form-field class="example-full-width" *ngIf="showeditdialog" style="width:100%;">
-        <mat-label>Url del Video</mat-label>
-        <input type="text" matInput formControlName="url">    
+
+      <mat-form-field>
+        <mat-label>Video</mat-label>
+        <mat-select (selectionChange)="onSelectionChange($event)">
+            <mat-option (click)="onOptionChange('video')">Link de Youtube</mat-option>
+            <mat-option (click)="onOptionChange('subir')">Subir MP4</mat-option>
+        </mat-select>
       </mat-form-field>
-      <br>
+
+      <div class="display-upload-video" *ngIf="selectedOption === 'subir'">
+        <form [formGroup]="AddVideoFormGroup" id="uploadForm" enctype="multipart/form-data" style='width: -webkit-fill-available;'>
+          <div class="container">
+            <div class="button-wrap">
+              <label class="button" for="upload"><mat-icon> insert_drive_file</mat-icon>
+                Subir</label>
+              <input  type="file" id="upload" (change)="onSelectVideos($event)" multiple>
+            </div>
+          </div>
+        </form>
+  
+      </div>
+      
+      <div class="display-url-video"  *ngIf="selectedOption === 'subir' || selectedOption === 'video'">
+        <mat-form-field class="example-full-width" style="width:100%;">
+          <mat-label>Url del Video</mat-label>
+          <input type="text" matInput formControlName="url" [readonly]="selectedOption === 'subir'">
+        </mat-form-field>
+      </div>
+
+
+
       <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">
-          <mat-label>Summary</mat-label>
+          <mat-label>Descripción</mat-label>
             <textarea matInput formControlName="summary"></textarea>
       </mat-form-field>
       <br>
@@ -179,8 +233,7 @@
       <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
     </div>
 
-    <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data" style='width: -webkit-fill-available;
-'>
+    <form [formGroup]="AddFilesFormGroup" id="uploadForm" enctype="multipart/form-data" style='width: -webkit-fill-available;'>
       <div class="container">
         <div class="button-wrap">
           <label class="button" for="upload"><mat-icon> insert_drive_file</mat-icon>

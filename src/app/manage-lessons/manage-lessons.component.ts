@@ -65,9 +65,11 @@ export class ManageLessonsComponent {
   unitData: any;
   lessonData: any;
   fileList: any;
-
+  videoList:any;
   AddLessonFormGroup: any;
   AddFilesFormGroup: any;
+  AddVideoFormGroup: any;
+
   showdialog: boolean = false;
   showeditdialog: boolean = false;
   showFilesdialog: boolean = false;
@@ -75,8 +77,44 @@ export class ManageLessonsComponent {
   dataSource: any;
   selectedFiles!: FileList;
 
+  ////HISTORIAL///
+  history: any;
+
+
   constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
 
+
+  /////CAMBIAR SELECCION DE VIDEOS/////////////
+  selectedOption!: string; 
+  
+  onSelectionChange(event: any): void { this.selectedOption = event.value; }
+
+
+  urlValidator(control: AbstractControl): { [key: string]: any } | null {
+    if (this.selectedOption === 'video' && control.value) {
+      const youtubeRegex = /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+      return youtubeRegex.test(control.value) ? null : { 'invalidUrl': true };
+    }
+    return null; // Si no es 'url', no aplica la validación
+  }
+
+  onOptionChange(option: string) {
+    this.selectedOption = option;
+    
+    if (option === 'video') {
+
+      this.AddLessonFormGroup.patchValue({ url: '' }); // Actualiza el campo 'url' con el nombre del archivo
+
+      this.AddLessonFormGroup.get('subir')?.setValidators(null);
+    } else {
+      this.AddLessonFormGroup.get('subir')?.setValidators([this.urlValidator.bind(this)]);
+    }
+    this.AddLessonFormGroup.get('subir')?.updateValueAndValidity();
+  }
+
+
+
+  /////FIN DE CAMBIAR SELECCION DE VIDEOS/////////////
 
 
   initializeFormGroups() {
@@ -87,10 +125,15 @@ export class ManageLessonsComponent {
       content: [''],
       lesson_order: ['', [Validators.required, Validators.min(1)]],      
       summary: ["",Validators.required],
-      url: ["",Validators.required],
+      url: ["", [this.urlValidator.bind(this)]], // Añadir la validación personalizada
     });
 
     this.AddFilesFormGroup = this._formBuilder.group({
+      lesson_id: [""],
+      file: this._formBuilder.array([], Validators.required)
+    });
+
+    this.AddVideoFormGroup = this._formBuilder.group({
       lesson_id: [""],
       file: this._formBuilder.array([], Validators.required)
     });
@@ -102,6 +145,9 @@ ngOnInit(): void {
   this.itemId = this.route.snapshot.paramMap.get('id');
   this.initializeFormGroups();
   this.loadList();
+
+  this.history = { user: JSON.parse(localStorage.getItem('token') || '{}')?.id, person_id: JSON.parse(localStorage.getItem('token') || '{}')?.person_id };
+
   
 }
 
@@ -110,7 +156,7 @@ async loadList() {
   try {
       this.unitData = await this.this_unit_recover();
       this.lessonData = await this.this_lessons_recover();
-  
+
   } catch (error) {
     console.error('Error al recuperar los datos de la lista:', error);
     // Maneja el error según tus necesidades
@@ -173,23 +219,34 @@ async this_lessons_files_recover(id:string) {
     console.error("Error en la solicitud:", error);
   }
 }
+
+async this_lessons_videos_recover(id:number) {
+  try {
+    const response = await fetch(
+      "http://localhost/iso2sys_rest_api/server.php?this_lessons_videos=&id="+id,
+    );
+    if (!response.ok) {
+      throw new Error("Error en la solicitud: " + response.status);
+    }
+    const data = await response.json();
+    console.log("Datos recibidos:", data);
+    return data; // Devuelve los datos
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
 /************************END RECOVERS************************************/
 
 /*********************************START QUERYS*************************************** */
 
-
 addLesson() {
-
   const datos = {
     addLesson: "",
-    lesson: this.AddLessonFormGroup.value
+    lesson: this.AddLessonFormGroup.value,
+    history: this.history
   };
 
-  console.log(datos.lesson);
-
   if (this.AddLessonFormGroup.valid) {
-    // El formulario tiene valores válidos
-    // Aquí envia los datos al backend
     fetch('http://localhost/iso2sys_rest_api/server.php', {
       method: 'POST',
       headers: {
@@ -199,29 +256,43 @@ addLesson() {
     })
     .then(response => response.json())
     .then(data => {
-  
-      console.log(data);
-      Swal.fire({
-        title: 'Lección añadida!',
-        text: 'La Lección fue añadida con exito.',
-        icon: 'success'
-      });
+      if (data.icon === 'success' && data.lesson_id) {
+        Swal.fire({
+          title: 'Lección añadida!',
+          text: 'La Lección fue añadida con éxito.',
+          icon: 'success'
+        }).then(() => {
+          this.uploadVideos(data.lesson_id); // Llamar a la función para subir videos con el ID de la lección
+        });
+      } else {
+        Swal.fire({
+          title: '¡Error!',
+          text: data.message,
+          icon: data.icon
+        });
+      }
       this.loadList();
       this.hideDialog();
     })
     .catch(error => {
       console.error('Error:', error);
+      Swal.fire({
+        title: '¡Error!',
+        text: 'Hubo un problema al añadir la lección.',
+        icon: 'error'
+      });
     });
 
   } else {
-    // El formulario no tiene valores válidos
     Swal.fire({
       title: '¡Faltan Datos en este formulario!',
-      text: 'No puedes agregar debido a que no has ingesado todos los datos.',
+      text: 'No puedes agregar debido a que no has ingresado todos los datos.',
       icon: 'error'
     });    
-  }    
+  }
 }
+
+
 
 
 
@@ -259,15 +330,17 @@ onFileList(id: string) {
   });
 }
 
-editLesson(){
+editLesson() {
   const datos = {
     editLesson: "",
-    lesson: this.AddLessonFormGroup.value
-  };
+    lesson: this.AddLessonFormGroup.value,
+    history: this.history
 
-  if (this.AddLessonFormGroup.valid) {
-    // El formulario tiene valores válidos
-    // Aquí envia los datos al backend
+  };
+  
+  const lesson_id = this.AddLessonFormGroup.get('id')?.value;
+
+  if (this.AddLessonFormGroup.valid && lesson_id) {
     fetch('http://localhost/iso2sys_rest_api/server.php', {
       method: 'POST',
       headers: {
@@ -277,30 +350,42 @@ editLesson(){
     })
     .then(response => response.json())
     .then(data => {
-  
-      console.log(data);
-      Swal.fire({
-        title: 'Sección Editada con Exito!',
-        text: 'Esta sección ha sido editada con exito.',
-        icon: 'success'
-      });
+      if (data.icon === 'success') {
+        Swal.fire({
+          title: 'Sección Editada con Éxito!',
+          text: 'Esta sección ha sido editada con éxito.',
+          icon: 'success'
+        }).then(() => {
+          this.uploadEditVideos(lesson_id); // Llamar a la función para subir videos con el ID de la lección
+        });
+      } else {
+        Swal.fire({
+          title: '¡Error!',
+          text: data.message,
+          icon: data.icon
+        });
+      }
       this.loadList();
-      this.hideEditDialog()
-
+      this.hideEditDialog();
     })
     .catch(error => {
       console.error('Error:', error);
+      Swal.fire({
+        title: '¡Error!',
+        text: 'Hubo un problema al editar la lección.',
+        icon: 'error'
+      });
     });
 
   } else {
-    // El formulario no tiene valores válidos
     Swal.fire({
       title: '¡Faltan Datos en este formulario!',
-      text: 'No puedes agregar debido a que no has ingesado todos los datos.',
+      text: 'No puedes editar debido a que no has ingresado todos los datos.',
       icon: 'error'
     });    
-  }    
+  }
 }
+
 
 
 
@@ -369,6 +454,108 @@ onUpload() {
   });
 }
 
+uploadVideos (lesson_id: number) {
+  const formData = new FormData();
+
+  // Validar que solo hay un video seleccionado
+  if (this.selectedVideos.length !== 1) {
+    Swal.fire({
+      title: 'Error',
+      text: 'Solo puedes subir un video a la vez.',
+      icon: 'error'
+    });
+    return;
+  }
+
+  formData.append('files[]', this.selectedVideos[0], this.selectedVideos[0].name);
+  formData.append('addVideo', 'true');
+  formData.append('lesson_id', lesson_id.toString());
+
+  this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
+    const res = response[0]; // Esperamos que la respuesta sea un array con un solo objeto
+    if (res.status === 'exists') {
+      Swal.fire({
+        title: '¡Advertencia!',
+        text: `Ya existe un archivo con el nombre ${res.file} en esta lección. ${res.message}`,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    } else if (res.status === 'success') {
+      this.this_lessons_videos_recover(lesson_id).then((files: any[]) => {
+        this.videoList = files;
+        this.AddLessonFormGroup.patchValue({ url: this.selectedVideos[0].name }); // Actualiza el campo 'url' con el nombre del archivo
+        Swal.fire(
+          '¡Éxito!',
+          'El archivo se ha subido correctamente.',
+          'success'
+        );
+      }).catch(error => {
+        console.error('Error recuperando los archivos de la lección:', error);
+      });
+    } else {
+      console.error('Error del servidor:', res.message);
+      Swal.fire(
+        'Error',
+        `Hubo un problema al subir el archivo: ${res.message}`,
+        'error'
+      );
+    }
+  });
+}
+
+
+uploadEditVideos(lesson_id: number) {
+  const formData = new FormData();
+
+  if (this.selectedVideos.length !== 1) {
+    Swal.fire({
+      title: 'Error',
+      text: 'Solo puedes subir un video a la vez.',
+      icon: 'error'
+    });
+    return;
+  }
+
+  const selectedVideo = this.selectedVideos[0];
+  formData.append('files[]', selectedVideo, selectedVideo.name);
+  formData.append('addVideo', 'true');
+  formData.append('lesson_id', lesson_id.toString());
+
+  this.http.post('http://localhost/iso2sys_rest_api/server.php', formData).subscribe((response: any) => {
+    const res = response[0];
+    if (res.status === 'exists') {
+      Swal.fire({
+        title: '¡Advertencia!',
+        text: `Ya existe un archivo con el nombre ${res.file} en esta lección. ${res.message}`,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    } else if (res.status === 'success') {
+      this.this_lessons_videos_recover(lesson_id).then((files: any[]) => {
+        this.videoList = files;
+        this.AddLessonFormGroup.patchValue({ url: selectedVideo.name }); // Actualiza el campo 'url' con el nombre del archivo
+        Swal.fire(
+          '¡Éxito!',
+          'El archivo se ha subido correctamente.',
+          'success'
+        );
+      }).catch(error => {
+        console.error('Error recuperando los archivos de la lección:', error);
+      });
+    } else {
+      console.error('Error del servidor:', res.message);
+      Swal.fire(
+        'Error',
+        `Hubo un problema al subir el archivo: ${res.message}`,
+        'error'
+      );
+    }
+  });
+}
+
+
+
+
 
 onDeleteFile(fileName: string) {
   Swal.fire({
@@ -392,6 +579,55 @@ onDeleteFile(fileName: string) {
       });
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       Swal.fire('Cancelado', 'Tu archivo está seguro', 'error');
+    }
+  });
+}
+
+
+
+
+
+onDropList(id: any) {
+  const datos = {
+    updateSingleFieldLesson: id,
+    tabla: "lessons",
+    campo: "isDeleted",
+    whereCondition: `id = ${id}`,
+    valor: 1,
+    history: this.history
+
+  };
+
+  Swal.fire({
+    title: "¿Estás seguro de deshabilitarlo?",
+    text: "¡Esta Lección no seguirá apareciendo en la lista!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, Deshabilítala"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "¡Completado!",
+        text: "La lección ha sido deshabilitada.",
+        icon: "success"
+      });
+      fetch('http://localhost/iso2sys_rest_api/server.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.loadList();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     }
   });
 }
@@ -420,6 +656,8 @@ openDialog() {
     url: ""
   }); 
 
+  
+
   this.showdialog = true;
 }
 
@@ -442,6 +680,52 @@ hideDialog() {
 hideEditDialog() {
   this.showeditdialog = false;
 }
+
+
+
+
+
+
+selectedVideos: File[] = []; // Definir el tipo como un arreglo de archivos
+
+onSelectVideos(event: any) {
+  const videos = event.target.files;
+  const invalidVideos = [];
+
+  // Limpiar el arreglo de videos seleccionados previamente
+  this.selectedVideos = [];
+
+  for (let i = 0; i < videos.length; i++) {
+    const fileExtension = videos[i].name.split('.').pop().toLowerCase();
+    if (fileExtension !== 'mp4') {
+      invalidVideos.push(videos[i].name);
+    } else {
+      this.selectedVideos.push(videos[i]);
+    }
+  }
+
+  if (invalidVideos.length > 0) {
+    Swal.fire({
+      title: 'Error',
+      text: `Los siguientes archivos no tienen la extensión .mp4: ${invalidVideos.join(', ')}`,
+      icon: 'error'
+    });
+    // Limpiar la selección de archivos no válidos
+    event.target.value = '';
+  } else if (this.selectedVideos.length > 0) {
+    const selectedFileName = this.selectedVideos[0].name;
+    this.AddLessonFormGroup.patchValue({ url: selectedFileName }); // Actualiza el campo 'url' con el nombre del archivo
+    Swal.fire({
+      title: 'Archivos seleccionados',
+      text: `Todos los archivos tienen la extensión .mp4`,
+      icon: 'success'
+    });
+  }
+}
+
+
+
+
 
 
 
