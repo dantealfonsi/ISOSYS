@@ -54,16 +54,18 @@
               </div>
             </div>
 
+
 <!-- ADD LESSON FORM GROUP-->        
-
-
 
 <section *ngIf="showdialog" class="dialog-background">
 
-  <div class="dialog" style='width:40%;'>
+  <div class="dialog" style='width:60%;'>
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Lección</h1>
-      <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
+      <div>
+        <mat-icon class="title-icon-lt" style="display:flex;">add_circle_outline</mat-icon> <h1>Crear Lección</h1>
+      </div>
+
+      <mat-icon class="close-icon" (click)="hideDialog()">backspace</mat-icon>
     </div>
 
     <form [formGroup]="AddLessonFormGroup" style='width:100%;'>
@@ -112,9 +114,6 @@
           <input type="text" matInput formControlName="url" [readonly]="selectedOption === 'subir'">
         </mat-form-field>
       </div>
-      
-
-
 
       <br>
       <mat-form-field appearance="fill" *ngIf="showdialog" style="width:100%;">
@@ -142,9 +141,9 @@
 <!------------------------- EDIT ------------------------>
 
 <section *ngIf="showeditdialog" class="dialog-background">
-  <div class="dialog" style='width:40%;'>
+  <div class="dialog" style='width:60%;'>
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Lección</h1>
+      <div><mat-icon class="title-icon-lt" style="display:flex;">build</mat-icon><h1>Editar Lección</h1></div>
       <mat-icon class="close-icon"  (click)="hideEditDialog()"
         >backspace</mat-icon
       >
@@ -229,7 +228,9 @@
 <section *ngIf="showFilesdialog" class="dialog-background">
   <div class="dialog" style="width: 40%;">
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon> Añadir Archivos</h1>
+      <div>
+        <mat-icon class="title-icon-lt" style="display: flex;">picture_as_pdf</mat-icon><h1>Añadir Archivos</h1>
+      </div>
       <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
     </div>
 

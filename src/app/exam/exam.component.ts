@@ -15,11 +15,12 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { ExamCompletionDialogComponent } from '../exam-completion-dialog/exam-completion-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-exam',
   standalone: true,
-  imports: [CommonModule,YouTubePlayerModule,MatIconModule,UserNavbarComponent, FooterComponent,MatStepperModule,MatRadioModule,ReactiveFormsModule,MatCheckboxModule],
+  imports: [CommonModule,YouTubePlayerModule,MatTooltipModule,MatIconModule,UserNavbarComponent, FooterComponent,MatStepperModule,MatRadioModule,ReactiveFormsModule,MatCheckboxModule],
   templateUrl: './exam.component.html',
   styleUrl: './exam.component.css'
 })
@@ -422,7 +423,7 @@ checkAllAnswersTrue(step: number): boolean {
 
   openExamResults(userMark: number): void { 
     const dialogRef = this.examResults.open(ExamCompletionDialogComponent, 
-      { width: '300px', 
+      { width: '100%', 
         data: { userMark: userMark } 
       }); dialogRef.afterClosed().subscribe(
         result => { console.log('El diálogo se cerró'); }
@@ -469,6 +470,10 @@ checkAllAnswersTrue(step: number): boolean {
 
         goToExam(unitId: string, lesson_id: string): void {
           this.router.navigate(['/view-exam', unitId, lesson_id]);
+        }
+
+        goBack(){
+          this.router.navigate(['/view-units']);
         }
     
 

@@ -59,3 +59,29 @@
 .menu-li:hover{
   background: rgba(255, 68, 0, 0.089);
 }
+
+
+#singleVideo {
+  max-width: 100%;
+  height: auto;
+  margin: auto;
+  display: block;
+}
+
+vg-player[_ngcontent-ng-c3095261262] {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  min-width: 600px;
+  min-height: 300px;
+}
+
+:host vg-controls {
+  height: 0 !important;
+}
+
+.back-icon:hover{
+  transform: scale(1.4);
+  transition: ease .5s;
+}
+

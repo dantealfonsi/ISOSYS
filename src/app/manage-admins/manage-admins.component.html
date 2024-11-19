@@ -2,7 +2,7 @@
 <div class="section-outer-container">
     <div class="section-container">
       <mat-icon>keyboard_backspace</mat-icon>
-      <mat-icon class="title-icon" style="display: flex;">supervisor_account</mat-icon>
+      <mat-icon class="title-icon" style="display: flex;">spa</mat-icon>
       <h1 class="title">Administradores</h1>
     </div>
   
@@ -116,10 +116,12 @@ style="
 
 <!------------------------- EDIT ------------------------>
 
-<section *ngIf="showeditdialog" class="dialog-background">
-  <div class="dialog">
+<section *ngIf="showeditdialog" class="dialog-background" >
+  <div class="dialog" style="width:40%">
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Usuario</h1>
+      <div>
+        <mat-icon class="title-icon-lt" style="display:flex;">build</mat-icon> <h1>Editar Usuario</h1>
+      </div>
       <mat-icon class="close-icon"  (click)="hideEditDialog()"
         >backspace</mat-icon
       >

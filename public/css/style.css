@@ -575,9 +575,10 @@ input::-ms-input-placeholder {
     margin: 15px auto;
 }
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus{
-    color:var(--primary-a40);
+    color:var(--primary-2);
     background: transparent;
     text-decoration: underline;
+    font-weight: bold;
 }
 .main_menu_bg .navbar {}
 

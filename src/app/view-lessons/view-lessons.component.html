@@ -77,7 +77,7 @@
 
       <div class="section-outer-container">
         <div class="section-container">
-            <mat-icon class="back-icon" >keyboard_backspace</mat-icon>
+            <mat-icon class="back-icon" (click)="goBack()"  matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
           <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
           <div>
             <h1 class="title">{{capitalizeWords(lesson?.title) }}</h1>
@@ -96,10 +96,20 @@
 
       <div>
 
-        <div style='margin:auto;'>
-          <youtube-player  [videoId]="lesson?.url" width="560" height="315"></youtube-player>
-          <div>
+        <div *ngIf="lesson?.url && !isMp4(lesson.url)" style='margin:auto;display: flex;justify-content: center;'>
+          <youtube-player [videoId]="lesson?.url" width="560" height="315"></youtube-player>
         </div>
+        
+        <div *ngIf="lesson?.url && isMp4(lesson.url)" style='margin:auto;display: flex;justify-content: center;'>
+          <vg-player>
+            <video #singleVideo id="singleVideo" controls>
+              <source [src]="'http://localhost/iso2sys_rest_api/videos/' + lesson.url" type="video/mp4">
+            </video>
+            <vg-controls></vg-controls>
+          </vg-player>
+        </div>
+        
+        
         <div class="description" style="display: flex; flex-direction: column;">
           <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
           padding-left: 1rem;

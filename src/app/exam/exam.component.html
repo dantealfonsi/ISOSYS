@@ -74,7 +74,7 @@
   
         <div class="section-outer-container">
           <div class="section-container">
-              <mat-icon class="back-icon" >keyboard_backspace</mat-icon>
+              <mat-icon class="back-icon" (click)="goBack()"  matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
             <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
             <div>
               <h1 style="margin: 0;">{{exam.data_exam.title}}</h1>
@@ -94,16 +94,17 @@
           <mat-step *ngFor="let question of questions; let index = index" [stepControl]="stepCtrl[index]" (click)="preventNavigation($event)">            
             <form [formGroup]="stepCtrl[index]">
               <div>
-                <p style="text-transform: uppercase;">{{ question.text }}</p>
+                <p style="text-transform: uppercase;font-size: 1.2rem;font-weight: 600;margin-top: 1rem;padding: 1rem;">-{{ question.text }}</p>
         
                 <mat-radio-group (change)="onRadioChange($event, index, question)"  formControlName="selectedAnswer" required>
                   <ng-container *ngFor="let answer of question.question_data">
                     <ng-container *ngIf="answer.type === 'radius'">
                       <mat-radio-button [value]="answer.id" [disabled]="colorChange">
-                        <span [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
+                        <span style='text-transform: capitalize;padding-top: .5rem;padding-bottom: .5rem;' [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
                           {{ answer.answer }}
                         </span>
                       </mat-radio-button>
+                      <br>
                     </ng-container>
                   </ng-container>
                 </mat-radio-group> 
@@ -112,21 +113,24 @@
                 <div *ngFor="let answer of question.question_data" [ngSwitch]="answer.type">
                   <div *ngSwitchCase="'checkbox'">
                     <mat-checkbox (change)="onSelectionChange(answer,index, answer.type, answer.checkbox_true, question.id, answer.true_response, $event.checked)" [disabled]="colorChange"  formControlName="selectedAnswer" required>
-                     <span [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
+                     <span style='text-transform: capitalize;' [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
                       {{ answer.answer }}
                     </span>
                     </mat-checkbox>
                   </div>                  
                   <div *ngSwitchCase="'text'"> 
-                    <p>{{ answer.answer }}</p>
-                    <input matInput placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)" [disabled]="colorChange" formControlName="selectedAnswer" required>
-                    <p *ngIf="colorChange">La respuesta era: <b>{{ answer.true_response }}</b></p>                  </div>
+                    <div style="display: flex; gap:1rem;align-items: flex-start;">
+                      <p style="text-transform: capitalize;font-size: 1.2rem;">-{{ answer.answer }}</p>
+                      <input style="padding: 0.2rem;display: flex;align-items: center;background: #ff58064f;color: #000000 !important;border: 1px solid;" placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)" [disabled]="colorChange" formControlName="selectedAnswer" required>
+                    </div>  
+                    <p *ngIf="colorChange" style="font-size: 1.2rem;padding:.5rem;color:red;text-decoration: underline;">La respuesta era: <b>{{ answer.true_response }}</b></p>       
+                  </div>
                 </div>
                 <!-- Input oculto para el question_mark --> 
                  <input type="hidden" [value]="question.question_mark" id="hidden-mark-{{index}}">
               </div>
-              <div>
-                <button mat-button [disabled]="!isStepValid(index)" (click)="validateAndProceed($event, index, stepper)"> {{ isLastStep(index) ? 'Finalizar examen' : 'Siguiente' }} </button>              </div>
+              <div style="display: flex;justify-content: flex-end;">
+                <button mat-button [disabled]="!isStepValid(index)" class='export' (click)="validateAndProceed($event, index, stepper)">{{ isLastStep(index) ? 'Finalizar examen' : 'Siguiente' }}  <mat-icon>arrow_right_alt</mat-icon></button>              </div>
             </form>
           </mat-step>
         </mat-horizontal-stepper>

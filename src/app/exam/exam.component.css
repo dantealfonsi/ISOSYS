@@ -64,3 +64,8 @@ video {
 ::ng-deep .mat-horizontal-stepper-header{
   pointer-events: none !important;
 }
+
+.back-icon:hover{
+  transform: scale(1.4);
+  transition: ease .5s;
+}

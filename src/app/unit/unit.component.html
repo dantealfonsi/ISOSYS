@@ -147,9 +147,9 @@
 <!------------------------- EDIT ------------------------>
 
 <section *ngIf="showeditdialog" class="dialog-background">
-  <div class="dialog">
+  <div class="dialog" style="width: 40%;">
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Materia</h1>
+      <div> <mat-icon class="title-icon-lt">build</mat-icon> <h1>Editar Unidad</h1> </div>
       <mat-icon class="close-icon"  (click)="hideEditDialog()"
         >backspace</mat-icon
       >
@@ -179,7 +179,7 @@
     <div class="dialog-button-container">
       <button class="export" (click)="editUnit()"> 
         <mat-icon>build</mat-icon> 
-        Editar Materia</button>
+        Editar Unidad</button>
 
       <button class="cancel" (click)="hideEditDialog()">
         Cancelar

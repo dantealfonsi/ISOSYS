@@ -141,3 +141,11 @@ html,body{
     ::ng-deep thead{
     background: rgba(255, 68, 0, 0.116) !important;
   }
+
+  .dialog-background{
+    position: fixed !important;
+  }
+
+  .dialog{
+    margin-right: -20rem;  
+  }

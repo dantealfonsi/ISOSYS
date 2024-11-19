@@ -142,7 +142,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.dialog-title-container h1{
+.dialog-title-container div h1{
   font-size: 1.5rem; 
   font-weight: bolder;
   display: flex;
@@ -150,6 +150,12 @@ body {
   gap: 1rem;
   text-decoration: underline;
 }
+
+.dialog-title-container div{
+  display: flex;
+  gap: 1rem;
+}
+
 
 ::ng-deep .outside-table .search-icon .mdc-text-field--filled:not(.mdc-text-field--disabled) {
   background-color: white !important;
@@ -181,6 +187,11 @@ body {
 
 .export:hover{
   background: linear-gradient(45deg, rgb(218, 65, 26), #ffb9a4)
+}
+
+.export:disabled,
+.export[disabled]{
+  background: #cccccc !important;
 }
 
 .edit{
@@ -329,6 +340,17 @@ color:black;
 .button-4:hover{
   color: white;
   background-color:#e66354;
+}
+
+
+.title-icon-lt{
+  background: linear-gradient(45deg, #ff7829fa, transparent);
+  color: white;
+  padding: 1.2rem;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none !important;
 }
 
 

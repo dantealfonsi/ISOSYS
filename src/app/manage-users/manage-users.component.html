@@ -129,9 +129,11 @@ style="
 <!------------------------- EDIT ------------------------>
 
 <section *ngIf="showeditdialog" class="dialog-background">
-  <div class="dialog">
+  <div class="dialog" style="width: 40%;">
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Usuario</h1>
+      <div>
+        <mat-icon class="title-icon-lt" style="display: flex;">build</mat-icon><h1>Editar Usuario</h1>
+      </div>
       <mat-icon class="close-icon"  (click)="hideEditDialog()"
         >backspace</mat-icon
       >

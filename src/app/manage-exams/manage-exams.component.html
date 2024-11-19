@@ -1,8 +1,8 @@
 <div class="section-outer-container"> 
     <div class="section-container">
       <mat-icon class="back-icon" matTooltip="Ir atras" (click)="goBack()">keyboard_backspace</mat-icon>
-      <mat-icon class="title-icon" style="display:flex;">school</mat-icon>
-        <div style="display: flex;flex-direction: column;"><h1 class="title">Examen  {{examData?.data_exam.title}}</h1>
+      <mat-icon class="title-icon" style="display:flex;">style</mat-icon>
+        <div style="display: flex;flex-direction: column;"><h1 class="title">Examen: {{examData?.data_exam.title}}</h1>
           <p style="margin:0;">Valor del Examen: {{examData?.data_exam.total_score}} puntos / total en preguntas: {{examData?.totalQuestionMark}} puntos</p></div>
         </div>
   
@@ -68,13 +68,15 @@
             
             
 
-<!-- ADD LESSON FORM GROUP-->        
+<!-- ADD QUESTION FORM GROUP-->        
 
 
 <section *ngIf="showdialog" class="dialog-background">
   <div class="dialog" style='width:40%;'>
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">add_circle_outline</mat-icon>  Crear Pregunta </h1>
+      <div>
+        <mat-icon class="title-icon-lt" style="display:flex;">add_circle_outline</mat-icon><h1>Crear Pregunta </h1>
+      </div>
       <mat-icon class="close-icon"  (click)="hideDialog()">backspace</mat-icon>
     </div>
 
@@ -116,7 +118,9 @@
 <section *ngIf="showeditdialog" class="dialog-background">
   <div class="dialog" style='width:40%;'>
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon>  Editar Pregunta</h1>
+      <div>
+        <mat-icon class="title-icon-lt" style="display: flex;">build</mat-icon> <h1>Editar Pregunta</h1>
+      </div>
       <mat-icon class="close-icon"  (click)="hideEditDialog()"
         >backspace</mat-icon
       >
@@ -135,7 +139,7 @@
 
       <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">
         <mat-label>Texto</mat-label>
-          <textarea matInput formControlName="text"></textarea>
+          <textarea matInput formControlName="text" style="text-transform: capitalize;"></textarea>
     </mat-form-field>
 
 
@@ -171,10 +175,12 @@
 <section *ngIf="showFilesdialog" class="dialog-background">
   <div class="dialog" style="width: 40%;">
     <div class="dialog-title-container">
-      <h1><mat-icon class="title-icon-lt">build</mat-icon> Añadir Respuestas</h1>
+      <div>
+        <mat-icon class="title-icon-lt" style="display: flex;">question_answer</mat-icon><h1>Añadir Respuestas</h1>
+      </div>
       <mat-icon class="close-icon" (click)="hideFilesDialog()">backspace</mat-icon>
     </div>
-    <div>{{examDatafind.text}}?</div>
+    <div style="text-align: left;width: 100%;border: dotted 2px #f46e3670;margin-bottom: 1rem;padding:1rem;"><p style="font-size: 1.2rem;margin-bottom: 0;text-transform: capitalize;"><b>Pregunta:</b> {{examDatafind.text}}</p></div>
     <form [formGroup]="AddAnswerFormGroup" style='width: -webkit-fill-available;'>
       <mat-form-field>
         <mat-label>Tipo de la Pregunta</mat-label>

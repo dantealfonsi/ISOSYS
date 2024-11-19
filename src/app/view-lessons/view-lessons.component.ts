@@ -7,11 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserNavbarComponent } from '../../assets/user-navbar/user-navbar.component';
 import { FooterComponent } from '../../assets/footer/footer.component';
 import { Router } from "@angular/router";
+import { VgCoreModule } from '@videogular/ngx-videogular/core'; 
+import { VgControlsModule } from '@videogular/ngx-videogular/controls';
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play'; 
+import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-view-lessons',
   standalone: true,
-  imports: [CommonModule,YouTubePlayerModule,MatIconModule,UserNavbarComponent, FooterComponent,],
+  imports: [CommonModule,YouTubePlayerModule,MatTooltipModule,MatIconModule,UserNavbarComponent, FooterComponent,VgOverlayPlayModule,VgBufferingModule,VgCoreModule, VgControlsModule],
   templateUrl: './view-lessons.component.html',
   styleUrl: './view-lessons.component.css'
 })
@@ -51,44 +56,52 @@ export class ViewLessonsComponent implements OnInit {
   }
 
 
-async this_specific_lesson_recover() {
-    function extractVideoId(url: string) {
-        let videoId;
 
-        if (url.includes('youtu.be')) {
-            // Shortened URL
-            videoId = url.split('youtu.be/')[1];
-        } else if (url.includes('youtube.com')) {
-            // Standard URL
-            const urlParams = new URLSearchParams(new URL(url).search);
-            videoId = urlParams.get('v');
-        }
-
-        return videoId;
+    async this_specific_lesson_recover() {
+      function extractVideoId(url: string) {
+          let videoId;
+  
+          if (url.includes('youtu.be')) {
+              // Shortened URL
+              videoId = url.split('youtu.be/')[1];
+          } else if (url.includes('youtube.com')) {
+              // Standard URL
+              const urlParams = new URLSearchParams(new URL(url).search);
+              videoId = urlParams.get('v');
+          }
+  
+          return videoId;
+      }
+  
+      try {
+          const response = await fetch(
+              `http://localhost/iso2sys_rest_api/server.php?this_specific_lesson_list=&id=${this.itemId}&lesson_order=${this.lesson_order}`
+          );
+          if (!response.ok) {
+              throw new Error('Error en la solicitud: ' + response.status);
+          }
+          const data = await response.json();
+          console.log('Datos recibidos:', data);
+  
+          // Assuming data.url contains the video URL
+          if (data.url) {
+              if (data.url.includes('.mp4')) {
+                  console.log('Detected .mp4 URL:', data.url);
+                  // Do not change the URL if it's an MP4 file
+              } else {
+                  const videoId = extractVideoId(data.url);
+                  console.log('Extracted Video ID:', videoId);
+                  data.url = videoId; // Add the videoId to the data object
+              }
+          }
+  
+          return data;
+      } catch (error) {
+          console.error('Error en la solicitud:', error);
+      }
     }
 
-    try {
-        const response = await fetch(
-            `http://localhost/iso2sys_rest_api/server.php?this_specific_lesson_list=&id=${this.itemId}&lesson_order=${this.lesson_order}`
-        );
-        if (!response.ok) {
-            throw new Error('Error en la solicitud: ' + response.status);
-        }
-        const data = await response.json();
-        console.log('Datos recibidos:', data);
-
-        // Assuming data.url contains the video URL
-        if (data.url) {
-            const videoId = extractVideoId(data.url);
-            console.log('Extracted Video ID:', videoId);
-            data.url = videoId; // Add the videoId to the data object
-        }
-
-        return data;
-    } catch (error) {
-        console.error('Error en la solicitud:', error);
-    }
-}
+  
 
 filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLessons.filter(unit => unit.id === itemId);}
   
@@ -144,6 +157,13 @@ filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLess
   goToExam(unitId: string, lesson_id: string): void {
     this.router.navigate(['/view-exam', unitId, lesson_id]);
   }
+
+  goBack(){
+    this.router.navigate(['/view-units']);
+  }
+
+
+  isMp4(url: string): boolean { return url.includes('.mp4'); }
 
 }  
 

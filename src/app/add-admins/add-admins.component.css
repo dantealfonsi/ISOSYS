@@ -5,3 +5,14 @@
 .export[disabled]{
     background: #db592552 !important;
 }
+
+
+.close-form{
+    color:white;
+    font-size:2rem;
+}
+
+.close-form:hover{
+    transform: scale(1.6);
+    transition: ease .5s;
+}
