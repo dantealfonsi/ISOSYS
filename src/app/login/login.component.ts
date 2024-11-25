@@ -84,7 +84,7 @@ goToRegister() {
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
         if (this.authService.isAdmin()) {
-          this.router.navigate(['main']);
+          this.router.navigate(['main/troll']);
         } else {
           this.router.navigate(['home']);
         }

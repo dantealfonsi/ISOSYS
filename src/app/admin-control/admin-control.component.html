@@ -13,30 +13,75 @@
   <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
       <custom-sidenav [collapsed]="collapsed()"></custom-sidenav>
   </mat-sidenav>
+
+  
   
   <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-    <router-outlet></router-outlet>
+    <router-outlet> 
+
+    </router-outlet>
     
 <button class="info-button" (click)="openToggle()">i</button>
   </mat-sidenav-content>
 </mat-sidenav-container> 
 
 
-
 <div class='toggleUp' id='toggleUp'  *ngIf="show" [@enterAnimation]> 
-<button class='footer-btn' id='f-bnt' (click)="closeToggle()"><mat-icon>arrow_drop_down_circle</mat-icon></button> 
+  <button class='footer-btn' id='f-bnt' (click)="closeToggle()"><mat-icon>arrow_drop_down_circle</mat-icon></button> 
+  <div class='Devs'> 
 
-<footer class="pie-pagina" id='toggleUp'>
-    <div class="grupo-1">
-        <div class="box">
-            <h2>Descargar Manual de Usuario</h2>
-            <div class="red-social">
-            <a type="submit" href="manual_usuario.pdf" download="manual_usuario.pdf"> Descargar </a>
-            </div>
+
+          <div class='card'>
+          <div class='card-content'>
+              <div class='img' style="background-image: url('img/iran.png');" > </div>
+          
+                <h1 class='nombre'>Iran Indriago</h1>
+                <h3 class='cargo'>Programador</h3>
+          </div>
+          </div>
+
+
+          <div class='card'>
+          <div class='card-content'>
+            <div class='img' style="background-image: url('img/ray.png');"> </div>
+        
+              <h1 class='nombre'>Leomar</h1>
+              <h3 class='cargo'>Programador</h3>
+              </div>
         </div>
-    </div>
-    <div class="grupo-2">
-        <small>&copy; 2024 <b>UPTP "LUIS MARIANO RIVERA"</b> - Todos los Derechos Reservados.</small>
-    </div>
-</footer>
+
+
+        <div class='card'>
+          <div class='card-content'>
+            <div class='img' style="background-image: url('img/mario.png');"> </div>
+        
+              <h1 class='nombre'>Raymundo</h1>
+              <h3 class='cargo'>Programador</h3>
+              </div>
+        </div>
+
+
+  </div>
+  <footer class="pie-pagina" id='toggleUp'>
+      <div class="grupo-1">
+          <div class="box">
+          <h2>FILOSOFIA</h2>
+              <p>Este sistema fue creado bajo los lineamientos y filosofia del Software Libre 
+                como parte del Proyecto Socio Tecnologico de la U.P.T.P Luis Mariano Rivera.</p>
+          </div>
+          <div class="box">
+              <h2>ACERCA DE</h2>
+              <p>Este sistema fue creado para la materia INGENIERIA DE SOFTWARE II </p>
+          </div>
+          <div class="box">
+              <h2>Descargar Manual de Usuario</h2>
+              <div class="red-social">
+              <a type="submit" href="manual_usuario.pdf" download="manual_usuario.pdf"> Descargar </a>
+              </div>
+          </div>
+      </div>
+      <div class="grupo-2">
+          <small>&copy; 2024 <b>UPTP "LUIS MARIANO RIVERA"</b> - Todos los Derechos Reservados.</small>
+      </div>
+  </footer>
 </div>

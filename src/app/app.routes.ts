@@ -20,6 +20,7 @@ import { ExamComponent } from './exam/exam.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IndexComponent } from './index/index.component';
 import { ReportComponent } from './report/report.component';
+import { TrollComponent } from './troll/troll.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch:'full'},
@@ -35,6 +36,7 @@ export const routes: Routes = [
     {path: 'profile',           component: ProfileComponent},
     {path: 'main',     component: AdminControlComponent, 
         children: [
+          {path:'troll', component: TrollComponent},
           {path: 'unit',      component: UnitComponent},
           {path: 'lessons/:id',      component: ManageLessonsComponent},
           {path: 'user',      component: ManageUsersComponent},

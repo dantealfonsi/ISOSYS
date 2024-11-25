@@ -85,10 +85,11 @@ width: 100%;
 
 .pie-pagina{
 width: 100%;
-background:linear-gradient(3deg, rgb(45 45 45) 13%, rgb(18 18 18) 100%);
+background:linear-gradient(3deg, rgb(255 255 255) 13%, rgb(255 201 179) 100%);
 position:relative;
 z-index: 100000000;
 top: 0;
+color: black;
 }
 
 .footer-btn{
@@ -108,7 +109,7 @@ justify-content: space-evenly;
 align-items: center;
 flex-direction: row;
 flex-wrap: wrap;
-background:#1c1c1c;
+background:#ffccb3;
 }
 
 .pie-pagina .grupo-1{
@@ -132,12 +133,13 @@ align-items: center;
 width: 250px;
 }
 .pie-pagina .grupo-1 .box h2{
-color: #fff;
+color: #000000;
+font-weight: bold;
 margin-bottom: 25px;
 font-size: 20px;
 }
 .pie-pagina .grupo-1 .box p{
-color: #efefef;
+color: #393939;
 margin-bottom: 10px;
 }
 .pie-pagina .grupo-1 .red-social a{
@@ -155,14 +157,14 @@ transition: all 300ms ease;
 font-size: 1.5rem;
 border: none;
 font-family: button;
-background: linear-gradient(3deg, rgb(40, 212, 251) 28%, rgb(159 214 231) 100%);
+background: linear-gradient(3deg, rgb(117 71 255) 28%, rgb(100 96 242) 100%);
 }
 
 .pie-pagina .grupo-2{
-background-color: #232323;
+background-color: none;
 padding: 15px 10px;
 text-align: center;
-color: #fff;
+color: #000000;
 }
 
 .pie-pagina .grupo-2 small{
@@ -220,16 +222,18 @@ box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .nombre{
-color: #5aacbf;
-font-family: 'roboto';
-font-size: 2.3rem;
+  color: #9460b3;
+  font-family: "roboto";
+  font-size: 2.3rem;
+  font-family: 'Raleway';
+  font-weight: 700;
+  margin-top: 1rem;
 }
 
 .cargo{
-font-family: 'button';
-color: #f1f1f1;
-font-size: 2rem;
-letter-spacing: .15rem;
+  color: #373737;
+  font-family: 'Montserrat';
+  font-weight: bold;
 }
 
 
