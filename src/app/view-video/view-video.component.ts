@@ -124,11 +124,34 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
       console.log(`Duración del video de YouTube: ${totalDuration} segundos`);
     };
 
+    const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
+      const player = event.target;
+      if (event.data == YT.PlayerState.ENDED) {
+        this.videoTrackingService.videoCompleted();
+        console.log('Video de YouTube completado');
+      } else if (event.data == YT.PlayerState.PLAYING) {
+        if (!this.intervalId) {
+          this.intervalId = setInterval(() => {
+            const currentTime = player.getCurrentTime();
+            this.videoTrackingService.updateVideoTime(1);
+            console.log(`Tiempo transcurrido (YouTube): ${currentTime} segundos`);
+            console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
+          }, 1000);
+        }
+      } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.BUFFERING) {
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+        }
+      }
+    };
+
     if (this.youtubePlayer) {
       this.player = new YT.Player(this.youtubePlayer.nativeElement, {
         videoId: this.videoUrl!, // Utilizar directamente la ID del video de YouTube
         events: {
-          'onReady': onPlayerReady
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
         }
       });
     }
