@@ -1,30 +1,27 @@
-
 <div class="culmn">
-  <header id="main_menu" class="header navbar-fixed-top">            
-      <div class="main_menu_bg">
-          <div class="container">
-              <div class="row">
-               <app-user-navbar></app-user-navbar>
-              </div>
-
-          </div>
+  <header id="main_menu" class="header navbar-fixed-top">
+    <div class="main_menu_bg">
+      <div class="container">
+        <div class="row">
+          <app-user-navbar></app-user-navbar>
+        </div>
 
       </div>
+
+    </div>
   </header> <!--End of header -->
 
+  <div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
 
-  
-<div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
-
-  <div class="lesson_menu" style="
+    <div class="lesson_menu" style="
   height: 95vh;
   background: rgb(255, 255, 255);
   width: 30%;
   margin-top: 2rem;
   border-radius: 1.5rem;">
 
-    <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0"> 
-      <li style="
+      <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0">
+        <li style="
       padding: 1rem;
       border-bottom: 1px solid #0000001f;
       display: flex;
@@ -38,46 +35,44 @@
     display: flex;
     align-items: center;
     justify-content: center;'>devices_other</mat-icon>
-        Ingenieria de Software</li>
-      <li style="display: flex;
+          Ingenieria de Software</li>
+        <li style="display: flex;
       flex-direction: column;
       align-content: center;
       align-items: center;" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
-        <div>
-          <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
-        </div>
-        <div>
-          <b>Lección: {{ lesson?.title }} </b>
-        </div>
-      </li>
+          <div>
+            <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
+          </div>
+          <div>
+            <b>Lección: {{ lesson?.title }} </b>
+          </div>
+        </li>
 
-      <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">         
-        <mat-icon style='border: 1px solid gray;
+        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index"
+          (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">
+          <mat-icon style='border: 1px solid gray;
                   border-radius: 4px;
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  margin-right: 1rem;'
-                  >play_arrow</mat-icon>   {{ lesson?.title }} 
-    </li> 
-    <hr>
-    <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;" (click)="goToExam(unitsAndLessons[0].id, exam.id)">         
-      <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>   
-      Examen {{ exam!.exam_order }} : {{ exam?.title }} 
-    </li>
-  </ul>
+                  margin-right: 1rem;'>play_arrow</mat-icon> {{ lesson?.title }}
+        </li>
+        <hr>
+        <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
+          (click)="goToExam(unitsAndLessons[0].id, exam.id)">
+          <mat-icon
+            style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>
+          Examen {{ exam!.exam_order }} : {{ exam?.title }}
+        </li>
+      </ul>
 
-
-
-  </div>
-
-
+    </div>
 
     <div class="container" style="padding-top: 2rem;padding-bottom: 2rem;">
 
       <div class="section-outer-container">
         <div class="section-container">
-            <mat-icon class="back-icon" (click)="goBack()"  matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
+          <mat-icon class="back-icon" (click)="goBack()" matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
           <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
           <div>
             <h1 class="title">{{capitalizeWords(lesson?.title) }}</h1>
@@ -86,34 +81,34 @@
             font-family: 'Montserrat';">Unidad {{unitsAndLessons[0]?.order}}</p>
           </div>
         </div>
-      
-        <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;"/>
-      
-    </div>
+
+        <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;" />
+
+      </div>
 
 
 
 
       <div>
 
-        <div *ngIf="lesson?.url && !isMp4(lesson.url)" style='margin:auto;display: flex;justify-content: center;'>
-          <youtube-player [videoId]="lesson?.url" width="560" height="315"></youtube-player>
+        <div *ngIf="lesson?.url"> 
+          <ng-container *ngIf="lesson.url; else noVideo">
+            <app-view-video [videoUrl]="lesson.url"></app-view-video>
+          </ng-container>
+          <ng-template #noVideo>
+            <!-- Muestra algo cuando no hay video -->
+          </ng-template>
         </div>
         
-        <div *ngIf="lesson?.url && isMp4(lesson.url)" style='margin:auto;display: flex;justify-content: center;'>
-          <vg-player>
-            <video #singleVideo id="singleVideo" controls>
-              <source [src]="'http://localhost/iso2sys_rest_api/videos/' + lesson.url" type="video/mp4">
-            </video>
-            <vg-controls></vg-controls>
-          </vg-player>
-        </div>
-        
-        
+
+
         <div class="description" style="display: flex; flex-direction: column;">
           <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
           padding-left: 1rem;
-          border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon> Descripción</h2></div>
+          border-radius: 10px 10px 0 0;">
+            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon>
+              Descripción</h2>
+          </div>
 
           <div style="background-color: white; padding: 1rem; text-align: justify;">
             <p>{{ lesson?.summary }}</p>
@@ -123,21 +118,25 @@
           <div style="display: flex; flex-direction: column;">
             <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
             padding-left: 1rem;
-            border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>ballot</mat-icon> Guias Adjuntas</h2></div>
-        
-          <ul style="background-color: white;">
-            <li *ngFor="let file of lesson?.files" class="download-li" >
-              <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }} <mat-icon style="color: #ff3d009c;">cloud_download</mat-icon></a>
-            </li>
-          </ul>
+            border-radius: 10px 10px 0 0;">
+              <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>ballot</mat-icon> Guias
+                Adjuntas</h2>
+            </div>
+
+            <ul style="background-color: white;">
+              <li *ngFor="let file of lesson?.files" class="download-li">
+                <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}
+                  <mat-icon style="color: #ff3d009c;">cloud_download</mat-icon></a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    </div>
 
 
 
-</div>
+  </div>
 
 
 </div>

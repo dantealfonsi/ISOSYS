@@ -71,6 +71,7 @@ export class UserPerMonthComponent {
       console.error("Error en la solicitud:", error);
     }
   }
+  
 
   updateChartData(reportList: any[]): void {
     const labels = reportList.map(item => item.month_name);

@@ -1,0 +1,12 @@
+<div *ngIf="videoUrl && !isMp4(videoUrl)" style="margin:auto; display: flex; justify-content: center;" #youtubePlayer>
+  <youtube-player id="youtube-player" [videoId]="videoUrl" width="560" height="315" ></youtube-player>
+</div>
+
+<div *ngIf="videoUrl && isMp4(videoUrl)" style='margin:auto; display: flex; justify-content: center;'>
+  <vg-player>
+    <video #singleVideo id="singleVideo" controls>
+      <source [src]="'http://localhost/iso2sys_rest_api/videos/' + videoUrl" type="video/mp4">
+    </video>
+    <vg-controls></vg-controls>
+  </vg-player>
+</div>

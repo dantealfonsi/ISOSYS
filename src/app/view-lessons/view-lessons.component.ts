@@ -12,11 +12,12 @@ import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play'; 
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import {MatTooltipModule} from '@angular/material/tooltip';
-
+import { ViewVideoComponent } from "../view-video/view-video.component";
+import { VideoTrackingService } from '../video-tracking.service';
 @Component({
   selector: 'app-view-lessons',
   standalone: true,
-  imports: [CommonModule,YouTubePlayerModule,MatTooltipModule,MatIconModule,UserNavbarComponent, FooterComponent,VgOverlayPlayModule,VgBufferingModule,VgCoreModule, VgControlsModule],
+  imports: [CommonModule, YouTubePlayerModule, MatTooltipModule, MatIconModule, UserNavbarComponent, FooterComponent, VgOverlayPlayModule, VgBufferingModule, VgCoreModule, VgControlsModule, ViewVideoComponent],
   templateUrl: './view-lessons.component.html',
   styleUrl: './view-lessons.component.css'
 })
@@ -35,7 +36,8 @@ export class ViewLessonsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    public router: Router
+    public router: Router,
+    public videoTrackingService: VideoTrackingService
   ) {}
 
 
@@ -150,9 +152,20 @@ filterUnitsAndLessons(unitsAndLessons: any[], itemId: any) { return unitsAndLess
 }
 
 
-  goToLesson(unitId: string, lessonOrder: string): void {
-    this.router.navigate(['/view-lessons', unitId, lessonOrder]);
+goToLesson(unitId: number, lessonOrder: number) {
+  const lesson = this.unitsAndLessons[0]?.lessons.find((lesson: { lesson_order: number; }) => lesson.lesson_order === lessonOrder);
+  if (lesson) {
+    this.videoUrl = ''; // Resetea la URL del video temporalmente
+    setTimeout(() => {
+      this.videoUrl = lesson.url; // Asigna la nueva URL del video después de un pequeño retraso
+    });
+  } else {
+    this.videoUrl = '';
   }
+  this.videoTrackingService.resetWatchedTime();
+  this.router.navigate(['/view-lessons', unitId, lessonOrder]);
+}
+
 
   goToExam(unitId: string, lesson_id: string): void {
     this.router.navigate(['/view-exam', unitId, lesson_id]);
