@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
 export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
   @Input() videoUrl: string | undefined;
+  @Input() lessonId: number | undefined;
   private intervalId: any;
   videoDuration: number | undefined;
   private player: YT.Player | undefined;
@@ -31,12 +32,17 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   constructor(private videoTrackingService: VideoTrackingService) {}
 
   ngOnInit(): void {
-    // Inicializamos en ngAfterViewInit
+    if (this.lessonId !== undefined) {
+      this.videoTrackingService.setLessonId(this.lessonId);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['videoUrl'] && !changes['videoUrl'].isFirstChange()) {
       this.resetPlayer();
+      if (this.lessonId !== undefined) {
+        this.videoTrackingService.setLessonId(this.lessonId);
+      }
     }
   }
 
@@ -100,14 +106,20 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
       video.src = this.getFullVideoUrl(this.videoUrl!); // Actualizar la URL del video con la ruta completa
       video.addEventListener('loadedmetadata', () => {
         const duration = video.duration;
+        this.videoTrackingService.setVideoDuration(duration);
         console.log(`Duración del video: ${duration} segundos`);
       });
 
+      let lastTimeUpdate = 0;
+
       video.addEventListener('timeupdate', () => {
         const currentTime = video.currentTime;
-        this.videoTrackingService.updateVideoTime(1);
-        console.log(`Tiempo transcurrido: ${currentTime} segundos`);
-        console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
+        if (Math.floor(currentTime) > lastTimeUpdate) {
+          lastTimeUpdate = Math.floor(currentTime);
+          this.videoTrackingService.updateVideoTime(1);
+          console.log(`Tiempo transcurrido: ${currentTime} segundos`);
+          console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
+        }
       });
 
       video.addEventListener('ended', () => {
@@ -121,6 +133,7 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     const onPlayerReady = (event: YT.PlayerEvent) => {
       const player = event.target;
       const totalDuration = player.getDuration();
+      this.videoTrackingService.setVideoDuration(totalDuration);
       console.log(`Duración del video de YouTube: ${totalDuration} segundos`);
     };
 
@@ -129,6 +142,8 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
       if (event.data == YT.PlayerState.ENDED) {
         this.videoTrackingService.videoCompleted();
         console.log('Video de YouTube completado');
+        clearInterval(this.intervalId); // Detener el conteo cuando el video termine
+        this.intervalId = null; // Asegurar que el intervalo se establezca como null
       } else if (event.data == YT.PlayerState.PLAYING) {
         if (!this.intervalId) {
           this.intervalId = setInterval(() => {
@@ -148,7 +163,7 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
 
     if (this.youtubePlayer) {
       this.player = new YT.Player(this.youtubePlayer.nativeElement, {
-        videoId: this.videoUrl!, // Utilizar directamente la ID del video de YouTube
+        videoId: this.videoUrl!,
         events: {
           'onReady': onPlayerReady,
           'onStateChange': onPlayerStateChange

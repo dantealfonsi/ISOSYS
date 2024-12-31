@@ -29,6 +29,8 @@ import autoTable from "jspdf-autotable";
 import { Router } from "@angular/router";
 import { UserNavbarComponent } from "../../assets/user-navbar/user-navbar.component";
 import { FooterComponent } from "../../assets/footer/footer.component";
+import { VideoTrackingService } from '../video-tracking.service';
+import { AuthService } from "../../auth.service";
 
 @Component({
   selector: 'app-view-units',
@@ -53,14 +55,16 @@ import { FooterComponent } from "../../assets/footer/footer.component";
     MatRadioModule,
     MatMenuModule,
     MatListModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './view-units.component.html',
   styleUrl: './view-units.component.css'
 })
 export class ViewUnitsComponent {
+  progressPercentage: number = 0;
+  viewedVideos: any = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,public videoTrackingService: VideoTrackingService,private authService: AuthService) {}
   
   goToLesson(unitId: string, lessonOrder: string): void {
     this.router.navigate(['/view-lessons', unitId, lessonOrder]);
@@ -73,12 +77,36 @@ export class ViewUnitsComponent {
   unitsAndLessons!: any[];
 
   ngOnInit(): void {
+    this.viewedVideos = []; // Inicializa como un array vacío
+  
+    const token = this.authService.getToken('token');
+    const obj = JSON.parse(token); 
+  
     this.unitsAndLessonsListRecover().then(data => {
       this.unitsAndLessons = data;
     }).catch(error => {
       console.error('Error recuperando las unidades y lecciones:', error);
     });
+  
+    if (token) {
+      this.loadViewedVideos(obj.id);
+    }
   }
+  
+  async loadViewedVideos(userId: number) {
+    try {
+      const data = await this.viewVideosRecover(userId);
+      if (Array.isArray(data)) {
+        this.viewedVideos = data;
+      } else {
+        console.error("Los datos recibidos no son un array", data);
+      }
+      console.log("viewedVideos:", this.viewedVideos);
+    } catch (error) {
+      console.error("Error al recuperar los videos vistos:", error);
+    }
+  }
+  
 
 
   async unitsAndLessonsListRecover(){
@@ -97,6 +125,111 @@ export class ViewUnitsComponent {
     }
   }
 
+async viewVideosRecover(id: number) {
+  try {
+    const response = await fetch(
+      "http://localhost/iso2sys_rest_api/server.php?view_videos&user_id=" + id
+    );
+    if (!response.ok) {
+      throw new Error("Error en la solicitud: " + response.status);
+    }
+    let data = await response.json();
+    console.log("Datos recibidos:", data);
+
+    // Asegúrate de que data sea siempre un array
+    if (!Array.isArray(data)) {
+      // Si es un objeto, conviértelo en un array
+      data = [data];
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
+
+
+
+
+  loadProgress(): void {
+    const key = this.videoTrackingService.getLocalStorageKey();
+    const savedProgress = localStorage.getItem(key);
+    if (savedProgress) {
+      const progress = JSON.parse(savedProgress);
+      this.progressPercentage = parseFloat(progress.progressPercentage);
+    } else {
+      this.progressPercentage = 0; // Valor predeterminado
+    }
+  }
+
+  getDivWidth(lessonId: number): string {
+    const token = this.authService.getToken('token');
+    if (token) {
+      const obj = JSON.parse(token); 
+      if (obj && obj.id) {
+        const key = `${obj.id}_${lessonId}_lesson_videos`;
+        const savedProgress = localStorage.getItem(key);
+        if (savedProgress) {
+          const progress = JSON.parse(savedProgress);
+          const progressPercentage = parseFloat(progress.progressPercentage);
+          if (progressPercentage > 50) {
+            return '1rem';
+          } else if (progressPercentage > 25) {
+            return '0.5rem';
+          }
+        }
+      } else {
+        console.error("ID no encontrado en el token", obj);
+      }
+    } else {
+      //console.error("Token no encontrado");
+    }
+    return '0'; // Valor predeterminado si el progreso es menor al 25% o no hay progreso guardado
+  }
+  
+  
+  getDivDisplay(lessonId: number): string {
+    const token = this.authService.getToken('token');
+    if (token) {
+      const obj = JSON.parse(token); 
+      if (obj && obj.id) {
+        const key = `${obj.id}_${lessonId}_lesson_videos`;
+        const savedProgress = localStorage.getItem(key);
+        if (savedProgress) {
+          const progress = JSON.parse(savedProgress);
+          const progressPercentage = parseFloat(progress.progressPercentage);
+          if (progressPercentage < 25) {
+            return 'none';
+          } else {
+            return 'block'; // Mostrar el div si el progreso es mayor o igual al 25%
+          }
+        } else {
+          return 'none'; // No hay progreso guardado
+        }
+      } else {
+        //console.error("ID no encontrado en el token", obj);
+      }
+    } else {
+      //console.error("Token no encontrado");
+    }
+    return 'none'; // Mostrar 'none' por defecto si no se encuentra el token o el ID
+  }
+  
+  isLessonViewed(lessonId: number): boolean {
+    if (Array.isArray(this.viewedVideos)) {
+      return this.viewedVideos.some(video => video.lesson_id === lessonId);
+    }
+    console.error("viewedVideos no es un array", this.viewedVideos);
+    return false;
+  }
+  
+  
 
 
 }
+
+
+
+
+
+

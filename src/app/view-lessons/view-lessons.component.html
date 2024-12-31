@@ -93,7 +93,7 @@
 
         <div *ngIf="lesson?.url"> 
           <ng-container *ngIf="lesson.url; else noVideo">
-            <app-view-video [videoUrl]="lesson.url"></app-view-video>
+            <app-view-video [videoUrl]="lesson.url" [lessonId]="lesson.id"></app-view-video>
           </ng-container>
           <ng-template #noVideo>
             <!-- Muestra algo cuando no hay video -->

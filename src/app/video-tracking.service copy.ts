@@ -16,7 +16,9 @@ export class VideoTrackingService {
   videoTime$ = this.videoTimeSource.asObservable();
   videoCompleted$ = this.videoCompletedSource.asObservable();
 
-  constructor() {}
+  constructor() {
+    this.loadProgress();
+  }
 
   videoCompleted() {
     this.videoCompletedSource.next(true);
@@ -42,7 +44,6 @@ export class VideoTrackingService {
 
   setLessonId(lessonId: number) {
     this.lessonId = lessonId;
-    this.resetWatchedTime(); // Reiniciar el tiempo visto al cambiar de lección
     this.loadProgress();
   }
 
@@ -50,9 +51,8 @@ export class VideoTrackingService {
     if (this.isSessionActive() && this.videoDuration > 0 && this.lessonId !== undefined) {
       const progressPercentage = (this.totalWatchedTime / this.videoDuration) * 100;
       this.checkpoints.forEach(checkpoint => {
-        const key = this.getCheckpointKey(checkpoint);
-        if (progressPercentage >= checkpoint && !localStorage.getItem(key)) {
-          this.saveProgress(progressPercentage);
+        if (progressPercentage >= checkpoint && !localStorage.getItem(`checkpoint_${checkpoint}_${this.lessonId}`)) {
+          this.saveProgress(checkpoint, progressPercentage);
           if (checkpoint === 90 && !this.hasPostedProgress) {
             this.postProgress(progressPercentage);
             this.hasPostedProgress = true; // Marcar la solicitud como enviada
@@ -62,25 +62,19 @@ export class VideoTrackingService {
     }
   }
 
-  private saveProgress(progressPercentage: number) {
-    const key = this.getLocalStorageKey();
-    const value = {
-      lessonId: this.lessonId,
-      progressPercentage: progressPercentage.toFixed(2) // Guardar el porcentaje con dos decimales
-    };
-    localStorage.setItem(key, JSON.stringify(value));
-    console.log(`Progreso guardado en localStorage:`, value);
-  }
-
-  public getLocalStorageKey(): string {
+  private saveProgress(checkpoint: number, progressPercentage: number) {
     const token = JSON.parse(localStorage.getItem('token') || '{}');
     const userId = token.id;
-    return `${userId}_${this.lessonId}_lesson_videos`;
-  }
-
-  private getCheckpointKey(checkpoint: number): string {
-    const key = this.getLocalStorageKey();
-    return `${key}_checkpoint_${checkpoint}`;
+    if (userId && this.lessonId !== undefined) {
+      const key = `${userId}_${this.lessonId}_lesson_videos`;
+      const value = {
+        userId,
+        lessonId: this.lessonId,
+        progressPercentage: progressPercentage.toFixed(2) // Guardar el porcentaje con dos decimales
+      };
+      localStorage.setItem(key, JSON.stringify(value));
+      console.log(`Checkpoint ${checkpoint}% alcanzado y guardado en localStorage:`, value);
+    }
   }
 
   private postProgress(progressPercentage: number) {
@@ -112,14 +106,16 @@ export class VideoTrackingService {
   }
 
   private loadProgress() {
-    const key = this.getLocalStorageKey();
-    const savedProgress = localStorage.getItem(key);
-    if (savedProgress) {
-      const progress = JSON.parse(savedProgress);
-      this.totalWatchedTime = (progress.progressPercentage / 100) * this.videoDuration;
-      console.log(`Progreso cargado: ${this.totalWatchedTime} segundos (${progress.progressPercentage}%)`);
-    } else {
-      this.totalWatchedTime = 0;
+    const token = JSON.parse(localStorage.getItem('token') || '{}');
+    const userId = token.id;
+    if (userId && this.lessonId !== undefined) {
+      const key = `${userId}_${this.lessonId}_lesson_videos`;
+      const savedProgress = localStorage.getItem(key);
+      if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+        this.totalWatchedTime = (progress.progressPercentage / 100) * this.videoDuration;
+        console.log(`Progreso cargado: ${this.totalWatchedTime} segundos (${progress.progressPercentage}%)`);
+      }
     }
   }
 
