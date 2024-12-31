@@ -69,3 +69,11 @@ video {
   transform: scale(1.4);
   transition: ease .5s;
 }
+
+::ng-deep .mat-mdc-dialog-container {
+  height: 100vh !important;
+  position: absolute;
+  max-width: 100% !important;
+  width: 100%;
+  top: 0;
+}

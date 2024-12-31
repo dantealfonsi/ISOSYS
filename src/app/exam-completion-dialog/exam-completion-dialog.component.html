@@ -1,7 +1,21 @@
-<h1>Felicidades por Completar el Examen</h1>
-<div>
-  <p>TU NOTA ES: <b>{{ data.userMark }}</b></p>
-</div>
-<div>
-  <button mat-button (click)="onNoClick()">Cerrar</button>
-</div>
+<!-- confetti.component.html -->
+<div class="confetti-container"></div>
+
+
+
+<section class="text-section">
+  <div>
+    <h1 class="congratulation-text">Felicidades</h1>
+    <h2 class="completed-text">¡Examen Completado!</h2>
+  </div>
+
+  <div class="mark-container">
+    <span>Tu calificación es:</span>
+    <span><b>{{ data.userMark }}</b></span>
+  </div>
+
+  <div>
+    <button mat-button class="edit" (click)="onNoClick()" style="width:10rem;justify-content: center;">Ver Calificaciones</button>
+  </div>
+
+</section>

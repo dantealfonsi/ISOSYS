@@ -428,7 +428,9 @@ checkAllAnswersTrue(step: number): boolean {
       }); dialogRef.afterClosed().subscribe(
         result => { console.log('El diálogo se cerró'); }
           // Realiza alguna acción después de cerrar el diálogo si es necesario }); }
-        )}
+        )
+      }
+
 
 
 
