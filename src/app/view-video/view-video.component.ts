@@ -1,13 +1,13 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, SimpleChanges, OnChanges, AfterViewInit, Renderer2 } from '@angular/core';
 import { VideoTrackingService } from '../video-tracking.service';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { MatIconModule } from '@angular/material/icon';
 import { UserNavbarComponent } from '../../assets/user-navbar/user-navbar.component';
 import { FooterComponent } from '../../assets/footer/footer.component';
 import { Router } from "@angular/router";
-import { VgCoreModule } from '@videogular/ngx-videogular/core'; 
+import { VgCoreModule } from '@videogular/ngx-videogular/core';
 import { VgControlsModule } from '@videogular/ngx-videogular/controls';
-import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play'; 
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
@@ -29,12 +29,15 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   @ViewChild('singleVideo', { static: false }) singleVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('youtubePlayer', { static: false }) youtubePlayer!: ElementRef;
 
-  constructor(private videoTrackingService: VideoTrackingService) {}
+  screenWidth: number = 0;
+  constructor(private videoTrackingService: VideoTrackingService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
     if (this.lessonId !== undefined) {
       this.videoTrackingService.setLessonId(this.lessonId);
     }
+    this.screenWidth = window.innerWidth;
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -47,8 +50,28 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   }
 
   ngAfterViewInit(): void {
+
     this.initializePlayer();
+    // Verifica repetidamente hasta que el iframe esté presente
+    const checkIframe = () => {
+      const iframe = document.getElementById('widget2');
+      if (iframe) {
+        iframe.style.width = '100%'; // 100% del ancho del contenedor
+        if (window.innerWidth <= 950) {
+          iframe.style.height = `${iframe.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3
+        } else {
+          iframe.style.height = `${iframe.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9
+        }
+      } else {
+        // Vuelve a verificar después de 100ms
+        setTimeout(checkIframe, 100);
+      }
+    };
+
+    // Comienza la verificación
+    checkIframe();
   }
+
 
   ngOnDestroy(): void {
     if (this.intervalId) {
@@ -179,4 +202,6 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
     return url;
   }
+
 }
+

@@ -1,5 +1,14 @@
+
+<style>
+    #widget2 {
+        width: 100% !important; /* Ajusta el ancho según tus necesidades */
+        max-width: 100% !important; /* Asegura que no exceda el ancho máximo */
+        background-color: red;
+      }
+</style>
+
 <div *ngIf="videoUrl && !isMp4(videoUrl)" style="margin:auto; display: flex; justify-content: center;" #youtubePlayer>
-  <youtube-player id="youtube-player" [videoId]="videoUrl" width="560" height="315" ></youtube-player>
+  <youtube-player id="youtube-player" [videoId]="videoUrl" [width]="screenWidth"></youtube-player>
 </div>
 
 <div *ngIf="videoUrl && isMp4(videoUrl)" style='margin:auto; display: flex; justify-content: center;'>
@@ -10,3 +19,5 @@
     <vg-controls></vg-controls>
   </vg-player>
 </div>
+
+

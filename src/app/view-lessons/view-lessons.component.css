@@ -1,3 +1,8 @@
+.container.left{
+  height: calc(99vh - 8rem);
+  overflow-y: auto;
+  padding-top: 0 !important;
+}
 
   video {
     display: block;
@@ -84,4 +89,77 @@ vg-player[_ngcontent-ng-c3095261262] {
   transform: scale(1.4);
   transition: ease .5s;
 }
+
+
+.whole-container{
+  display: flex;
+  margin-top: 5.5rem;
+  padding-left: 1rem;
+}
+
+.lesson-menu-container{
+  display: flex;
+  padding-top: 8rem;
+}
+
+.lesson-menu{
+  height: calc(99vh - 8rem);
+  background: rgb(255, 255, 255);
+  width: 40%;
+  border-radius: 1.5rem;
+  }
+
+  .lesson-menu-ul{
+    overflow-y: auto;
+  }
+
+  .lesson-menu-icon{
+    background: linear-gradient(45deg, #ff380b, #ffa00ca3);
+    padding: 1rem;
+    border-radius: 7px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .lesson-menu-li{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+  }
+
+  .play-icon{
+    border: 1px solid gray;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+  }
+
+@media (max-width: 950px) {
+
+  .lesson-menu{
+    overflow-y: auto;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    width: 100%;
+    border-radius: 1.5rem;
+    position: absolute;
+    z-index: 1000000;
+    top: 0;
+    position: fixed;
+    display: none;
+    }
+
+    :ng-deep iframe{
+      width: 100% !important;
+    }
+
+}
+
+
 

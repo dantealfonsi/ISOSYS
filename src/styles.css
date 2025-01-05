@@ -355,6 +355,146 @@ color:black;
 
 
 
+/*****************RESPONSIVE**********************/
+
+
+@media screen and (max-width: 950px) {
+  .table-image {
+    display: none;
+  }
+
+  .arrow-icon {
+    display: none;
+  }
+
+  .section-outer-container {
+    border-radius: 1rem;
+    padding: .5rem;
+  }
+
+  .title-icon {
+    padding: 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .outside-table {
+    flex-direction: column-reverse;
+    gap: .5rem;
+  }
+
+  .button-container {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    width: 16rem;
+    justify-content: center;
+  }
+
+  .export {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .add {
+    width: 100%;
+    justify-content: center;
+  }
+
+
+  .dialog {
+    background-color: #fdfbff;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    width: 100% !important;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    box-shadow: 1px 1px 8px 4px #676767;
+    align-content: center;
+    margin-right: 0rem;
+  }
+
+  form {
+    width: 90%;
+  }
+
+  .two-inputs {
+    display: flex;
+    flex-direction: column;
+  }
+
+  br {
+    display: none;
+  }
+
+
+  .nationality-form-field {
+    width: 30% !important;
+  }
+
+  .genre-field {
+    width: 100%;
+  }
+
+  .qualification-image-container {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+  }
+
+  .qualification-image {
+    width: 100%;
+  }
+
+}
+
+
+
+
+@media (max-width: 950px) {
+  .mat-table-wrapper {
+    display: none;
+  }
+
+  .expansion-panel-wrapper {
+    display: block;
+  }
+}
+
+@media (min-width: 950px) {
+  .mat-table-wrapper {
+    display: block;
+  }
+
+  .expansion-panel-wrapper {
+    display: none;
+  }
+
+}
+
+
+.table-responsive {
+  display: block;
+}
+
+.mat-expansion {
+  display: none;
+}
+
+@media (max-width: 950px) {
+  .table-responsive {
+    display: none;
+  }
+
+  .mat-expansion {
+    display: block;
+  }
+}
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

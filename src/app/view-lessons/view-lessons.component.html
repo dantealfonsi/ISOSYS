@@ -11,35 +11,11 @@
     </div>
   </header> <!--End of header -->
 
-  <div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
-
-    <div class="lesson_menu" style="
-  height: 95vh;
-  background: rgb(255, 255, 255);
-  width: 30%;
-  margin-top: 2rem;
-  border-radius: 1.5rem;">
-
-      <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0">
-        <li style="
-      padding: 1rem;
-      border-bottom: 1px solid #0000001f;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.6rem;
-      font-weight: 600;"><mat-icon style='background: linear-gradient(45deg, #ff380b, #ffa00ca3);
-    padding: 1rem;
-    border-radius: 7px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;'>devices_other</mat-icon>
-          Ingenieria de Software</li>
-        <li style="display: flex;
-      flex-direction: column;
-      align-content: center;
-      align-items: center;" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
+  <div class="lesson-menu-container">
+    <div class="lesson-menu">
+      <ul>
+        <li><mat-icon class="lesson-menu-icon">devices_other</mat-icon>Ingenieria de Software</li>
+        <li class="lesson-menu-li" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
           <div>
             <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
           </div>
@@ -47,28 +23,23 @@
             <b>Lección: {{ lesson?.title }} </b>
           </div>
         </li>
+      </ul>
 
-        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index"
-          (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">
-          <mat-icon style='border: 1px solid gray;
-                  border-radius: 4px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  margin-right: 1rem;'>play_arrow</mat-icon> {{ lesson?.title }}
+        <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0" style='overflow-y: auto;' class="lesson-menu-ul">
+        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">
+          <mat-icon class="play-icon">play_arrow</mat-icon> {{ lesson?.title }}
         </li>
         <hr>
         <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
           (click)="goToExam(unitsAndLessons[0].id, exam.id)">
-          <mat-icon
-            style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>
+          <mat-icon class="play-icon">play_arrow</mat-icon>
           Examen {{ exam!.exam_order }} : {{ exam?.title }}
         </li>
       </ul>
 
     </div>
 
-    <div class="container" style="padding-top: 2rem;padding-bottom: 2rem;">
+    <div class="container left" style="padding-top: 2rem;padding-bottom: 2rem;">
 
       <div class="section-outer-container">
         <div class="section-container">
@@ -91,7 +62,7 @@
 
       <div>
 
-        <div *ngIf="lesson?.url"> 
+        <div *ngIf="lesson?.url">
           <ng-container *ngIf="lesson.url; else noVideo">
             <app-view-video [videoUrl]="lesson.url" [lessonId]="lesson.id"></app-view-video>
           </ng-container>
@@ -99,7 +70,7 @@
             <!-- Muestra algo cuando no hay video -->
           </ng-template>
         </div>
-        
+
 
 
         <div class="description" style="display: flex; flex-direction: column;">
@@ -140,4 +111,3 @@
 
 
 </div>
-<app-footer></app-footer>
