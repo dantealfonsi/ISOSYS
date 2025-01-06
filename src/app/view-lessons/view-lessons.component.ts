@@ -14,12 +14,14 @@ import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ViewVideoComponent } from "../view-video/view-video.component";
 import { VideoTrackingService } from '../video-tracking.service';
+import {MatTabsModule} from '@angular/material/tabs';
+
 @Component({
   selector: 'app-view-lessons',
   standalone: true,
-  imports: [CommonModule, YouTubePlayerModule, MatTooltipModule, MatIconModule, UserNavbarComponent, FooterComponent, VgOverlayPlayModule, VgBufferingModule, VgCoreModule, VgControlsModule, ViewVideoComponent],
+  imports: [CommonModule,MatTabsModule, YouTubePlayerModule, MatTooltipModule, MatIconModule, UserNavbarComponent, FooterComponent, VgOverlayPlayModule, VgBufferingModule, VgCoreModule, VgControlsModule, ViewVideoComponent],
   templateUrl: './view-lessons.component.html',
-  styleUrl: './view-lessons.component.css'
+  styleUrl: './view-lessons.component.css',
 })
 
 export class ViewLessonsComponent implements OnInit {
