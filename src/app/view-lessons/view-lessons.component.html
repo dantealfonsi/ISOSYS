@@ -12,9 +12,15 @@
   </header> <!--End of header -->
 
   <div class="lesson-menu-container">
-    <div class="lesson-menu">
+    <div class="lesson-menu" [ngClass]="{'show': lessonMenuVisible}">
       <ul>
-        <li class="menu-upper-title"><mat-icon class="lesson-menu-icon">devices_other</mat-icon>Ingenieria de Software</li>
+          <li class="menu-upper-title">
+            <div class="first-title">
+              <mat-icon class="lesson-menu-icon">devices_other</mat-icon>
+              <span>Ingenieria de Software</span>
+            </div>
+            <div><mat-icon class="close-menu-icon" (click)="toggleLessonMenu()">close</mat-icon></div>        
+          </li>
         <li class="lesson-menu-li" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
           <div>
             <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
@@ -26,7 +32,7 @@
       </ul>
 
         <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0" style='overflow-y: auto;' class="lesson-menu-ul">
-        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">
+        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;text-transform: capitalize;" [ngClass]="{'active-lesson': lesson.lesson_order === lesson_order}"  >
           <mat-icon class="play-icon">play_arrow</mat-icon> {{ lesson?.title }}
         </li>
         <hr>
@@ -155,13 +161,14 @@ align-items: center;
 padding: 1rem;
 z-index: 100000000;
 b: 1rem -1rem 2rem 0px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
-box-shadow: 1px -3px 7px 0px #b9b7c3;">
+box-shadow: 1px -3px 7px 0px #b9b7c3;
+height: 5rem;">
 
-<button class="control-button"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
+<button class="control-button" (click)="goToPreviousLesson()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
 
-<button class="control-button control-blue"><mat-icon>menu</mat-icon></button>
+<button class="control-button control-blue"  [ngClass]="{'toggle-active': lessonMenuVisible}" (click)="toggleLessonMenu()"><mat-icon>menu</mat-icon></button>
 
-  <button class="control-button">Siguiente <mat-icon>skip_next</mat-icon></button>
+<button class="control-button" (click)="goToNextLesson()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
   
 

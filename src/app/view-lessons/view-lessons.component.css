@@ -68,6 +68,19 @@ li {
   box-shadow: inset .2rem .2rem .5rem #b1b9cd, inset -.2rem -.2rem .5rem var(--white);
 }
 
+.close-menu-icon{
+  display: none;
+}
+
+.first-title{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.first-title span{
+  font-weight: 600;
+}
 
 #singleVideo {
   max-width: 100%;
@@ -104,6 +117,7 @@ vg-player[_ngcontent-ng-c3095261262] {
   display: flex;
   padding-left: 1rem;
 }
+
 
 .lesson-menu {
   height: calc(99vh - 12rem);
@@ -157,6 +171,9 @@ vg-player[_ngcontent-ng-c3095261262] {
   box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7;
 }
 
+::ng-deep .mat-mdc-tab-group {
+  margin-bottom: 20%;
+}
 
 ::ng-deep .mat-mdc-tab-header,.mat-mdc-tab-label-container,.mat-mdc-tab-list,.mat-mdc-tab-labels {
   box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7 !important;
@@ -206,11 +223,21 @@ vg-player[_ngcontent-ng-c3095261262] {
   border-radius: 3rem;
 }
 
+.active-lesson {
+  background: linear-gradient(45deg, #bfb7ff, transparent);  
+  font-weight: bold; /* Ejemplo: cambiar el peso de la fuente */
+}
+
+.toggle-active{
+  background: linear-gradient(45deg, #bfb7ff, transparent);  
+  color: white;
+}
+
 @media (max-width: 950px) {
 
   .lesson-menu {
     overflow-y: auto;
-    height: 100%;
+    height: calc(100% - 5rem);
     background: rgb(255, 255, 255);
     width: 100%;
     border-radius: 1.5rem;
@@ -219,6 +246,7 @@ vg-player[_ngcontent-ng-c3095261262] {
     top: 0;
     position: fixed;
     display: none;
+    margin: 0;
   }
 
   :ng-deep iframe {
@@ -232,5 +260,14 @@ vg-player[_ngcontent-ng-c3095261262] {
   .container.left{
     width: 100%;
 }
+
+.close-menu-icon{
+  display: block;
+}
+
+.menu-upper-title {
+  justify-content: space-between;
+}
+
 
 }

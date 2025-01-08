@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -180,9 +180,124 @@ goToLesson(unitId: number, lessonOrder: number) {
 
   isMp4(url: string): boolean { return url.includes('.mp4'); }
 
-}  
 
 
+  goToNextLesson() {
+    const unitIdParam = this.route.snapshot.paramMap.get('id');
+    const lessonOrderParam = this.route.snapshot.paramMap.get('lesson_order');
+  
+    console.log('unitIdParam:', unitIdParam);
+    console.log('lessonOrderParam:', lessonOrderParam);
+  
+    if (unitIdParam && lessonOrderParam) {
+      const unitId = +unitIdParam;
+      const lessonOrder = +lessonOrderParam;
+  
+      console.log('unitId:', unitId);
+      console.log('lessonOrder:', lessonOrder);
+  
+      const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
+  
+      console.log('unit:', unit);
+  
+      if (unit) {
+        // Encontrar la lección actual
+        const nextLesson = unit.lessons.find((lesson: { lesson_order: number; }) => lesson.lesson_order > lessonOrder);
+  
+        console.log('nextLesson:', nextLesson);
+  
+        if (nextLesson) {
+          this.videoUrl = ''; // Resetea la URL del video temporalmente
+          setTimeout(() => {
+            this.videoUrl = nextLesson.url; // Asigna la nueva URL del video después de un pequeño retraso
+            console.log('videoUrl asignado:', this.videoUrl);
+          });
+  
+          this.videoTrackingService.resetWatchedTime();
+          console.log('Tiempo de visualización reseteado');
+  
+          this.router.navigate(['/view-lessons', unitId, nextLesson.lesson_order]);
+          console.log('Navegando a la siguiente lección:', unitId, nextLesson.lesson_order);
+        } else {
+          this.videoUrl = ''; // Si no hay siguiente lección, resetea la URL del video
+          console.log('No hay siguiente lección, videoUrl reseteado');
+        }
+      } else {
+        this.videoUrl = ''; // Si no se encuentra la unidad, resetea la URL del video
+        console.log('Unidad no encontrada, videoUrl reseteado');
+      }
+    } else {
+      this.videoUrl = ''; // Si no se encuentran los parámetros, resetea la URL del video
+      console.log('Parámetros no encontrados, videoUrl reseteado');
+    }
+  }
 
+
+  goToPreviousLesson() {
+    const unitIdParam = this.route.snapshot.paramMap.get('id');
+    const lessonOrderParam = this.route.snapshot.paramMap.get('lesson_order');
+  
+    console.log('unitIdParam:', unitIdParam);
+    console.log('lessonOrderParam:', lessonOrderParam);
+  
+    if (unitIdParam && lessonOrderParam) {
+      const unitId = +unitIdParam;
+      const lessonOrder = +lessonOrderParam;
+  
+      console.log('unitId:', unitId);
+      console.log('lessonOrder:', lessonOrder);
+  
+      const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
+  
+      console.log('unit:', unit);
+  
+      if (unit) {
+        // Encontrar la lección actual
+        const previousLesson = unit.lessons.reverse().find((lesson: { lesson_order: number; }) => lesson.lesson_order < lessonOrder);
+  
+        console.log('previousLesson:', previousLesson);
+  
+        if (previousLesson) {
+          this.videoUrl = ''; // Resetea la URL del video temporalmente
+          setTimeout(() => {
+            this.videoUrl = previousLesson.url; // Asigna la nueva URL del video después de un pequeño retraso
+            console.log('videoUrl asignado:', this.videoUrl);
+          });
+  
+          this.videoTrackingService.resetWatchedTime();
+          console.log('Tiempo de visualización reseteado');
+  
+          this.router.navigate(['/view-lessons', unitId, previousLesson.lesson_order]);
+          console.log('Navegando a la lección anterior:', unitId, previousLesson.lesson_order);
+        } else {
+          this.videoUrl = ''; // Si no hay lección anterior, resetea la URL del video
+          console.log('No hay lección anterior, videoUrl reseteado');
+        }
+      } else {
+        this.videoUrl = ''; // Si no se encuentra la unidad, resetea la URL del video
+        console.log('Unidad no encontrada, videoUrl reseteado');
+      }
+    } else {
+      this.videoUrl = ''; // Si no se encuentran los parámetros, resetea la URL del video
+      console.log('Parámetros no encontrados, videoUrl reseteado');
+    }
+  }
+
+  lessonMenuVisible: boolean = false;
+
+  toggleLessonMenu() {
+    this.lessonMenuVisible = !this.lessonMenuVisible;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    const windowWidth = (event.target as Window).innerWidth;
+    if (windowWidth > 950) {
+      this.lessonMenuVisible = false;
+    }
+  }
+  
+
+}
 
 
