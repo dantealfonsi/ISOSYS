@@ -166,12 +166,12 @@ height: 5rem;">
 
 <button class="control-button" *ngIf="!isFirstLesson" (click)="goToPreviousLesson()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
 
-<button class="control-button" *ngIf="isFirstLesson"   (click)="goToPreviousUnit()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
+<button class="control-button" *ngIf="isFirstLesson"  [disabled]="isFirstUnit" [ngClass]="{'disabled': isFirstUnit}" (click)="goToPreviousUnit()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
 
 <button class="control-button control-blue"  [ngClass]="{'toggle-active': lessonMenuVisible}" (click)="toggleLessonMenu()"><mat-icon>menu</mat-icon></button>
 
 <button class="control-button" *ngIf="!isLastLesson" (click)="goToNextLesson()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
-<button class="control-button" *ngIf="isLastLesson" (click)="goToNextUnit()">Siguiente <mat-icon>skip_next</mat-icon></button>
+<button class="control-button" *ngIf="isLastLesson"  [disabled]="isLastUnit" [ngClass]="{'disabled': isLastUnit}"  (click)="goToNextUnit()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
 </div>

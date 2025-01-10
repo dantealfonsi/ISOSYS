@@ -34,6 +34,8 @@ export class ViewLessonsComponent implements OnInit {
   lesson: any;
   isFirstLesson: boolean = false;
   isLastLesson: boolean = false;
+  isFirstUnit: boolean = false;
+  isLastUnit: boolean = false;
   currentLessonOrder!: number;
   url: string | undefined;
 
@@ -139,7 +141,9 @@ export class ViewLessonsComponent implements OnInit {
 
         // Ahora que unitsAndLessons está inicializado, llamamos a checkForNoPreviousLesson
         this.checkForNoPreviousLesson();
-        this.checkIfLastLesson()
+        this.checkForNoPreviousUnit();
+        this.checkIfLastLesson();
+        this.checkForLastUnit();
       })
       .catch(error => {
         console.error('Error recuperando las unidades y lecciones:', error);
@@ -365,6 +369,66 @@ export class ViewLessonsComponent implements OnInit {
     }
   }
 
+  checkForNoPreviousUnit() {
+    const unitIdParam = this.route.snapshot.paramMap.get('id');
+  
+    if (unitIdParam) {
+      const unitId = +unitIdParam;
+      const unit = this.wholeUnitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
+  
+      if (unit) {
+        // Encontrar la unidad anterior con el número menor más cercano al orden de la unidad actual
+        const previousUnit = this.wholeUnitsAndLessons
+          .filter((prevUnit: { order: string; }) => +prevUnit.order < +unit.order)
+          .sort((a: { order: string; }, b: { order: string; }) => +b.order - +a.order)[0];
+  
+        if (!previousUnit) {
+          this.isFirstUnit = true;
+          console.log('No hay unidad anterior, es la primera unidad');
+        } else {
+          this.isFirstUnit = false;
+          console.log('Unidad anterior encontrada:', previousUnit);
+        }
+      } else {
+        console.log('Unidad no encontrada');
+        this.isFirstUnit = false;
+      }
+    } else {
+      console.log('Parámetros no encontrados');
+      this.isFirstUnit = false;
+    }
+  }
+  
+  checkForLastUnit() {
+    const unitIdParam = this.route.snapshot.paramMap.get('id');
+  
+    if (unitIdParam) {
+      const unitId = +unitIdParam;
+      const unit = this.wholeUnitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
+  
+      if (unit) {
+        // Encontrar la unidad siguiente con el número mayor más cercano al orden de la unidad actual
+        const nextUnit = this.wholeUnitsAndLessons
+          .filter((nextUnit: { order: string; }) => +nextUnit.order > +unit.order)
+          .sort((a: { order: string; }, b: { order: string; }) => +a.order - +b.order)[0];
+  
+        if (!nextUnit) {
+          this.isLastUnit = true;
+          console.log('No hay unidad siguiente, es la última unidad');
+        } else {
+          this.isLastUnit = false;
+          console.log('Unidad siguiente encontrada:', nextUnit);
+        }
+      } else {
+        console.log('Unidad no encontrada');
+        this.isLastUnit = false;
+      }
+    } else {
+      console.log('Parámetros no encontrados');
+      this.isLastUnit = false;
+    }
+  }
+  
   
   goToNextUnit() {
     const unitIdParam = this.route.snapshot.paramMap.get('id');
