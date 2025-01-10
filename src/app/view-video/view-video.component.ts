@@ -110,6 +110,25 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     this.clearVideoElement();
     setTimeout(() => {
       this.initializePlayer();
+
+      const checkIframe = () => {
+        const iframe = document.getElementById('widget2');
+        if (iframe) {
+          iframe.style.width = '100%'; // 100% del ancho del contenedor
+          if (window.innerWidth <= 950) {
+            iframe.style.height = `${iframe.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3
+          } else {
+            iframe.style.height = `${iframe.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9
+          }
+        } else {
+          // Vuelve a verificar después de 100ms
+          setTimeout(checkIframe, 100);
+        }
+      };
+  
+      // Comienza la verificación
+      checkIframe();
+  
     });
   }
 

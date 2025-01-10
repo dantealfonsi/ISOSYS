@@ -99,10 +99,10 @@
         </mat-tab-group>
         
         <ng-template #noDescription>
-          <div>Sin información</div>
+          <div style="text-align: center;font-size: 1.2rem;padding: 1rem;color: #626f8b;">Sin información</div>
         </ng-template>
         <ng-template #noFiles>
-          <div>Sin información</div>
+          <div style="text-align: center;font-size: 1.2rem;padding: 1rem;color: #626f8b;">Sin información</div>
         </ng-template>
         
 
@@ -164,13 +164,14 @@ b: 1rem -1rem 2rem 0px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
 box-shadow: 1px -3px 7px 0px #b9b7c3;
 height: 5rem;">
 
-<button class="control-button" (click)="goToPreviousLesson()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
+<button class="control-button" *ngIf="!isFirstLesson" (click)="goToPreviousLesson()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
+
+<button class="control-button" *ngIf="isFirstLesson"   (click)="goToPreviousUnit()"> 	<mat-icon>skip_previous</mat-icon> Anterior</button>
 
 <button class="control-button control-blue"  [ngClass]="{'toggle-active': lessonMenuVisible}" (click)="toggleLessonMenu()"><mat-icon>menu</mat-icon></button>
 
-<button class="control-button" (click)="goToNextLesson()">Siguiente <mat-icon>skip_next</mat-icon></button>
+<button class="control-button" *ngIf="!isLastLesson" (click)="goToNextLesson()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
-  
-
+<button class="control-button" *ngIf="isLastLesson" (click)="goToNextUnit()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
 </div>

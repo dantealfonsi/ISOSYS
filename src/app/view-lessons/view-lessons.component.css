@@ -229,8 +229,17 @@ vg-player[_ngcontent-ng-c3095261262] {
 }
 
 .toggle-active{
-  background: linear-gradient(45deg, #bfb7ff, transparent);  
+  background: linear-gradient(45deg, #6450fa, #bfb7ff);  
   color: white;
+}
+
+.disabled{
+  background: linear-gradient(45deg, #bec8e4, #c8d0e7);
+  color: rgb(93 115 131 / 80%) !important;
+}
+
+.toggle-active mat-icon{
+  color: #cdcdd3;
 }
 
 @media (max-width: 950px) {
