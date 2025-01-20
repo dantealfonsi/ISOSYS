@@ -24,54 +24,58 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   @Input() videoUrl: string | undefined;
   @Input() lessonId: number | undefined;
   private intervalId: any;
-  videoDuration: number | undefined;
   private player: YT.Player | undefined;
+
+  videoDuration: number | undefined;
+
+
   @ViewChild('singleVideo', { static: false }) singleVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('youtubePlayer', { static: false }) youtubePlayer!: ElementRef;
-
+  @ViewChild('skeletonLoader', { static: false }) skeletonLoader: ElementRef | undefined;
+    
   screenWidth: number = 0;
+  iframeLoaded: boolean = false;
+
+
   constructor(private videoTrackingService: VideoTrackingService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
+
     if (this.lessonId !== undefined) {
       this.videoTrackingService.setLessonId(this.lessonId);
+      this.initializePlayer();
     }
     this.screenWidth = window.innerWidth;
 
+
+    //alert(this.iframeLoaded);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
     if (changes['videoUrl'] && !changes['videoUrl'].isFirstChange()) {
       this.resetPlayer();
+
       if (this.lessonId !== undefined) {
         this.videoTrackingService.setLessonId(this.lessonId);
       }
     }
+
   }
+
 
   ngAfterViewInit(): void {
 
+    if (window.innerWidth <= 950) {
+      this.skeletonLoader!.nativeElement.style.height = `${this.skeletonLoader!.nativeElement.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3      
+    } else {
+      this.skeletonLoader!.nativeElement.style.height = `${this.skeletonLoader!.nativeElement.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9     
+    }
+    
     this.initializePlayer();
-    // Verifica repetidamente hasta que el iframe esté presente
-    const checkIframe = () => {
-      const iframe = document.getElementById('widget2');
-      if (iframe) {
-        iframe.style.width = '100%'; // 100% del ancho del contenedor
-        if (window.innerWidth <= 950) {
-          iframe.style.height = `${iframe.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3
-        } else {
-          iframe.style.height = `${iframe.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9
-        }
-      } else {
-        // Vuelve a verificar después de 100ms
-        setTimeout(checkIframe, 100);
-      }
-    };
+    this.checkIframe();
 
-    // Comienza la verificación
-    checkIframe();
   }
-
 
   ngOnDestroy(): void {
     if (this.intervalId) {
@@ -79,6 +83,73 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
     if (this.player) {
       this.player.destroy();
+    }
+  }
+
+  resetPlayer(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+    this.videoTrackingService.resetWatchedTime();
+    if (this.player) {
+      this.player.destroy();
+      this.player = undefined;
+    }
+    this.clearVideoElement();
+    setTimeout(() => {
+      this.initializePlayer();
+      this.checkIframe();
+    });
+
+  }
+
+
+
+  checkIframe() {
+
+    this.waitForIframe().then(iframe => {
+      iframe.style.width = '100%';
+      if (window.innerWidth <= 950) {
+        iframe.style.height = `${iframe.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3        
+      } else {
+        iframe.style.height = `${iframe.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9
+        }
+      this.iframeLoaded = true; // El iframe se ha cargado, ocultamos el skeleton screen
+    }).catch(() => {
+      ////console.log('No se encontró el iframe después del tiempo de espera');
+    });
+  }
+
+  waitForIframe(): Promise<HTMLIFrameElement> {
+    return new Promise((resolve, reject) => {
+      const maxAttempts = 10;
+      let attempts = 0;
+
+      const intervalId = setInterval(() => {
+        const iframe = this.renderer.selectRootElement('[id^="widget"]', true);
+
+        if (iframe) {
+          clearInterval(intervalId);
+          this.renderer.listen(iframe, 'load', () => {
+            //alert('El iframe se ha cargado');
+            resolve(iframe);
+          });
+        } else if (attempts >= maxAttempts) {
+          clearInterval(intervalId);
+          reject();
+        }
+        attempts++;
+      }, 100);
+    });
+  }
+
+  clearVideoElement(): void {
+    if (this.singleVideo && this.singleVideo.nativeElement) {
+      this.singleVideo.nativeElement.src = ''; // Forzar actualización de src para videos MP4
+      this.singleVideo.nativeElement.load(); // Recargar el elemento de video
+    }
+    if (this.youtubePlayer) {
+      this.youtubePlayer.nativeElement.innerHTML = ''; // Limpiar el contenido del reproductor de YouTube
     }
   }
 
@@ -98,50 +169,6 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
   }
 
-  resetPlayer(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-    this.videoTrackingService.resetWatchedTime();
-    if (this.player) {
-      this.player.destroy();
-      this.player = undefined;
-    }
-    this.clearVideoElement();
-    setTimeout(() => {
-      this.initializePlayer();
-
-      const checkIframe = () => {
-        const iframe = document.getElementById('widget2');
-        if (iframe) {
-          iframe.style.width = '100%'; // 100% del ancho del contenedor
-          if (window.innerWidth <= 950) {
-            iframe.style.height = `${iframe.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3
-          } else {
-            iframe.style.height = `${iframe.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9
-          }
-        } else {
-          // Vuelve a verificar después de 100ms
-          setTimeout(checkIframe, 100);
-        }
-      };
-  
-      // Comienza la verificación
-      checkIframe();
-  
-    });
-  }
-
-  clearVideoElement(): void {
-    if (this.singleVideo && this.singleVideo.nativeElement) {
-      this.singleVideo.nativeElement.src = ''; // Forzar actualización de src para videos MP4
-      this.singleVideo.nativeElement.load(); // Recargar el elemento de video
-    }
-    if (this.youtubePlayer) {
-      this.youtubePlayer.nativeElement.innerHTML = ''; // Limpiar el contenido del reproductor de YouTube
-    }
-  }
-
   setupMP4Player(): void {
     if (this.singleVideo && this.singleVideo.nativeElement) {
       const video = this.singleVideo.nativeElement;
@@ -149,7 +176,7 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
       video.addEventListener('loadedmetadata', () => {
         const duration = video.duration;
         this.videoTrackingService.setVideoDuration(duration);
-        console.log(`Duración del video: ${duration} segundos`);
+        //console.log(`Duración del video: ${duration} segundos`);
       });
 
       let lastTimeUpdate = 0;
@@ -159,31 +186,33 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
         if (Math.floor(currentTime) > lastTimeUpdate) {
           lastTimeUpdate = Math.floor(currentTime);
           this.videoTrackingService.updateVideoTime(1);
-          console.log(`Tiempo transcurrido: ${currentTime} segundos`);
-          console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
+          //console.log(`Tiempo transcurrido: ${currentTime} segundos`);
+          //console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
         }
       });
 
       video.addEventListener('ended', () => {
         this.videoTrackingService.videoCompleted();
-        console.log('Video completado');
+        //console.log('Video completado');
       });
     }
   }
 
   setupYouTubePlayer(): void {
+
+
     const onPlayerReady = (event: YT.PlayerEvent) => {
       const player = event.target;
       const totalDuration = player.getDuration();
       this.videoTrackingService.setVideoDuration(totalDuration);
-      console.log(`Duración del video de YouTube: ${totalDuration} segundos`);
+      //console.log(`Duración del video de YouTube: ${totalDuration} segundos`);
     };
 
     const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
       const player = event.target;
       if (event.data == YT.PlayerState.ENDED) {
         this.videoTrackingService.videoCompleted();
-        console.log('Video de YouTube completado');
+        //console.log('Video de YouTube completado');
         clearInterval(this.intervalId); // Detener el conteo cuando el video termine
         this.intervalId = null; // Asegurar que el intervalo se establezca como null
       } else if (event.data == YT.PlayerState.PLAYING) {
@@ -191,8 +220,8 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
           this.intervalId = setInterval(() => {
             const currentTime = player.getCurrentTime();
             this.videoTrackingService.updateVideoTime(1);
-            console.log(`Tiempo transcurrido (YouTube): ${currentTime} segundos`);
-            console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
+            //console.log(`Tiempo transcurrido (YouTube): ${currentTime} segundos`);
+            //console.log(`Tiempo efectivo visto: ${this.videoTrackingService.getTotalWatchedTime()} segundos`);
           }, 1000);
         }
       } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.BUFFERING) {
@@ -201,6 +230,8 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
           this.intervalId = null;
         }
       }
+
+
     };
 
     if (this.youtubePlayer) {
@@ -221,6 +252,10 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
     return url;
   }
-
 }
+
+
+
+
+
 

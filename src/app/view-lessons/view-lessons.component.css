@@ -156,10 +156,19 @@ vg-player[_ngcontent-ng-c3095261262] {
 
 .lesson-menu-li {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-content: center;
   align-items: center;
   padding: 1rem;
+  justify-content: space-between;
+}
+
+.upper-lesson-menu-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .play-icon {
@@ -169,6 +178,21 @@ vg-player[_ngcontent-ng-c3095261262] {
   justify-content: center;
   margin-right: 1rem;
   box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7;
+}
+
+.mat-unit-icon{
+  box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3rem;
+}
+
+.mat-unit-icon:hover{
+  color: #6450fa ;
+  box-shadow: inset .2rem .2rem .5rem #b1b9cd, inset -.2rem -.2rem .5rem #fff;
+  transition: ease .4s;
 }
 
 ::ng-deep .mat-mdc-tab-group {

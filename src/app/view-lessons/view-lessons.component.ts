@@ -40,6 +40,7 @@ export class ViewLessonsComponent implements OnInit {
   url: string | undefined;
 
   videoUrl: string = 'http://localhost/iso2sys_rest_api/videos/prueba.mp4';
+  showVideoComponent: boolean = true;
 
 
   constructor(
@@ -125,6 +126,13 @@ export class ViewLessonsComponent implements OnInit {
     });
   }
 
+    
+  reloadVideo() {
+    this.showVideoComponent = false; // Esconde el componente 
+    setTimeout(() => this.showVideoComponent = true, 0); // Muestra de nuevo para recargar
+  }
+
+  
   async loadLesson() {
     this.lesson = await this.this_specific_lesson_recover();
     this.wholeUnitsAndLessons = await this.unitsAndLessonsListRecover();
@@ -182,6 +190,7 @@ export class ViewLessonsComponent implements OnInit {
     this.router.navigate(['/view-lessons', unitId, lessonOrder]);
   }
 
+  
 
   goToExam(unitId: string, lesson_id: string): void {
     this.router.navigate(['/view-exam', unitId, lesson_id]);
@@ -632,6 +641,12 @@ export class ViewLessonsComponent implements OnInit {
 
 
 }
+
+
+
+
+
+
 
 
 

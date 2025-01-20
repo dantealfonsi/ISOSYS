@@ -22,12 +22,20 @@
             <div><mat-icon class="close-menu-icon" (click)="toggleLessonMenu()">close</mat-icon></div>        
           </li>
         <li class="lesson-menu-li" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
-          <div>
-            <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
+          <button [disabled]="isFirstUnit" (click)="goToPreviousUnit2()" style="background:none;border:none;">
+            <mat-icon class="mat-unit-icon" [ngClass]="{'disabled': isFirstUnit}">navigate_before</mat-icon>
+          </button>
+          <div class="upper-lesson-menu-container">
+            <div>
+              <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
+            </div>
+            <div>
+              <b style="text-transform: capitalize;">{{ lesson?.title }} </b>
+            </div>
           </div>
-          <div>
-            <b>Lección: {{ lesson?.title }} </b>
-          </div>
+          <button [disabled]="isLastUnit" (click)="goToNextUnit()" style="background:none;border:none;">
+            <mat-icon class="mat-unit-icon" [ngClass]="{'disabled': isLastUnit}" >navigate_next</mat-icon>
+          </button>
         </li>
       </ul>
 
@@ -70,7 +78,7 @@
 
         <div *ngIf="lesson?.url">
           <ng-container *ngIf="lesson.url; else noVideo">
-            <app-view-video [videoUrl]="lesson.url" [lessonId]="lesson.id"></app-view-video>
+            <app-view-video [videoUrl]="lesson.url" [lessonId]="lesson.id" *ngIf="showVideoComponent"></app-view-video>
           </ng-container>
           <ng-template #noVideo>
             <!-- Muestra algo cuando no hay video -->
@@ -79,6 +87,8 @@
 
 
         <mat-tab-group>
+          
+
           <mat-tab label="Descripción">
             <div class="description-inside">
               <p *ngIf="lesson?.summary; else noDescription">{{ lesson?.summary }}</p>
@@ -173,5 +183,7 @@ height: 5rem;">
 <button class="control-button" *ngIf="!isLastLesson" (click)="goToNextLesson()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
 <button class="control-button" *ngIf="isLastLesson"  [disabled]="isLastUnit" [ngClass]="{'disabled': isLastUnit}"  (click)="goToNextUnit()">Siguiente <mat-icon>skip_next</mat-icon></button>
+
+
 
 </div>

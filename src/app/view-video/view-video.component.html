@@ -1,11 +1,7 @@
+<div #skeletonLoader class="skeleton-loader" id="skeleton-loader" >
+  <mat-icon class='hourglass'>hourglass_full</mat-icon>
+</div>
 
-<style>
-    #widget2 {
-        width: 100% !important; /* Ajusta el ancho según tus necesidades */
-        max-width: 100% !important; /* Asegura que no exceda el ancho máximo */
-        background-color: red;
-      }
-</style>
 
 <div *ngIf="videoUrl && !isMp4(videoUrl)" style="margin:auto; display: flex; justify-content: center;" #youtubePlayer>
   <youtube-player id="youtube-player" [videoId]="videoUrl" [width]="screenWidth"></youtube-player>
@@ -19,5 +15,4 @@
     <vg-controls></vg-controls>
   </vg-player>
 </div>
-
 
