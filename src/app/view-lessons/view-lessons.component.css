@@ -120,8 +120,9 @@ vg-player[_ngcontent-ng-c3095261262] {
 
 
 .lesson-menu {
-  height: calc(99vh - 12rem);
+  height: calc(99vh - 14rem); /*REMEMBER TO DO BETA TEST WITH 12REMS*/
   /* Calcula la altura como 99% del viewport menos 8rem */
+  padding-bottom: 1.5rem; /*REMEMBER TO DO BETA TEST WITH 0REMS*/
   background: rgb(255 255 255 / 58%);
   width: 40%;
   border-radius: 1.5rem;
@@ -178,6 +179,7 @@ vg-player[_ngcontent-ng-c3095261262] {
   justify-content: center;
   margin-right: 1rem;
   box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7;
+  padding: .8rem;
 }
 
 .mat-unit-icon{
