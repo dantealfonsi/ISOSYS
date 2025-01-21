@@ -32,7 +32,8 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   @ViewChild('singleVideo', { static: false }) singleVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('youtubePlayer', { static: false }) youtubePlayer!: ElementRef;
   @ViewChild('skeletonLoader', { static: false }) skeletonLoader: ElementRef | undefined;
-    
+  @ViewChild('videoWrapper', { static: false }) videoWrapper: ElementRef | undefined;
+
   screenWidth: number = 0;
   iframeLoaded: boolean = false;
 
@@ -68,10 +69,12 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
 
     if (window.innerWidth <= 950) {
       this.skeletonLoader!.nativeElement.style.height = `${this.skeletonLoader!.nativeElement.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3      
+      this.videoWrapper!.nativeElement.style.height = `${this.videoWrapper!.nativeElement.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3      
     } else {
       this.skeletonLoader!.nativeElement.style.height = `${this.skeletonLoader!.nativeElement.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9     
+      this.videoWrapper!.nativeElement.style.height = `${this.videoWrapper!.nativeElement.offsetWidth * 9 / 16}px`; // Relación de aspecto 4:3      
     }
-    
+
     this.initializePlayer();
     this.checkIframe();
 
@@ -97,6 +100,9 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
     this.clearVideoElement();
     setTimeout(() => {
+
+      this.iframeLoaded = false;
+
       this.initializePlayer();
       this.checkIframe();
     });
@@ -113,8 +119,9 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
         iframe.style.height = `${iframe.offsetWidth * 3 / 4}px`; // Relación de aspecto 4:3        
       } else {
         iframe.style.height = `${iframe.offsetWidth * 9 / 16}px`; // Relación de aspecto 16:9
-        }
-      this.iframeLoaded = true; // El iframe se ha cargado, ocultamos el skeleton screen
+      }
+      this.iframeLoaded = true; // El iframe se ha cargado, ocultamos el skeleton scree
+
     }).catch(() => {
       ////console.log('No se encontró el iframe después del tiempo de espera');
     });
@@ -126,6 +133,7 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
       let attempts = 0;
 
       const intervalId = setInterval(() => {
+
         const iframe = this.renderer.selectRootElement('[id^="widget"]', true);
 
         if (iframe) {
@@ -252,7 +260,10 @@ export class ViewVideoComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
     return url;
   }
+  
 }
+
+
 
 
 

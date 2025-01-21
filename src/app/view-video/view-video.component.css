@@ -6,6 +6,11 @@ vg-controls {
     height: 0 !important;
 }
 
+.youtube-video-container{
+  margin:auto; 
+  justify-content: center;
+}
+
 .skeleton-loader {
     width: 100%;
     height: 100%;
@@ -19,7 +24,18 @@ vg-controls {
     justify-content: center;
     border: 1px solid #cad6d7;
     box-shadow: 1px 1px 8px 0px #9d9c9c;
+    position: absolute; /* Permite posicionar el contenedor absolutamente dentro del padre */
+    box-sizing: border-box; /* Incluye margen en el cálculo del recuadro */
+
   }
+
+  .video-wrapper {
+    position: relative; /* Permite que el contenedor hijo se posicione absolutamente dentro */
+    width: 100%;
+    margin-bottom: 3rem !important;
+
+  }
+
   
   @keyframes skeleton-animation {
     0% {

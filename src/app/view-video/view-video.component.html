@@ -1,18 +1,20 @@
-<div #skeletonLoader class="skeleton-loader" id="skeleton-loader" >
-  <mat-icon class='hourglass'>hourglass_full</mat-icon>
+<div class="video-wrapper" #videoWrapper>
+  <div #skeletonLoader class="skeleton-loader" id="skeleton-loader"  *ngIf="!iframeLoaded  && !isMp4(videoUrl!)">
+    <mat-icon class='hourglass'>hourglass_full</mat-icon>
+  </div>
+
+  <div *ngIf="videoUrl && !isMp4(videoUrl)" class="youtube-video-container" #youtubePlayer>
+    <youtube-player id="youtube-player" [videoId]="videoUrl" [width]="screenWidth"></youtube-player>
+  </div>
+
+  <div *ngIf="videoUrl && isMp4(videoUrl)" class="video-container">
+    <vg-player>
+      <video #singleVideo id="singleVideo" controls>
+        <source [src]="'http://localhost/iso2sys_rest_api/videos/' + videoUrl" type="video/mp4">
+      </video>
+      <vg-controls></vg-controls>
+    </vg-player>
+  </div>
+  
+
 </div>
-
-
-<div *ngIf="videoUrl && !isMp4(videoUrl)" style="margin:auto; display: flex; justify-content: center;" #youtubePlayer>
-  <youtube-player id="youtube-player" [videoId]="videoUrl" [width]="screenWidth"></youtube-player>
-</div>
-
-<div *ngIf="videoUrl && isMp4(videoUrl)" class="video-container">
-  <vg-player>
-    <video #singleVideo id="singleVideo" controls>
-      <source [src]="'http://localhost/iso2sys_rest_api/videos/' + videoUrl" type="video/mp4">
-    </video>
-    <vg-controls></vg-controls>
-  </vg-player>
-</div>
-
