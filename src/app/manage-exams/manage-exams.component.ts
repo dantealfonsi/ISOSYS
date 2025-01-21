@@ -316,8 +316,8 @@ editLesson(){
   
       console.log("error en edicion: "+data);
       Swal.fire({
-        title: 'Sección Editada con Exito!',
-        text: 'Esta sección ha sido editada con exito.',
+        title: 'Pregunta Editada con Exito!',
+        text: 'Esta Pregunta ha sido editada con exito.',
         icon: 'success'
       });
       this.loadList();

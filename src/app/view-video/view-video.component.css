@@ -1,0 +1,12 @@
+#singleVideo{
+    width: 100% !important;
+}
+
+vg-controls {
+    height: 0 !important;
+}
+
+.youtube-video-container{
+  margin:auto; 
+  justify-content: center;
+}

@@ -43,13 +43,13 @@
           <div>
             <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
           </div>
-          <div>
+          <div style="text-align: center;">
             <b>Lección: {{ lesson?.title }} </b>
           </div>
         </li>
 
         <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index"
-          (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;">
+          (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;text-transform:capitalize;">
           <mat-icon style='border: 1px solid gray;
                   border-radius: 4px;
                   display: flex;
@@ -75,7 +75,7 @@
           <mat-icon class="back-icon" (click)="goBack()" matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
           <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
           <div>
-            <h1 class="title">{{capitalizeWords(lesson?.title) }}</h1>
+            <h1 class="title" style="text-transform: capitalize;">{{lesson?.title}}</h1>
             <p style="margin: 0;
             font-weight: 900;
             font-family: 'Montserrat';">Unidad {{unitsAndLessons[0]?.order}}</p>
