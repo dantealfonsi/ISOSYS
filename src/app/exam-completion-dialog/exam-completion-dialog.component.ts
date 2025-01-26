@@ -49,7 +49,7 @@ export class ExamCompletionDialogComponent {
   
   onNoClick(): void {
     this.dialogRef.close();
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/profile'], { queryParams: { fromExamCompletionDialog: true } });
   }
 
 }

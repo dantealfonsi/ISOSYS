@@ -40,7 +40,7 @@ import {MatNativeDateModule, provideNativeDateAdapter} from '@angular/material/c
 import {MatRadioModule} from '@angular/material/radio';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
+import { ActivatedRoute } from '@angular/router';
 
 interface Marks {
   unit_name: string;  
@@ -79,7 +79,10 @@ export class ProfileComponent {
   editUserFormGroup!: FormGroup;
   editPersonFormGroup!: FormGroup;
 
-  constructor(private router: Router,private _formBuilder: FormBuilder,private cookieService: CookieService) {}
+  selectedTabIndex = 0;
+
+  
+  constructor(private router: Router,private _formBuilder: FormBuilder,private cookieService: CookieService,private route: ActivatedRoute) {}
 
   @ViewChild(MatPaginator) paginator! : MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -107,6 +110,12 @@ ngOnInit() {
   this.initializeFormGroups(); // Inicializamos los formularios primero
 
   this.loadData();
+
+  this.route.queryParams.subscribe(params => {
+    if (params['fromExamCompletionDialog']) {
+      this.selectedTabIndex = 1;
+    }
+  });
 }
 
   initializeFormGroups() {

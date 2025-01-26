@@ -55,15 +55,16 @@
               <mat-icon class="back-icon" (click)="goBack()"  matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
             <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
             <div>
-              <h1 style="margin: 0;">{{exam.data_exam.title}}</h1>
+              <h1 class="title" >{{exam.data_exam.title}}</h1>
               <p style="margin: 0;
               font-weight: 900;
               font-family: 'Montserrat';">Unidad {{unitsAndLessons[0]?.order}}</p>
             </div>
           </div>
         
-          <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;opacity:0"/>
-        
+          <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;opacity:0" *ngIf="!authService?.isAdmin()"/>
+          <div src="img/unit.png" style="width: 30%;border-radius: 2rem;height: 6rem;opacity: 1;display: flex;align-items: center;font-weight: bold;border: 8px double #ffb291;justify-content: center;" *ngIf="authService?.isAdmin()"> EXAMEN DE PRUEBA</div>
+
       </div>
 
 
@@ -164,7 +165,7 @@
             border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon> Descripción</h2></div>
   
             <div style="background-color: white; padding: 1rem; text-align: justify;font-family: 1.4rem !important;">
-              <p class='desc'>{{ exam.data_exam.description }}</p>
+              <h5 class='desc'>{{ exam.data_exam.description }}</h5>
             </div>
           </div>
       </div>

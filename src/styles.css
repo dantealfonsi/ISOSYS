@@ -85,6 +85,19 @@ body {
   margin-left: 2rem;
 }
 
+.lesson-menu-icon {
+  background: linear-gradient(45deg, #f37d68, #ff7e33a3);
+  padding: 1rem;
+  border-radius: 7px;
+  color: white;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  box-shadow: 1px 1px 6px #454545;
+}
 
 .outside-table{
   display: flex;
@@ -96,6 +109,8 @@ body {
   border-radius: 20px;
   background: var(--lighter-surface);
   margin-bottom: 2rem;
+  box-shadow: 1px 1px 6px #454545;
+
 }
 
 .search-icon{
@@ -196,6 +211,8 @@ body {
   gap: 1rem;
   align-items: center;
   font-weight: bold;
+  box-shadow: 1px 1px 6px #454545;
+
 }
 
 .export:hover{
@@ -212,12 +229,13 @@ body {
   background: linear-gradient(45deg, rgb(170, 116, 201), #974fd1);
   color: white;
   padding: 0.7rem;
-  border-radius: 13px;
   font-size: 1rem;
   display: flex;
   gap: 1rem;
   align-items: center;
   font-weight: bold;
+  box-shadow: 1px 1px 6px #454545;
+
 }
 
 .edit:hover{
@@ -236,6 +254,8 @@ body {
   gap: 1rem;
   align-items: center;
   font-weight: bold;
+  box-shadow: 1px 1px 6px #454545;
+
 }
 
 .add:hover{
@@ -253,6 +273,8 @@ body {
   gap: 1rem;
   align-items: center;
   font-weight: bold;
+  box-shadow: 1px 1px 6px #454545;
+
 }
 
 .cancel:hover{

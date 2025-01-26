@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { ExamCompletionDialogComponent } from '../exam-completion-dialog/exam-completion-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-exam',
@@ -60,7 +61,8 @@ checkboxCounts: { [step: number]: { positives: number; negatives: number } } = {
     public router: Router,
     private fb: FormBuilder,
     private _formBuilder: FormBuilder,
-    public examResults: MatDialog
+    public examResults: MatDialog,
+    public authService: AuthService
   ) { 
     this.questions = this.questions || [];
     this.stepCtrl = this.questions.map(() => this._formBuilder.group({}));

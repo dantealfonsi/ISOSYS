@@ -12,7 +12,7 @@
   </header> <!--End of header -->
 
   <section style="padding:1rem;">
-    <mat-tab-group style="margin-top: 10rem;margin-bottom: 5rem;">
+    <mat-tab-group style="margin-top: 6rem;margin-bottom: 5rem;" [selectedIndex]="selectedTabIndex" >
       <mat-tab label="Datos Personales">
 
         <section
@@ -21,6 +21,8 @@
 
 
           <form [formGroup]="editPersonFormGroup">
+            <div class="two-inputs" style="justify-content: space-around;">
+
             <div style="display: flex;flex-direction: row;align-items: center;">
               <mat-form-field style="width: 5rem;">
                 <mat-select formControlName="nationality" [(value)]="selectedNationality"
@@ -33,7 +35,22 @@
                 <mat-label>Cedula</mat-label>
                 <input type="text" matInput formControlName="cedula" />
               </mat-form-field>
+
             </div>
+
+            <mat-form-field>
+              <mat-label>Elige un genero</mat-label>
+              <mat-select matNativeControl required formControlName="gender" aria-label="Select an option">
+                <mat-option [value]="'masculino'">Masculino</mat-option>
+                <mat-option [value]="'femenino'">Femenino</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+          </div>
+
+
+
             <br />
             <div class="two-inputs">
               <mat-form-field class="example-full-width">
@@ -72,7 +89,7 @@
               </mat-form-field>
               <br />
 
-              <mat-form-field>
+              <mat-form-field style="width: 15rem;">
                 <mat-label>Escoge una fecha</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="birthday" />
                 <mat-hint>DIA/MES/AÑO</mat-hint>
@@ -89,14 +106,8 @@
             </mat-form-field>
             <br />
 
-            <mat-form-field>
-              <mat-label>Elige un genero</mat-label>
-              <mat-select matNativeControl required formControlName="gender" aria-label="Select an option">
-                <mat-option [value]="'masculino'">Masculino</mat-option>
-                <mat-option [value]="'femenino'">Femenino</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <br /><br />
+           
+            <br />
           </form>
 
           <!--<div class="custom-hr" style="margin-bottom: 2rem;"> Datos de usuario </div>
@@ -135,7 +146,7 @@
 
               <ng-container matColumnDef="unit_order">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>UNIDAD</b></th>
-                <td mat-cell *matCellDef="let item">Unidad {{ item.unit_order }} </td>
+                <td mat-cell *matCellDef="let item"><b>Unidad {{ item.unit_order }}</b></td>
               </ng-container>
 
               <ng-container matColumnDef="unit_name">
@@ -153,7 +164,7 @@
               <ng-container matColumnDef="mark">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>NOTA</b></th>
                 <td mat-cell *matCellDef="let item">
-                  {{ item.score}}-PTS
+                <b>{{ item.score}}-PTS</b>
                 </td>
               </ng-container>
 

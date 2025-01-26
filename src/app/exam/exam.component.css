@@ -13,6 +13,8 @@ video {
 .description,
 .files {
   margin-top: 20px;
+  box-shadow: 0px 4px 6px #454545;
+  border-radius: .7rem;
 }
 
 h2 {
@@ -120,7 +122,7 @@ vg-player[_ngcontent-ng-c3095261262] {
 }
 
 .desc{
-  font-family: 1.4rem; text-transform: capitalize;
+  font-size: 1.2rem !important; text-transform: capitalize;color:black;
 }
 
 .lesson-menu {

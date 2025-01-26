@@ -31,7 +31,7 @@
 
         <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0" style='overflow-y: auto;' class="lesson-menu-ul">
         <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;text-transform: capitalize;" [ngClass]="{'active-lesson': lesson.lesson_order === lesson_order}"  >
-          <mat-icon class="play-icon">play_arrow</mat-icon> {{ lesson?.title }}
+          <mat-icon class="play-icon">play_arrow</mat-icon> Lección {{lesson?.lesson_order}}: {{ lesson?.title }}
         </li>
         <hr>
         <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
@@ -65,6 +65,20 @@
 
 
       <div>
+        
+        <div class="description" style="display: flex; flex-direction: column;margin-bottom: 2rem;">
+          <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
+          padding-left: 1rem;
+          border-radius: 10px 10px 0 0;">
+            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon>
+              Descripción</h2>
+          </div>
+  
+  
+          <div style="background-color: white; padding: 1rem; text-align: justify;">
+            <h5 style="font-size: 1.2rem !important;text-transform: capitalize;">{{ lesson?.summary }}</h5>
+          </div>
+        </div>
 
         <div *ngIf="lesson?.url">
           <ng-container *ngIf="lesson.url; else noVideo">
@@ -75,17 +89,23 @@
           </ng-template>
         </div>
       
-      <div class="description" style="display: flex; flex-direction: column;margin-bottom: 2rem;">
-        <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
-        padding-left: 1rem;
-        border-radius: 10px 10px 0 0;">
-          <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon>
-            Descripción</h2>
-        </div>
 
 
-        <div style="background-color: white; padding: 1rem; text-align: justify;">
-          <p style="font-size: 1.2rem !important;text-transform: capitalize;">{{ lesson?.summary }}</p>
+      <div class="files" style="display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: column;">
+          <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
+          padding-left: 1rem;
+          border-radius: 10px 10px 0 0;">
+            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>ballot</mat-icon> Guias
+              Adjuntas</h2>
+          </div>
+
+          <ul style="background-color: white;">
+            <li *ngFor="let file of lesson?.files" class="download-li">
+              <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}
+                <mat-icon style="color: #ff3d009c;">cloud_download</mat-icon></a>
+            </li>
+          </ul>
         </div>
       </div>
 

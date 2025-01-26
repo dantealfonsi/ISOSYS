@@ -15,19 +15,19 @@
 <section>
     <div>
         <h2 style="text-decoration: underline;">Usuarios por Mes</h2>
-        <table border='1'>
+        <table border='1' style="box-shadow: 1px 1px 20px 0px #474747;border-radius: 0;border-color: #c7c7c7;">
           <thead>
-            <tr style="background: #ff6c007d;">
-              <th>Mes</th>
-              <th>Nombre del Mes</th>
-              <th>Cantidad de Usuarios</th>
+            <tr style="background: #ff49007d;">
+              <th>MES</th>
+              <th>NOMBRE DEL MES</th>
+              <th>CANTIDAD DE USUARIOS</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let report of reportList">
-              <td>{{ report.month }}</td>
+              <td><b>{{ report.month }}</b></td>
               <td>{{ report.month_name }}</td>
-              <td>{{ report.user_count }}</td>
+              <td><b>{{ report.user_count }}</b></td>
             </tr>
           </tbody>
         </table>
