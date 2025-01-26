@@ -65,7 +65,14 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>TITULO</b></th>
       <td mat-cell *matCellDef="let item" > 
         {{ capitalizeWords(item.title) }}
-     </td>
+      </td>
+    </ng-container>
+    
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>VALOR</b></th>
+          <td mat-cell *matCellDef="let item" > 
+            <b>{{ capitalizeWords(item.total_score)}} PTS</b>
+          </td>
     </ng-container>
     
     <ng-container matColumnDef="Acciones" >
@@ -91,8 +98,8 @@
       </td>
     </ng-container>
     
-    <tr mat-header-row *matHeaderRowDef="['unit_name','title','Acciones']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['unit_name','title','Acciones']"></tr>
+    <tr mat-header-row *matHeaderRowDef="['unit_name','title','valor','Acciones']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['unit_name','title','valor','Acciones']"></tr>
   </table>
   <mat-paginator style="background: none"  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons >
   </mat-paginator>
@@ -115,9 +122,9 @@
 
         <mat-form-field  *ngIf="showdialog">
             <mat-label>Unidad</mat-label>
-            <mat-select required formControlName="unit_id">
+            <mat-select required formControlName="unit_id" style="text-transform: capitalize;">
               @for (unit of unitList; track unit) {
-                <mat-option [value]="unit.id">
+                <mat-option [value]="unit.id" style="text-transform: capitalize;">
                     Unidad {{unit.unit_order}}: {{unit.name}}
                    </mat-option>
               }
@@ -126,12 +133,12 @@
           
           <mat-form-field class="example-full-width" *ngIf="showdialog">
             <mat-label>Titulo del examen</mat-label>
-            <input type="text"  matInput formControlName="title" >
+            <input type="text"  matInput formControlName="title" style="text-transform: capitalize;">
           </mat-form-field>
 
           <mat-form-field appearance="fill" *ngIf="showdialog">
             <mat-label>Descripción</mat-label>
-            <textarea matInput formControlName="description"></textarea>
+            <textarea matInput formControlName="description" style="text-transform: capitalize;"></textarea>
           </mat-form-field>
 
           <mat-form-field class="example-full-width" *ngIf="showdialog">
@@ -176,9 +183,9 @@
 
         <mat-form-field  *ngIf="showeditdialog">
             <mat-label>Unidad</mat-label>
-            <mat-select required formControlName="unit_id">
+            <mat-select required formControlName="unit_id" style="text-transform: capitalize;">
               @for (unit of unitList; track unit) {
-                <mat-option [value]="unit.id">
+                <mat-option [value]="unit.id" style="text-transform: capitalize;">
                     Unidad {{unit.unit_order}}: {{unit.name}}
                    </mat-option>
               }
@@ -187,17 +194,17 @@
           
           <mat-form-field class="example-full-width" *ngIf="showeditdialog">
             <mat-label>Titulo del examen</mat-label>
-            <input type="text"  matInput formControlName="title" >
+            <input type="text"  matInput formControlName="title" style="text-transform: capitalize;">
           </mat-form-field>
 
           <mat-form-field appearance="fill" *ngIf="showeditdialog">
             <mat-label>Descripción</mat-label>
-            <textarea matInput formControlName="description"></textarea>
+            <textarea matInput formControlName="description" style="text-transform: capitalize;"></textarea>
           </mat-form-field>
 
-          <mat-form-field class="example-full-width" *ngIf="showeditdialog">
+          <mat-form-field class="example-full-width" *ngIf="!blockMark">
             <mat-label>Nota total</mat-label>
-            <input type="number" matInput formControlName="total_score"> 
+            <input type="number" matInput formControlName="total_score" [disabled]="blockMark"> 
           </mat-form-field>
       </div>
     </form>

@@ -74,7 +74,7 @@ export class ViewExamComponent {
   unitList: any;
   examListMat: any;
   history: any;
-
+  blockMark: boolean = true;
 
   constructor(
     private _formBuilder: FormBuilder,

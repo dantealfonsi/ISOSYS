@@ -57,7 +57,7 @@ al darte en la lección ya luego no sale ese numero en cada una de las lecciones
 
 -Que en la pagina de unidades, todo el espacio sobrante se aproveche, 
 a la derecha de la unidad en el espacio que queda, si se puede agregar en ese espacio una información <--(Nisiquiera se a que se refiere )-->
-sobre la unidad que se va a estudiar o poner alguna foto que llame la atención de la unidad  <--(No se puede, )-->
+sobre la unidad que se va a estudiar o poner alguna foto que llame la atención de la unidad  <--(No se puede)-->
 
 -Que haya una forma de comunicación entre el estudiante y profesor en la pagina <--(No se puede)-->
 

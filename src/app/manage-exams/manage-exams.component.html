@@ -59,7 +59,7 @@
                     <ul>
                       <li style="background: linear-gradient(45deg, #f54f0f, transparent); padding: 1rem; color: white; font-weight: 900;">Respuestas</li>
                       <li *ngFor="let answer of exam.question_data" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-top: 1px solid #7f7f7fe8;">
-                        <div> 
+                        <div style="text-transform: capitalize;"> 
                           {{answer.answer}} - <span style='font-weight: 600;'>Validación: </span> <span *ngIf="answer.true_response === 'true'; else typeCheck" style="color:rgb(99, 214, 99);font-weight: 600;">Verdadero</span> <ng-template #typeCheck> <span *ngIf="answer.type === 'text'; else falso" style="font-weight: 800;">Complete</span> <ng-template #falso> <span style='color: rgb(240, 32, 32);font-weight: 800;'>Falso</span> </ng-template> </ng-template> 
                         </div>
                         <button (click)="deleteAnswer(answer.id)" class='button-4'><mat-icon>remove_circle_outline</mat-icon>Borrar</button>
