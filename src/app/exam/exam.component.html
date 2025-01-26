@@ -52,12 +52,12 @@
         </li>
   
         <li *ngFor="let lesson of unitsAndLessons[0]?.lessons" class="menu-li" style="cursor:pointer;text-transform: capitalize;" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)">         
-            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>   
+            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;padding: .8rem;'>play_arrow</mat-icon>   
             {{ lesson?.title }} 
           </li>
           <hr>
           <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;text-transform: capitalize;" (click)="goToExam(unitsAndLessons[0].id, exam.id)">         
-            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>   
+            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem; padding: .8rem;'>play_arrow</mat-icon>   
             Examen {{ exam!.exam_order }} : {{ exam?.title }} 
           </li>
           

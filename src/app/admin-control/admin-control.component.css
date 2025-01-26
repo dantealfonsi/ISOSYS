@@ -32,11 +32,11 @@ z-index: 5;
 }
 
 mat-toolbar a:hover{
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 mat-toolbar a span:hover{
-  color: rgb(247, 213, 149);
+  color: rgb(55, 11, 255);
 }
 
 .content{

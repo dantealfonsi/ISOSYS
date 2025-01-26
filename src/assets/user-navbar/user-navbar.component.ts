@@ -42,7 +42,7 @@ export class UserNavbarComponent {
     }
 
     goToMain() {
-      this.router.navigate(['/main']);
+      this.router.navigate(['/main/index']);
     }
     
     goToLanding() {

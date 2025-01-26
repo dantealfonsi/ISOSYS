@@ -1,13 +1,17 @@
-<mat-toolbar class="mat-elevation-z3" style='background: linear-gradient(45deg, #d6471c, #ff6f0e42);justify-content: space-between;'>
+<mat-toolbar class="mat-elevation-z3" style='background: linear-gradient(45deg, #525ddd, #0a5aada8);justify-content: space-between;justify-content: space-between;'>
   <button mat-icon-button (click)="collapsed.set(!collapsed())">
       <mat-icon style="color: #fff;">menu</mat-icon>
   </button>
-  <a 
-  style="color: white;cursor: pointer;font-size: 1rem;display: flex;align-items: center;gap: .5rem;" 
-  class="logout" (click)="authService.logout()">	
-    <mat-icon>low_priority</mat-icon> 
-   <span> Cerrar Sesión </span>
-  </a>
+  <div style="display: flex;gap: 1rem;flex-direction: row-reverse;">
+    <a 
+    style="color: white;cursor: pointer;font-size: 1rem;display: flex;align-items: center;gap: .2rem;" 
+    class="logout" (click)="authService.logout()">	
+      <mat-icon>low_priority</mat-icon> 
+     <span style="font-weight: 900;font-size: 1.2rem;"> Cerrar Sesión </span>
+    </a>
+    <span style="font-size: 1.2rem;color: white; font-weight: 900;">{{user}}</span>
+  </div>
+
 </mat-toolbar>
 <mat-sidenav-container>
   <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">

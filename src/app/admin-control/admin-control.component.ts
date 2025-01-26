@@ -33,12 +33,14 @@ import { CookieService } from 'ngx-cookie-service';
 ],
 })
 
+
 export class AdminControlComponent {
 
    tokenData:any = {
     userid: 'pene',
-    
   };
+
+  user:any;
   
   constructor(public authService: AuthService, private router: Router) {}
 
@@ -50,7 +52,9 @@ export class AdminControlComponent {
     if (!this.authService.isAdmin()) {
       this.router.navigate(['home']);
     } 
-    
+
+    this.user = JSON.parse(localStorage.getItem('token') || '{}')?.email;
+
 
   }
 

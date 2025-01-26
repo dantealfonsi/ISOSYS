@@ -1,0 +1,71 @@
+-[BUG FIXED] SHORT DIALOG BACKGROUND ON ALL COMPONENTS.[DONE]
+
+-En el panel de admin, cuando le das a gestionar unidades, 
+el texto es mucho mas grande que el de la pagina anterior [DONE]
+
+-En donde los examenes,  el texto donde dice la puntuación y cuantos puntos lleva entre cada pregunta, 
+ese texto es muy pequeño, la profe dijo que debería ser mas grande o conforme baje la pagina, 
+se siga viendo para no tener que subir a cada rato a ver cuantos puntos lleva [DONE]
+
+-Donde se gestionan los usuarios y administradores, que no deberia decir usuarios, 
+ya que se da por hecho que todos lo son, asi que deberia decir estudiante [DONE]
+
+-En la página de inicio, las opciones que estan arriba a la derecha, 
+no resaltan tanto a la vista, si se puede poner un color mas llamativo o grande al apuntar con el cursor [DONE]
+
+-A la hora de entrar en una unidad en clases, en el caso de la primera, 
+el texto de la izquierda de bugea, bueno asi se veia en la lap de juan, 
+que en donde decia examenes, el texto estaba fuera de allí del cuadrado donde anda  [DONE]  
+
+-En Examenes y lecciones, el texto de la descripción es muy pequeño   [DONE]
+
+-Si se puede poner en la parte de lecciones, la descripción, arriba del video  [DONE] 
+
+-Es que en la pagina de Inicio y en el panel de admin, salga un texto que diga el nombre 
+del usuario para saber quién es el que inició sesión  [DONE]
+
+-Que el admin, tenga un color de la pagina distinto al del estudiante,
+ ejemplo la pagina es anaranjada y para el admin azul  [DONE]
+
+-Que así como vez en dar detalles a los usuarios y que te salga sus notas en cada unidad, 
+tambien en examenes y salga de cada examen, la nota de cada estudiante que participo 
+exceptuando la de los administradores
+
+-En clases, sabes que cuando elijes la unidad, a la izquierda luego de entrar, 
+te sale un mini indice en el que elijes cada lección o el examen, bueno, 
+que eso es salga en la página de clases, para que puedan elegir la unidad sin tener que bajar la pagina
+
+
+
+
+
+
+
+ -Solo darle a continuar una sola vez en el examen, salgan los resultados luego de realizarlo, 
+ y que te pueda redirigir a tus avances pero en vez de que se 
+ vea solamente la puntuación, si no tambien en que respuesta saliste bien
+
+-y no se si esta arriba, pero en la parte de examenes de los profesores,
+ salga un texto que diga que es para probarlos examenes o algo asi, no se,
+  se quejan cuando hago el examen desde la cuenta admin y me mandan a poner la del estudiante pa hacerlo.
+
+
+-Que cuando vayas de los resultados a perfil aparezca en examenes
+
+-En la parte de clases, sabes que dice la lección y al final el número de la lección, 
+al darte en la lección ya luego no sale ese numero en cada una de las lecciones 
+
+
+
+-Que el usuario pueda tener su foto de perfil<--(No se puede-Tentativo)-->
+
+
+
+
+-que en la pagina de unidades, todo el espacio sobrante se aproveche, 
+a la derecha de la unidad en el espacio que queda, si se puede agregar en ese espacio una información 
+sobre la unidad que se va a estudiar o poner alguna foto que llame la atención de la unidad  <--(No se puede)-->
+
+-que haya una forma de comunicación entre el estudiante y profesor en la pagina <--(No se puede)-->
+
+-que en el perfil de examenes, se vean cada pregunta buena o mala en los detalles. <--(No se puede)-->

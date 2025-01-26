@@ -145,7 +145,3 @@ html,body{
   .dialog-background{
     position: fixed !important;
   }
-
-  .dialog{
-    margin-right: -20rem;  
-  }

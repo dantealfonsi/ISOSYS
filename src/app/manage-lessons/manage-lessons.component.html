@@ -3,7 +3,7 @@
       <mat-icon class="back-icon" matTooltip="Ir atras" (click)="goBack()">keyboard_backspace</mat-icon>
       <mat-icon class="title-icon" style="display:flex;">school</mat-icon>
         <div style="display: flex;flex-direction: column;"><h1 class="title">Unidad {{unitData?.unit_order}}</h1>
-          <p style="margin:0;">{{unitData?.name}}</p></div>
+          <p class="subtitle">{{unitData?.name}}</p></div>
         </div>
   
     <img
@@ -18,7 +18,7 @@
             <div style="display: flex;justify-content: center; cursor:pointer;">
              <div class="timeThread" (click)="openDialog()" style="width: auto;">
                 <div style='padding: 2rem 1rem;'>
-                    <h1>Nueva Lección </h1>
+                    <h1 style=" font-weight: 900;">Nueva Lección </h1>
                  </div>
                 <div class='green-part'>
                     <h1 style="color:white;font-size: 6rem;">+</h1>
@@ -32,7 +32,7 @@
             <div *ngFor="let lesson of lessonData">
               <div class="timeThread">
                 <div style='padding: 2rem 0rem;'>
-                  <h1>Lección {{lesson.lesson_order}}: {{lesson.title}}</h1>
+                  <h1 class="manage-lesson-title"><b>Lección {{lesson.lesson_order}}:</b> {{lesson.title}}</h1>
                 </div>
                 <div style='display: flex;gap: 1.5rem;'>
                   <button class="export" (click)="onFileList(lesson.id)"><mat-icon>attach_file</mat-icon>Guias</button>
@@ -87,6 +87,15 @@
       </mat-form-field>
       <br>
       
+
+
+      <br>
+      <mat-form-field appearance="fill" *ngIf="showdialog" style="width:100%;">
+        <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="summary"></textarea>
+    </mat-form-field>
+      <br>    
+      
       <mat-form-field>
         <mat-label>Video</mat-label>
         <mat-select (selectionChange)="onSelectionChange($event)">
@@ -114,13 +123,7 @@
           <input type="text" matInput formControlName="url" [readonly]="selectedOption === 'subir'">
         </mat-form-field>
       </div>
-
-      <br>
-      <mat-form-field appearance="fill" *ngIf="showdialog" style="width:100%;">
-        <mat-label>Descripción</mat-label>
-          <textarea matInput formControlName="summary"></textarea>
-    </mat-form-field>
-      <br>      
+      
     </form>
 
 
@@ -170,6 +173,13 @@
       </mat-form-field>
       <br>
 
+    
+      <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">
+          <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="summary"></textarea>
+      </mat-form-field>
+      <br>
+
       <mat-form-field>
         <mat-label>Video</mat-label>
         <mat-select (selectionChange)="onSelectionChange($event)">
@@ -197,14 +207,6 @@
           <input type="text" matInput formControlName="url" [readonly]="selectedOption === 'subir'">
         </mat-form-field>
       </div>
-
-
-
-      <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">
-          <mat-label>Descripción</mat-label>
-            <textarea matInput formControlName="summary"></textarea>
-      </mat-form-field>
-      <br>
       
     </form>
 

@@ -1,8 +1,8 @@
 <div class="section-outer-container">
     <div class="section-container">
-      <mat-icon>keyboard_backspace</mat-icon>
+      <mat-icon>clear_all</mat-icon>
       <mat-icon class="title-icon" style="display: flex;">supervisor_account</mat-icon>
-      <h1 class="title">Usuarios</h1>
+      <h1 class="title">Estudiantes</h1>
     </div>
   
     <img
@@ -59,7 +59,7 @@ style="
 
   <ng-container matColumnDef="username">
     <th mat-header-cell *matHeaderCellDef mat-sort-header > <b>Nombre de Usuario</b> </th>
-    <td mat-cell *matCellDef="let item"> {{ item.email }} </td>
+    <td mat-cell *matCellDef="let item"><b>{{ item.email }}</b></td>
   </ng-container>
   
   <!--<ng-container matColumnDef="password">
@@ -93,7 +93,7 @@ style="
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button  mat-menu-item disabled>
+        <button  mat-menu-item (click)="onProfileList(item.user_id)">
           <mat-icon>👁</mat-icon>
           <span>Ver Detalles</span>
         </button>
@@ -175,3 +175,148 @@ style="
   </div>
 
 </section>
+
+
+
+
+
+<!-------------PROFILE DATA------------------>
+<div *ngIf="showProfileDialog" class="profile-container">
+  <div class="main-body">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="main-breadcrumb">
+      <ol class="breadcrumb"
+        style="align-items: center;display:flex;flex-direction: row;justify-content: space-between;background: #ffffff;box-shadow: 1px 1px 6px 0px #454545;">
+        <div style="display: flex;">
+          <li class="breadcrumb-item" (click)="hideProfileDialog()"
+            style="color:#a2a3fb;text-decoration: underline; cursor: pointer;"><a>Estudiantes</a></li>/
+          <li class="breadcrumb-item active" aria-current="page">Datos de Estudiante</li>
+        </div>
+        <mat-icon class="close-icon" (click)="hideProfileDialog()">close</mat-icon>
+      </ol>
+    </nav>
+    <!-- /Breadcrumb -->
+
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body" style="box-shadow: 1px 1px 6px 0px #454545;">
+            <div class="d-flex flex-column align-items-center text-center">
+              <img src="../../assets/img/female-student-profile.png" *ngIf="profileStudent.gender === 'femenino'"
+                alt="Admin" class="rounded-circle" width="150" style='box-shadow: 1px 1px 7px #615d5d;'>
+
+              <img src="../../assets/img/student-profile.png" *ngIf="profileStudent.gender === 'masculino'" alt="Admin"
+                class="rounded-circle" width="150" style='box-shadow: 1px 1px 7px #615d5d;'>
+
+              <div class="mt-3" style="background: white;">
+                <h4 style="font-weight: bolder;">{{capitalizeWords(profileStudent.person_id.name)}}
+                  {{capitalizeWords(profileStudent.person_id.last_name)}}</h4>
+                <p class="text-secondary mb-1" style="text-decoration: underline;">Estudiante</p>
+                <br><br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div class="card-body" style="box-shadow: 1px 1px 6px 0px #454545;background: white;">
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0" style="font-size: 1.2rem;font-weight: bolder;">Nombre:</h6>
+              </div>
+              <div class="col-sm-9 text-secondary" style="font-size: 1.2rem;">
+                {{ firstLetterUpperCase(profileStudent.person_id.name) }} {{ firstLetterUpperCase(profileStudent.person_id.second_name) }}
+                {{ firstLetterUpperCase(profileStudent.person_id.last_name) }} {{
+                firstLetterUpperCase(profileStudent.person_id.second_last_name) }}
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0" style="font-size: 1.2rem;font-weight: bolder;">Email:</h6>
+              </div>
+              <div class="col-sm-9 text-secondary" style="font-size: 1.2rem;">
+                {{ profileStudent.email }}
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0" style="font-size: 1.2rem;font-weight: bolder;">Teléfono:</h6>
+              </div>
+              <div class="col-sm-9 text-secondary" style="font-size: 1.2rem;">
+                {{ profileStudent.person_id.phone }}
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0" style="font-size: 1.2rem;font-weight: bolder;">Dirección:</h6>
+              </div>
+              <div class="col-sm-9 text-secondary" style="font-size: 1.2rem;">
+                {{ capitalizeWords(profileStudent.person_id.address) }}
+
+              </div>
+            </div>
+            <hr>
+          </div>
+        </div>
+      </div>
+
+    <!--
+      <div style="width: 100%;padding: 1rem;">
+        <div class="card mt-3" style="box-shadow: 1px 1px 6px 0px #454545;">
+          <div class="header"
+            style="text-align: center;padding: 1rem;background: linear-gradient(45deg, #342ca9, #a2a9fb);color: white;">
+            <h5 style="text-decoration: underline; font-size: 2rem;">Inscripciones</h5>
+          </div>
+          <div class="table-responsive">
+            <table mat-table [dataSource]="registrationListMat" matSort>
+              <ng-container matColumnDef="year">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;background: #e7e7e7;">
+                  Año </th>
+                <td mat-cell *matCellDef="let item">{{ firstLetterUpperCase(item.year) }}</td>
+              </ng-container>
+              <ng-container matColumnDef="section_id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;background: #e7e7e7;">
+                  Sección </th>
+                <td mat-cell *matCellDef="let item"> Sección {{ firstLetterUpperCase(item.section_id.section_name) }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="parent_id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;background: #e7e7e7;">
+                  Representante </th>
+                <td mat-cell *matCellDef="let item">{{ firstLetterUpperCase(item.parent_id.name) }} {{
+                  firstLetterUpperCase(item.parent_id.last_name) }}</td>
+              </ng-container>
+              <ng-container matColumnDef="period">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;background: #e7e7e7;">
+                  Periodo </th>
+                <td mat-cell *matCellDef="let item">{{ firstLetterUpperCase(item.period) }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['year','section_id','parent_id','period']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['year','section_id','parent_id','period']"></tr>
+            </table>
+          </div>
+          <mat-accordion class="mat-expansion" *ngFor="let item of registrationListMat.data">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <b> PERIODO:</b> {{firstLetterUpperCase(item.period) }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div>
+                <p><strong>AÑO:</strong> {{ firstLetterUpperCase(item.year) }}</p>
+                <p><strong>SECCIÓN:</strong> {{ firstLetterUpperCase(item.section_id.section_name) }}</p>
+                <p><strong>REPRESENTANTE:</strong> {{ firstLetterUpperCase(item.parent_id.name) }} {{
+                  firstLetterUpperCase(item.parent_id.last_name) }}</p>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>-->  
+    </div>
+  </div>
+</div>

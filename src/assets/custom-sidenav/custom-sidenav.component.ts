@@ -66,7 +66,7 @@ item: any;
         },
         {
           icon: 'person',
-          label: 'Usuarios',
+          label: 'Estudiantes',
           route: 'user',
         },
         {

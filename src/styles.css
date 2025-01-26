@@ -111,20 +111,27 @@ body {
 }
 
 
-.dialog-background{
-  width: 100%;
+
+
+.dialog-background {
+  width: -webkit-fill-available;
+  /* Safari/WebKit */
+  width: -moz-available;
+  /* Firefox */
+  width: fill-available;
   height: 100vh;
   background-color: #9b9b9b61;
-  position: absolute;
+  position: fixed !important;
   top: 0;
-  right: 0rem;
+  right: auto;
   display: flex;
   flex-direction: row;
+  margin-left: -23px;
   align-items: center;
   justify-content: center;
 }
 
-.dialog{
+.dialog {
   background-color: #fdfbff;
   padding: 1.5rem;
   height: 50vh;
@@ -133,7 +140,11 @@ body {
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
+  box-shadow: 1px 1px 8px 4px #676767;
+  border: 4px double #f4433642;
+  width: 60% !important;
 }
+
 
 .dialog-title-container{
   display: flex; 
@@ -149,6 +160,7 @@ body {
   flex-direction: row;
   gap: 1rem;
   text-decoration: underline;
+  font-weight: bold;
 }
 
 .dialog-title-container div{
@@ -183,6 +195,7 @@ body {
   display: flex;
   gap: 1rem;
   align-items: center;
+  font-weight: bold;
 }
 
 .export:hover{
@@ -204,6 +217,7 @@ body {
   display: flex;
   gap: 1rem;
   align-items: center;
+  font-weight: bold;
 }
 
 .edit:hover{
@@ -221,6 +235,7 @@ body {
   display: flex;
   gap: 1rem;
   align-items: center;
+  font-weight: bold;
 }
 
 .add:hover{
@@ -237,6 +252,7 @@ body {
   display: flex;
   gap: 1rem;
   align-items: center;
+  font-weight: bold;
 }
 
 .cancel:hover{
@@ -268,6 +284,9 @@ table tr:last-child td /*To remove the last border*/
 margin: 0 !important;
 font-size: 2rem !important;
 font-weight: bolder !important;
+text-transform: capitalize;
+font-weight: 600 !important;
+
 }
 
 .title-icon{
@@ -284,6 +303,18 @@ font-weight: bolder !important;
 .close-icon{
   font-weight: bolder; 
   font-size: 1.5rem;
+}
+
+.subtitle{
+  margin: 0 !important;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.manage-lesson-title{
+  font-size: 1.2rem !important;
+  text-transform: capitalize;
 }
 
 .close-icon:hover{

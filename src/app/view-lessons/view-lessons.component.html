@@ -55,13 +55,13 @@
                   display: flex;
                   align-items: center;
                   justify-content: center;
-                  margin-right: 1rem;'>play_arrow</mat-icon> {{ lesson?.title }}
+                  margin-right: 1rem;padding: .8rem;'>play_arrow</mat-icon> {{ lesson?.title }}
         </li>
         <hr>
         <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
           (click)="goToExam(unitsAndLessons[0].id, exam.id)">
           <mat-icon
-            style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>
+            style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;padding: .8rem;'>play_arrow</mat-icon>
           Examen {{ exam!.exam_order }} : {{ exam?.title }}
         </li>
       </ul>
@@ -85,11 +85,25 @@
         <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;" />
 
       </div>
+      
+      <div class="description" style="display: flex; flex-direction: column;margin-bottom: 2rem;">
+        <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
+        padding-left: 1rem;
+        border-radius: 10px 10px 0 0;">
+          <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon>
+            Descripción</h2>
+        </div>
 
 
+        <div style="background-color: white; padding: 1rem; text-align: justify;">
+          <p>{{ lesson?.summary }}</p>
+        </div>
+      </div>
 
 
       <div>
+
+        
 
         <div *ngIf="lesson?.url"> 
           <ng-container *ngIf="lesson.url; else noVideo">
@@ -102,18 +116,7 @@
         
 
 
-        <div class="description" style="display: flex; flex-direction: column;">
-          <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
-          padding-left: 1rem;
-          border-radius: 10px 10px 0 0;">
-            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon>
-              Descripción</h2>
-          </div>
 
-          <div style="background-color: white; padding: 1rem; text-align: justify;">
-            <p>{{ lesson?.summary }}</p>
-          </div>
-        </div>
         <div class="files" style="display: flex; flex-direction: column;">
           <div style="display: flex; flex-direction: column;">
             <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);

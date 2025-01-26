@@ -1,9 +1,12 @@
+<section style="position: sticky;top: 1px;z-index: 10000;">
 <div class="section-outer-container"> 
     <div class="section-container">
       <mat-icon class="back-icon" matTooltip="Ir atras" (click)="goBack()">keyboard_backspace</mat-icon>
       <mat-icon class="title-icon" style="display:flex;">style</mat-icon>
         <div style="display: flex;flex-direction: column;"><h1 class="title">Examen: {{examData?.data_exam.title}}</h1>
-          <p style="margin:0;">Valor del Examen: {{examData?.data_exam.total_score}} puntos / total en preguntas: {{examData?.totalQuestionMark}} puntos</p></div>
+          <p style="margin:0;
+          font-size: 1rem;
+          font-weight: bold;text-transform: capitalize;">Valor del Examen: {{examData?.data_exam.total_score}} puntos / total en preguntas: {{examData?.totalQuestionMark}} puntos</p></div>
         </div>
   
     <img
@@ -11,7 +14,7 @@
       src="img/lesson.png"
     />
   </div>
-
+</section>
           <!--add-student content -->  
 
             <div style="display: flex;justify-content: center; cursor:pointer;">
@@ -31,7 +34,7 @@
                 <div class="timeThread">
                   <div style="display: flex;align-items: center;width: 100%; justify-content: space-between;border-bottom: 1px solid #00000040;">
                     <div style='padding: 2rem 0rem;'>
-                      <h1> Pregunta {{exam.question_order}}: {{exam.text}}</h1>
+                      <h1 style="text-transform: capitalize;font-weight: bold;"> Pregunta {{exam.question_order}}: {{exam.text}}</h1>
                     </div>
                     <div style='display: flex;gap: 1.5rem;'>
                       <button class="export" (click)="onFileList(exam.id)" *ngIf="!exam.question_data?.length">

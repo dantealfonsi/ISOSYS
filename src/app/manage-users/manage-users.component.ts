@@ -91,6 +91,16 @@ export class ManageUsersComponent {
   history: any;
 
 
+   /////////////////////////////COMMON VARIBALES/////////////////////////////
+
+
+   showProfileDialog: boolean = false;
+   profileStudent: any;
+   dataSource: any;
+
+   /////////////////////////////END COMMON VARIBALES/////////////////////////////
+
+   
   goToAdd(){
     this.router.navigate(['/app/addUsers']);
   }
@@ -337,6 +347,21 @@ export class ManageUsersComponent {
     return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
     }
 
+
+
+    onProfileList(id: string) {
+      this.openProfileDialog();
+      const selectedId = id;
+      this.profileStudent = this.userList.find((p: { user_id: string; }) => p.user_id === selectedId);
+    }
+    openProfileDialog() {
+      this.showProfileDialog = true;
+    }
+  
+  
+    hideProfileDialog() {
+      this.showProfileDialog = false;
+    }
 
 
 
