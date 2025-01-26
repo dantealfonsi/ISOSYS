@@ -344,74 +344,66 @@ checkAllAnswersTrue(step: number): boolean {
 
   validateAndProceed(event: Event, index: number, stepper: MatStepper): void {
     event.preventDefault();
-  
+
     const confirmResponse = () => {
-      Swal.fire({
-        title: '¿Tu respuesta es definitiva?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Activa el cambio de color después de la confirmación
-          this.colorChange = true;
-  
-          const allAnswersTrue = this.checkAllAnswersTrue(index);
-          if (allAnswersTrue) {
-            Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success');
-          } else {
-            Swal.fire('¡Error!', 'Hay respuestas incorrectas.', 'error');
-          }
-          this.stepCtrl[index].markAsTouched();
-          this.firstAttempt = false;  // Marca que la primera vez ya ha pasado
-        }
-      });
-    };
-  
-    if (this.firstAttempt) {
-      confirmResponse();
-    } else {
-      const allAnswersTrue = this.checkAllAnswersTrue(index);
-      if (allAnswersTrue) {
-        const hiddenInput = document.getElementById(`hidden-mark-${index}`) as HTMLInputElement; 
-        this.userMark += Number(hiddenInput.value);
-        console.log(this.userMark);
-        Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success').then(() => {
-          stepper.next();
-          // Restablece el fondo a blanco y desactiva el cambio de color después de avanzar
-          setTimeout(() => {
-            this.colorChange = false;
-            this.firstAttempt = true;  // Restablece para el siguiente step
-          }, 100);
-        });
-      } else {
         Swal.fire({
-          title: '¡Error!',
-          text: 'Hay respuestas incorrectas.',
-          icon: 'error',
-          confirmButtonText: 'Continuar'
-        }).then(() => {
-          stepper.next();
-          // Restablece el fondo a blanco y desactiva el cambio de color después de avanzar
-          setTimeout(() => {
-            this.colorChange = false;
-            this.firstAttempt = true;  // Restablece para el siguiente step
-          }, 100);
+            title: '¿Tu respuesta es definitiva?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Activa el cambio de color después de la confirmación
+                this.colorChange = true;
+
+                const allAnswersTrue = this.checkAllAnswersTrue(index);
+                if (allAnswersTrue) {
+                    Swal.fire('¡Correcto!', 'Todas las respuestas son correctas.', 'success');
+                } else {
+                    Swal.fire('¡Error!', 'Hay respuestas incorrectas.', 'error');
+                }
+                this.stepCtrl[index].markAsTouched();
+                this.firstAttempt = false;  // Marca que la primera vez ya ha pasado
+            }
         });
-      }
-  
-      if (this.isLastStep(index)) {
-        this.addMark().then(() => {
-          this.openExamResults(this.userMark);
-        }).catch(error => {
-          console.error('Error al añadir la puntuación:', error);
-        });
-      }
-  
-      this.stepCtrl[index].markAsTouched();
+    };
+
+    if (this.firstAttempt) {
+        confirmResponse();
+    } else {
+        const allAnswersTrue = this.checkAllAnswersTrue(index);
+        if (allAnswersTrue) {
+            const hiddenInput = document.getElementById(`hidden-mark-${index}`) as HTMLInputElement;
+            this.userMark += Number(hiddenInput.value);
+            console.log(this.userMark);
+            stepper.next();  // Avanza al siguiente step sin mostrar el alert nuevamente
+            // Restablece el fondo a blanco y desactiva el cambio de color después de avanzar
+            setTimeout(() => {
+                this.colorChange = false;
+                this.firstAttempt = true;  // Restablece para el siguiente step
+            }, 100);
+        } else {
+            stepper.next();  // Avanza al siguiente step sin mostrar el alert nuevamente
+            // Restablece el fondo a blanco y desactiva el cambio de color después de avanzar
+            setTimeout(() => {
+                this.colorChange = false;
+                this.firstAttempt = true;  // Restablece para el siguiente step
+            }, 100);
+        }
+
+        if (this.isLastStep(index)) {
+            this.addMark().then(() => {
+                this.openExamResults(this.userMark);
+            }).catch(error => {
+                console.error('Error al añadir la puntuación:', error);
+            });
+        }
+
+        this.stepCtrl[index].markAsTouched();
     }
-  }
+}
+
 
 
   preventNavigation(event: MouseEvent): void {

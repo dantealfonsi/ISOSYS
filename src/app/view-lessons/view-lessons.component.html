@@ -10,81 +10,70 @@
 
     </div>
   </header> <!--End of header -->
-
-  <div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
-
-    <div class="lesson_menu" style="
-  height: 95vh;
-  background: rgb(255, 255, 255);
-  width: 30%;
-  margin-top: 2rem;
-  border-radius: 1.5rem;">
-
-      <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0">
-        <li style="
-      padding: 1rem;
-      border-bottom: 1px solid #0000001f;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.6rem;
-      font-weight: 600;"><mat-icon style='background: linear-gradient(45deg, #ff380b, #ffa00ca3);
-    padding: 1rem;
-    border-radius: 7px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;'>devices_other</mat-icon>
-          Ingenieria de Software</li>
-        <li style="display: flex;
-      flex-direction: column;
-      align-content: center;
-      align-items: center;" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
-          <div>
-            <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
-          </div>
-          <div style="text-align: center;">
-            <b>Lección: {{ lesson?.title }} </b>
+  <div class="lesson-menu-container">
+    <div class="lesson-menu">
+      <ul>
+          <li class="menu-upper-title">
+            <div class="first-title">
+              <mat-icon class="lesson-menu-icon">devices_other</mat-icon>
+              <span>Ingenieria de Software</span>
+            </div>
+          <div class="upper-lesson-menu-container">
+            <div>
+              <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
+            </div>
+            <div>
+              <b style="text-transform: capitalize;">{{ lesson?.title }} </b>
+            </div>
           </div>
         </li>
+      </ul>
 
-        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index"
-          (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;text-transform:capitalize;">
-          <mat-icon style='border: 1px solid gray;
-                  border-radius: 4px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  margin-right: 1rem;padding: .8rem;'>play_arrow</mat-icon> {{ lesson?.title }}
+        <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0" style='overflow-y: auto;' class="lesson-menu-ul">
+        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;text-transform: capitalize;" [ngClass]="{'active-lesson': lesson.lesson_order === lesson_order}"  >
+          <mat-icon class="play-icon">play_arrow</mat-icon> {{ lesson?.title }}
         </li>
         <hr>
         <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
           (click)="goToExam(unitsAndLessons[0].id, exam.id)">
-          <mat-icon
-            style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;padding: .8rem;'>play_arrow</mat-icon>
+          <mat-icon class="play-icon">play_arrow</mat-icon>
           Examen {{ exam!.exam_order }} : {{ exam?.title }}
         </li>
       </ul>
 
     </div>
 
-    <div class="container" style="padding-top: 2rem;padding-bottom: 2rem;">
+    <div class="container left" style="padding-top: 2rem;padding-bottom: 2rem;">
 
       <div class="section-outer-container">
         <div class="section-container">
           <mat-icon class="back-icon" (click)="goBack()" matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
-          <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
+          <mat-icon class="title-icon" style="display: flex;">video_library</mat-icon>
           <div>
-            <h1 class="title" style="text-transform: capitalize;">{{lesson?.title}}</h1>
+            <h1 class="title">{{capitalizeWords(lesson?.title) }}</h1>
             <p style="margin: 0;
             font-weight: 900;
             font-family: 'Montserrat';">Unidad {{unitsAndLessons[0]?.order}}</p>
           </div>
         </div>
 
-        <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;" />
+        <img src="img/unit.png" style="opacity: 0;height: 6rem;" class="title-image" />
 
       </div>
+
+
+
+
+      <div>
+
+        <div *ngIf="lesson?.url">
+          <ng-container *ngIf="lesson.url; else noVideo">
+            <app-view-video [videoUrl]="lesson.url" [lessonId]="lesson.id" ></app-view-video>
+          </ng-container>
+          <ng-template #noVideo>
+            <!-- Muestra algo cuando no hay video -->
+          </ng-template>
+        </div>
       
       <div class="description" style="display: flex; flex-direction: column;margin-bottom: 2rem;">
         <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
@@ -96,46 +85,13 @@
 
 
         <div style="background-color: white; padding: 1rem; text-align: justify;">
-          <p>{{ lesson?.summary }}</p>
+          <p style="font-size: 1.2rem !important;text-transform: capitalize;">{{ lesson?.summary }}</p>
         </div>
       </div>
 
 
-      <div>
-
-        
-
-        <div *ngIf="lesson?.url"> 
-          <ng-container *ngIf="lesson.url; else noVideo">
-            <app-view-video [videoUrl]="lesson.url" [lessonId]="lesson.id"></app-view-video>
-          </ng-container>
-          <ng-template #noVideo>
-            <!-- Muestra algo cuando no hay video -->
-          </ng-template>
-        </div>
-        
-
-
-
-        <div class="files" style="display: flex; flex-direction: column;">
-          <div style="display: flex; flex-direction: column;">
-            <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
-            padding-left: 1rem;
-            border-radius: 10px 10px 0 0;">
-              <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>ballot</mat-icon> Guias
-                Adjuntas</h2>
-            </div>
-
-            <ul style="background-color: white;">
-              <li *ngFor="let file of lesson?.files" class="download-li">
-                <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}
-                  <mat-icon style="color: #ff3d009c;">cloud_download</mat-icon></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
+  </div>
 
 
 

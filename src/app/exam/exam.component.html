@@ -13,64 +13,42 @@
     </header> <!--End of header -->
   
   
-    
-  <div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
+    <div class="lesson-menu-container">
+      <div class="lesson-menu">
+        <ul>
+            <li class="menu-upper-title" >
+              <div class="first-title">
+                <mat-icon class="lesson-menu-icon">devices_other</mat-icon>
+                <span>Ingenieria de Software</span>
+              </div>
+            <div class="upper-lesson-menu-container">
+              <div>
+                <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
+              </div>
+              <div>
+                <b style="text-transform: capitalize;">{{ lesson?.title }} </b>
+              </div>
+            </div>
+          </li>
+        </ul>
   
-    <div class="lesson_menu" style="
-    height: 95vh;
-    background: rgb(255, 255, 255);
-    width: 30%;
-    margin-top: 2rem;
-    border-radius: 1.5rem;">
-  
-      <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0"> 
-        <li style="
-        padding: 1rem;
-        border-bottom: 1px solid #0000001f;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        font-size: 1.6rem;
-        font-weight: 600;"><mat-icon style='background: linear-gradient(45deg, #ff380b, #ffa00ca3);
-      padding: 1rem;
-      border-radius: 7px;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;'>devices_other</mat-icon>
-          Ingenieria de Software</li>
-        <li style="display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
-          <div style="text-align: center;">
-            <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}} : {{unitsAndLessons[0]?.name}}</a>
-          </div>
-          <div>
-            <!--<b>Examen: {{ unitsAndLessons[0].title }} </b>-->
-          </div>
-        </li>
-  
-        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons" class="menu-li" style="cursor:pointer;text-transform: capitalize;" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)">         
-            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;padding: .8rem;'>play_arrow</mat-icon>   
-            {{ lesson?.title }} 
+          <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0" style='overflow-y: auto;' class="lesson-menu-ul">
+          <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li" style="cursor:pointer;text-transform: capitalize;" [ngClass]="{'active-lesson': lesson.lesson_order === lesson_order}"  >
+            <mat-icon class="play-icon">play_arrow</mat-icon> {{ lesson?.title }}
           </li>
           <hr>
-          <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;text-transform: capitalize;" (click)="goToExam(unitsAndLessons[0].id, exam.id)">         
-            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem; padding: .8rem;'>play_arrow</mat-icon>   
-            Examen {{ exam!.exam_order }} : {{ exam?.title }} 
+          <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
+            (click)="goToExam(unitsAndLessons[0].id, exam.id)">
+            <mat-icon class="play-icon">play_arrow</mat-icon>
+            Examen {{ exam!.exam_order }} : {{ exam?.title }}
           </li>
-          
-
-    </ul>
+        </ul>
+  
+      </div>
   
   
   
-    </div>
-  
-  
-  
-      <div class="container" style="padding-top: 2rem;padding-bottom: 2rem;">
+      <div class="container left" style="padding-top: 8rem;padding-bottom: 2rem;">
   
         <div class="section-outer-container">
           <div class="section-container">
@@ -84,7 +62,7 @@
             </div>
           </div>
         
-          <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;"/>
+          <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;opacity:0"/>
         
       </div>
 
@@ -121,7 +99,7 @@
                   <div *ngSwitchCase="'text'"> 
                     <div style="display: flex; gap:1rem;align-items: flex-start;">
                       <p style="text-transform: capitalize;font-size: 1.2rem;">-{{ answer.answer }}</p>
-                      <input style="padding: 0.2rem;display: flex;align-items: center;background: #ff58064f;color: #000000 !important;border: 1px solid;" placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)" [disabled]="colorChange" formControlName="selectedAnswer" required>
+                      <input style="padding: 0.2rem;display: flex;align-items: center;background: #e76b20f5;color: #000000 !important;border: 1px solid;font-weight: 900;" placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)" [disabled]="colorChange" formControlName="selectedAnswer" required>
                     </div>  
                     <p *ngIf="colorChange" style="font-size: 1.2rem;padding:.5rem;color:red;text-decoration: underline;">La respuesta era: <b>{{ answer.true_response }}</b></p>       
                   </div>
@@ -185,8 +163,8 @@
             padding-left: 1rem;
             border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon> Descripción</h2></div>
   
-            <div style="background-color: white; padding: 1rem; text-align: justify;">
-              <p>{{ exam.data_exam.description }}</p>
+            <div style="background-color: white; padding: 1rem; text-align: justify;font-family: 1.4rem !important;">
+              <p class='desc'>{{ exam.data_exam.description }}</p>
             </div>
           </div>
       </div>

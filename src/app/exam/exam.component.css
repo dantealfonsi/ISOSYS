@@ -1,41 +1,48 @@
+.container.left {
+  height: calc(99vh - 8rem);
+  overflow-y: auto;
+  padding-top: 2rem !important;
+  margin-top: 6rem;
+}
 
 video {
-    display: block;
-    margin: 0 auto 20px;
-  }
-  
-  .description, .files {
-    margin-top: 20px;
-  }
-  
-  h2 {
-    margin-top: 20px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin: 10px ;
-  }
+  display: block;
+  margin: 0 auto 20px;
+}
 
-  :host /deep/ .youtube-player-placeholder{
-    margin: auto !important;
-  } 
+.description,
+.files {
+  margin-top: 20px;
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px;
+}
+
+:host /deep/ .youtube-player-placeholder {
+  margin: auto !important;
+}
 
 
-  .download-li{ 
-    display: flex;
-    margin: 0;
-    padding: 1.2rem;
-    border-bottom: 1px solid #0000002e;
-  }
+.download-li {
+  display: flex;
+  margin: 0;
+  padding: 1.2rem;
+  border-bottom: 1px solid #0000002e;
+}
 
-  .download-li:hover{
-    background-color: rgba(255, 68, 0, 0.137);
-  }
+.download-li:hover {
+  background-color: rgba(255, 68, 0, 0.137);
+}
 
 
 .download-li a {
@@ -46,34 +53,259 @@ video {
 }
 
 
-.menu-li{
+.menu-li {
   padding: 1.2rem 0.6rem;
   border-bottom: 1px solid #0000002e;
   display: flex;
   align-items: center;
-  margin-bottom: 0;
+  margin-bottom: .5rem;
   margin-top: 0;
-  font-weight:600;
+  font-weight: 600;
+  box-shadow: 0rem 0rem .6rem 0px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
 }
 
-.menu-li:hover{
-  background: rgba(255, 68, 0, 0.089);
+.menu-li:hover {
+  box-shadow: inset .2rem .2rem .5rem #b1b9cd, inset -.2rem -.2rem .5rem var(--white);
 }
 
-
-::ng-deep .mat-horizontal-stepper-header{
-  pointer-events: none !important;
+.close-menu-icon{
+  display: none;
 }
 
-.back-icon:hover{
+.first-title{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.first-title span{
+  font-weight: 600;
+}
+
+#singleVideo {
+  max-width: 100%;
+  height: auto;
+  margin: auto;
+  display: block;
+}
+
+vg-player[_ngcontent-ng-c3095261262] {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  min-width: 600px;
+  min-height: 300px;
+}
+
+:host vg-controls {
+  height: 0 !important;
+}
+
+.back-icon:hover {
   transform: scale(1.4);
   transition: ease .5s;
 }
 
-::ng-deep .mat-mdc-dialog-container {
-  height: 100vh !important;
-  position: absolute;
-  max-width: 100% !important;
-  width: 100%;
-  top: 0;
+
+.whole-container {
+  display: flex;
+  margin-top: 5.5rem;
+  padding-left: 1rem;
+}
+
+.lesson-menu-container {
+  display: flex;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.desc{
+  font-family: 1.4rem; text-transform: capitalize;
+}
+
+.lesson-menu {
+  height: calc(99vh - 14rem); /*REMEMBER TO DO BETA TEST WITH 12REMS*/
+  /* Calcula la altura como 99% del viewport menos 8rem */
+  padding-bottom: 1.5rem; /*REMEMBER TO DO BETA TEST WITH 0REMS*/
+  background: rgb(255 255 255 / 58%);
+  width: 40%;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin-top: 8rem;
+  box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
+}
+
+
+:root {
+  --primary-light: #8abdff;
+  --primary: #6d5dfc;
+  --primary-dark: #5b0eeb;
+
+  --white: #FFFFFF;
+  --greyLight-1: #E4EBF5;
+  --greyLight-2: #c8d0e7;
+  --greyLight-3: #bec8e4;
+  --greyDark: #9baacf;
+}
+
+.lesson-menu-ul {
+  flex-grow: 1;
+  /* Esto hará que el ul ocupe el espacio disponible */
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.lesson-menu-li {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  padding: 1rem;
+  justify-content: space-between;
+}
+
+.upper-lesson-menu-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.play-icon {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7;
+  padding: .8rem;
+}
+
+.mat-unit-icon{
+  box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3rem;
+}
+
+.mat-unit-icon:hover{
+  color: #6450fa ;
+  box-shadow: inset .2rem .2rem .5rem #b1b9cd, inset -.2rem -.2rem .5rem #fff;
+  transition: ease .4s;
+}
+
+::ng-deep .mat-mdc-tab-group {
+  margin-bottom: 20%;
+}
+
+::ng-deep .mat-mdc-tab-header,.mat-mdc-tab-label-container,.mat-mdc-tab-list,.mat-mdc-tab-labels {
+  box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7 !important;
+  border-radius: 1rem 1rem 0 0 !important;
+  padding: .5rem !important;
+  background: #ffffff8a !important;
+}
+
+::ng-deep .mdc-tab-indicator {
+  box-shadow: inset .2rem .2rem .5rem #b1b9cd, inset -.2rem -.2rem .5rem #fff;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #6d5dfc !important;
+  font-family: sans-serif !important;
+  font-weight: 400 !important;
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-top-width: .2rem !important;
+}
+
+::ng-deep .mat-mdc-tab-body {
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 1px 1px 0px 0px #8d8d8d;
+}
+
+.description-inside{
+  background-color: #ffffffb0;
+  padding: 1rem;
+  text-align: justify;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.description-inside p{
+  font-size: 1.2rem !important;
+}
+
+.mat-download-icon{
+  box-shadow: .3rem .3rem .6rem 2px #afb6cd, -.2rem -.2rem 0rem 0px #e1e0e7;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3rem;
+}
+
+.active-lesson {
+  background: linear-gradient(45deg, #bfb7ff, transparent);  
+  font-weight: bold; /* Ejemplo: cambiar el peso de la fuente */
+}
+
+.toggle-active{
+  background: linear-gradient(45deg, #6450fa, #bfb7ff);  
+  color: white;
+}
+
+.disabled{
+  background: linear-gradient(45deg, #bec8e4, #c8d0e7);
+  color: rgb(93 115 131 / 80%) !important;
+}
+
+.toggle-active mat-icon{
+  color: #cdcdd3;
+}
+
+@media (max-width: 950px) {
+
+  .lesson-menu {
+    overflow-y: auto;
+    height: calc(100% - 5rem);
+    background: rgb(255, 255, 255);
+    width: 100%;
+    border-radius: 1.5rem;
+    position: absolute;
+    z-index: 1000000;
+    top: 0;
+    position: fixed;
+    display: none;
+    margin: 0;
+  }
+
+  :ng-deep iframe {
+    width: 100% !important;
+  }
+
+  .lesson-menu-container {
+    padding-left: 0rem;
+  }
+
+  .container.left{
+    width: 100%;
+}
+
+.close-menu-icon{
+  display: block;
+}
+
+.menu-upper-title {
+  justify-content: space-between;
+}
+
+
 }

@@ -31,3 +31,8 @@ hr{
   flex-wrap: wrap !important;
   padding: 1rem !important;
 }
+
+.rounded-circle{
+  border-radius: 50%;
+  height: 11rem;
+}

@@ -1,110 +1,105 @@
-
 <div class="culmn">
-  <header id="main_menu" class="header navbar-fixed-top">            
-      <div class="main_menu_bg">
-          <div class="container">
-              <div class="row">
-               <app-user-navbar></app-user-navbar>
-              </div>
-
-          </div>
+  <header id="main_menu" class="header navbar-fixed-top">
+    <div class="main_menu_bg">
+      <div class="container">
+        <div class="row">
+          <app-user-navbar></app-user-navbar>
+        </div>
 
       </div>
+
+    </div>
   </header> <!--End of header -->
 
-<section style="padding:1rem;">
-  <mat-tab-group style="margin-top: 10rem;margin-bottom: 5rem;">
-    <mat-tab label="Datos Personales"> 
+  <section style="padding:1rem;">
+    <mat-tab-group style="margin-top: 10rem;margin-bottom: 5rem;">
+      <mat-tab label="Datos Personales">
 
-      <section style="display: flex;flex-flow: column wrap;padding: 4rem;flex-direction: column;align-content: center;">
+        <section
+          style="display: flex;flex-flow: column wrap;padding: 4rem;flex-direction: column;align-content: center;">
 
-    
 
-      <form [formGroup]="editPersonFormGroup">
-        <div style="display: flex;flex-direction: row;align-items: center;">
-      <mat-form-field style="width: 5rem;">
-        <mat-select formControlName="nationality" [(value)]="selectedNationality" [(ngModel)]="selectedNationality">
-          <mat-option *ngFor="let option of nationality" [value]="option.value">{{ option.label }}</mat-option>
-        </mat-select>
-      </mat-form-field>
 
-      <mat-form-field class="example-full-width" style="width:10rem;">
-        <mat-label>Cedula</mat-label>
-        <input type="text" matInput formControlName="cedula"/>
-      </mat-form-field>
-    </div>
-      <br />
-      <div class="two-inputs">
-        <mat-form-field class="example-full-width">
-          <mat-label>Nombre</mat-label>
-          <input type="text" matInput formControlName="name" style="text-transform: capitalize;"/>
-        </mat-form-field>
-        <br />
-        <mat-form-field  class="example-full-width">
-          <mat-label>Segundo Nombre</mat-label>
-          <input type="text" matInput formControlName="second_name" style="text-transform: capitalize;"/>
-        </mat-form-field>
-      </div>
-      <br />
+          <form [formGroup]="editPersonFormGroup">
+            <div style="display: flex;flex-direction: row;align-items: center;">
+              <mat-form-field style="width: 5rem;">
+                <mat-select formControlName="nationality" [(value)]="selectedNationality"
+                  [(ngModel)]="selectedNationality">
+                  <mat-option *ngFor="let option of nationality" [value]="option.value">{{ option.label }}</mat-option>
+                </mat-select>
+              </mat-form-field>
 
-      <div class="two-inputs">
-        <mat-form-field class="example-full-width">
-          <mat-label>Apellido</mat-label>
-          <input type="text" matInput formControlName="last_name" style="text-transform: capitalize;"/>
-        </mat-form-field>
-        <br />
-        <mat-form-field class="example-full-width">
-          <mat-label>Segundo Apellido</mat-label>
-          <input type="text" matInput formControlName="second_last_name" style="text-transform: capitalize;"/>
-        </mat-form-field>
-      </div>
+              <mat-form-field class="example-full-width" style="width:10rem;">
+                <mat-label>Cedula</mat-label>
+                <input type="text" matInput formControlName="cedula" />
+              </mat-form-field>
+            </div>
+            <br />
+            <div class="two-inputs">
+              <mat-form-field class="example-full-width">
+                <mat-label>Nombre</mat-label>
+                <input type="text" matInput formControlName="name" style="text-transform: capitalize;" />
+              </mat-form-field>
+              <br />
+              <mat-form-field class="example-full-width">
+                <mat-label>Segundo Nombre</mat-label>
+                <input type="text" matInput formControlName="second_name" style="text-transform: capitalize;" />
+              </mat-form-field>
+            </div>
+            <br />
 
-      <br />
+            <div class="two-inputs">
+              <mat-form-field class="example-full-width">
+                <mat-label>Apellido</mat-label>
+                <input type="text" matInput formControlName="last_name" style="text-transform: capitalize;" />
+              </mat-form-field>
+              <br />
+              <mat-form-field class="example-full-width">
+                <mat-label>Segundo Apellido</mat-label>
+                <input type="text" matInput formControlName="second_last_name" style="text-transform: capitalize;" />
+              </mat-form-field>
+            </div>
 
-      <div class="two-inputs">
-        <mat-form-field class="example-full-width">
-          <mat-label>Teléfono</mat-label>
-          <input type="text" matInput formControlName="phone" />
-          <mat-error *ngIf="editPersonFormGroup.get('phone')?.invalid">
-            Ejemplo: 0412-858-1138 o 04128581138.
-          </mat-error>
-        </mat-form-field>
-        <br />
+            <br />
 
-        <mat-form-field>
-          <mat-label>Escoge una fecha</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="birthday" />
-          <mat-hint>DIA/MES/AÑO</mat-hint>
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+            <div class="two-inputs">
+              <mat-form-field class="example-full-width">
+                <mat-label>Teléfono</mat-label>
+                <input type="text" matInput formControlName="phone" />
+                <mat-error *ngIf="editPersonFormGroup.get('phone')?.invalid">
+                  Ejemplo: 0412-858-1138 o 04128581138.
+                </mat-error>
+              </mat-form-field>
+              <br />
 
-   
-      </div>
+              <mat-form-field>
+                <mat-label>Escoge una fecha</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthday" />
+                <mat-hint>DIA/MES/AÑO</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
 
-      <mat-form-field
-        style="width: 100%"
-        class="example-full-width"
-      >
-        <mat-label>Dirección</mat-label>
-        <input type="text" matInput formControlName="address" />
-      </mat-form-field>
-      <br />
 
-      <mat-form-field>
-        <mat-label>Elige un genero</mat-label>
-        <mat-select matNativeControl required formControlName="gender" aria-label="Select an option">
-          <mat-option [value]="'masculino'">Masculino</mat-option>
-          <mat-option [value]="'femenino'">Femenino</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <br /><br />
-    </form>
+            </div>
 
-    <!--<div class="custom-hr" style="margin-bottom: 2rem;"> Datos de usuario </div>
+            <mat-form-field style="width: 100%" class="example-full-width">
+              <mat-label>Dirección</mat-label>
+              <input type="text" matInput formControlName="address" />
+            </mat-form-field>
+            <br />
+
+            <mat-form-field>
+              <mat-label>Elige un genero</mat-label>
+              <mat-select matNativeControl required formControlName="gender" aria-label="Select an option">
+                <mat-option [value]="'masculino'">Masculino</mat-option>
+                <mat-option [value]="'femenino'">Femenino</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <br /><br />
+          </form>
+
+          <!--<div class="custom-hr" style="margin-bottom: 2rem;"> Datos de usuario </div>
 
       <form [formGroup]="editUserFormGroup" style="display:flex;flex-direction: column;">
       
@@ -122,64 +117,60 @@
         
       </form> -->
 
-      <button (click)="editUser()" class="edit" style="justify-content: center;"><b>GUARDAR</b></button>
+          <button (click)="editUser()" class="edit" style="justify-content: center;"><b>GUARDAR</b></button>
 
-    </section>
+        </section>
 
-    </mat-tab>
-    <mat-tab label="Avances">
+      </mat-tab>
+      <mat-tab label="Avances">
 
 
-      <section style="padding: 2rem; height:80vh;">
-        <div
-        class="mat-elevation-z8"
-        style="
+        <section style="padding: 2rem; height:80vh;">
+          <div class="mat-elevation-z8" style="
             background-color: #fff;
             overflow: auto;
             width: 100%;
-        "
-        >
-        <table mat-table style="background: none" [dataSource]="markDataMat" matSort id="content" #content>
-  
-          <ng-container matColumnDef="unit_order">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>UNIDAD</b></th>
-            <td mat-cell *matCellDef="let item" >Unidad {{ item.unit_order }} </td>
-            </ng-container>
-            
-            <ng-container matColumnDef="unit_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>TITULO</b></th>
-            <td mat-cell *matCellDef="let item" > {{ capitalizeWords(item.unit_name) }} </td>
-            </ng-container>
-  
-            <ng-container matColumnDef="exam_title">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>EXAMEN</b></th>
-            <td mat-cell *matCellDef="let item" > 
-                {{ capitalizeWords(item.exam.title) }}
-            </td>
-            </ng-container>
-            
-            <ng-container matColumnDef="mark">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>NOTA</b></th>
-                <td mat-cell *matCellDef="let item" > 
-                    {{ item.score}}-PTS
+        ">
+            <table mat-table style="background: none" [dataSource]="markDataMat" matSort id="content" #content>
+
+              <ng-container matColumnDef="unit_order">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>UNIDAD</b></th>
+                <td mat-cell *matCellDef="let item">Unidad {{ item.unit_order }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="unit_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>TITULO</b></th>
+                <td mat-cell *matCellDef="let item"> {{ capitalizeWords(item.unit_name) }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="exam_title">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>EXAMEN</b></th>
+                <td mat-cell *matCellDef="let item">
+                  {{ capitalizeWords(item.exam.title) }}
                 </td>
-            </ng-container>
-                
-            
-            <tr mat-header-row *matHeaderRowDef="['unit_order','unit_name','exam_title','mark']"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['unit_order','unit_name','exam_title','mark']"></tr>
-        </table>
-        <mat-paginator style="background: none"  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons >
-        </mat-paginator>
-        </div>  
+              </ng-container>
 
-      </section>
-   
-    </mat-tab>
-  </mat-tab-group>
+              <ng-container matColumnDef="mark">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;"><b>NOTA</b></th>
+                <td mat-cell *matCellDef="let item">
+                  {{ item.score}}-PTS
+                </td>
+              </ng-container>
 
-</section>
- 
+
+              <tr mat-header-row *matHeaderRowDef="['unit_order','unit_name','exam_title','mark']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['unit_order','unit_name','exam_title','mark']"></tr>
+            </table>
+            <mat-paginator style="background: none" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+
+        </section>
+
+      </mat-tab>
+    </mat-tab-group>
+
+  </section>
+
 
   <app-footer></app-footer>
-

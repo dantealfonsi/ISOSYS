@@ -29,21 +29,15 @@ del usuario para saber quién es el que inició sesión  [DONE]
 
 -Que así como vez en dar detalles a los usuarios y que te salga sus notas en cada unidad, 
 tambien en examenes y salga de cada examen, la nota de cada estudiante que participo 
-exceptuando la de los administradores
+exceptuando la de los administradores  [DONE]
 
 -En clases, sabes que cuando elijes la unidad, a la izquierda luego de entrar, 
 te sale un mini indice en el que elijes cada lección o el examen, bueno, 
-que eso es salga en la página de clases, para que puedan elegir la unidad sin tener que bajar la pagina
+que eso es salga en la página de clases, para que puedan elegir la unidad sin tener que bajar la pagina [DONE] 
 
 
+-Solo darle a continuar una sola vez en el examen, salgan los resultados luego de realizarlo. [DONE] 
 
-
-
-
-
- -Solo darle a continuar una sola vez en el examen, salgan los resultados luego de realizarlo, 
- y que te pueda redirigir a tus avances pero en vez de que se 
- vea solamente la puntuación, si no tambien en que respuesta saliste bien
 
 -y no se si esta arriba, pero en la parte de examenes de los profesores,
  salga un texto que diga que es para probarlos examenes o algo asi, no se,
@@ -62,10 +56,13 @@ al darte en la lección ya luego no sale ese numero en cada una de las lecciones
 
 
 
--que en la pagina de unidades, todo el espacio sobrante se aproveche, 
+-Que en la pagina de unidades, todo el espacio sobrante se aproveche, 
 a la derecha de la unidad en el espacio que queda, si se puede agregar en ese espacio una información 
 sobre la unidad que se va a estudiar o poner alguna foto que llame la atención de la unidad  <--(No se puede)-->
 
--que haya una forma de comunicación entre el estudiante y profesor en la pagina <--(No se puede)-->
+-Que haya una forma de comunicación entre el estudiante y profesor en la pagina <--(No se puede)-->
+
+Que te pueda redirigir a tus avances pero en vez de que se 
+vea solamente la puntuación, si no tambien en que respuesta saliste bien <--(No se puede)-->
 
 -que en el perfil de examenes, se vean cada pregunta buena o mala en los detalles. <--(No se puede)-->

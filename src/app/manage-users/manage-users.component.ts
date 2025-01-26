@@ -29,6 +29,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { Router, RouterModule,RouterLink } from "@angular/router";
 import { RouterOutlet } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 interface User {
   user_id: string;  
@@ -41,6 +42,14 @@ interface User {
     Last_name: string;
 }
 }
+
+interface Marks {
+  unit_name: string;  
+  unit_order: string;
+  exam_title: string;
+  score: string;
+}
+
 @Component({
   selector: 'app-manage-users',
   standalone: true,
@@ -66,6 +75,8 @@ interface User {
     RouterOutlet,
     RouterModule,
     RouterLink,
+    MatButtonModule,
+    MatExpansionModule
   ],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.css'
@@ -80,9 +91,16 @@ export class ManageUsersComponent {
   @ViewChild(MatPaginator) paginator! : MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-
+  @ViewChild('paginator2') paginator2!: MatPaginator; 
+  @ViewChild('sort2') sort2!: MatSort;
+  
   userList: any;
   userListMat: any;
+
+  
+  userMarkList: any;
+  userMarkListMat: any;
+
   checked: unknown;
   addUsers!: string|any[];
   showeditdialog: boolean = false;
@@ -152,7 +170,23 @@ export class ManageUsersComponent {
     }
   }
 
-
+  async markListRecover(userId:string) {
+    console.log("AQUIIII"+userId);
+    try {
+      const response = await fetch(
+        `http://localhost/iso2sys_rest_api/server.php?mark_list=&user_id=${userId}`
+      );
+      if (!response.ok) {
+        throw new Error("Error en la solicitud: " + response.status);
+      }
+      const data = await response.json();
+      console.log("Datos recibidos:", data);
+      return data; // Devuelve los datos
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  }
+  
   blockUser(id: any) {
     let valor = '1';
     let elemento: any = this.userList.find((e: any) => e.user_id === id);
@@ -349,10 +383,13 @@ export class ManageUsersComponent {
 
 
 
-    onProfileList(id: string) {
+    async onProfileList(id: string) {
       this.openProfileDialog();
       const selectedId = id;
       this.profileStudent = this.userList.find((p: { user_id: string; }) => p.user_id === selectedId);
+      this.userMarkList = await this.markListRecover(id);
+      console.log(this.userMarkList);
+      this.userMarkListMat = new MatTableDataSource<Marks>(this.userMarkList);
     }
     openProfileDialog() {
       this.showProfileDialog = true;
