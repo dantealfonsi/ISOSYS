@@ -71,7 +71,7 @@ item: any;
         },
         {
           icon: 'verified_user',
-          label: 'Administradores',
+          label: 'Profesores',
           route: 'admin'
         },
       ]

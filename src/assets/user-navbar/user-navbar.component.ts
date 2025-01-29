@@ -4,13 +4,16 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth.service';
 import { CommonModule } from '@angular/common';
-
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-user-navbar',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    MatButtonModule,
+    MatMenuModule
   ],
   templateUrl: './user-navbar.component.html',
   styleUrl: './user-navbar.component.css'
@@ -20,7 +23,20 @@ export class UserNavbarComponent {
 
   constructor(private cookieService: CookieService,private router: Router,public authService: AuthService) {};
 
-    
+  user: string | undefined
+
+  ngOnInit(): void {
+
+    if (!this.authService.isAdmin()) {
+      this.router.navigate(['home']);
+    } 
+
+    this.user = JSON.parse(localStorage.getItem('token') || '{}')?.email;
+
+
+  }
+  
+
   goToAboutUs() {
     this.router.navigate(['/about-us']);
   }

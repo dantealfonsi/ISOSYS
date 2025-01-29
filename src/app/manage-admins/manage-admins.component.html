@@ -3,7 +3,7 @@
     <div class="section-container">
       <mat-icon>clear_all</mat-icon>
       <mat-icon class="title-icon" style="display: flex;">spa</mat-icon>
-      <h1 class="title">Administradores</h1>
+      <h1 class="title">Profesores</h1>
     </div>
   
     <img
@@ -140,8 +140,8 @@ style="
       <mat-form-field *ngIf="showeditdialog">
         <mat-label>Cargo</mat-label>
         <mat-select formControlName="isAdmin">
-          <mat-option [value]="0">Usuario</mat-option>
-          <mat-option [value]="1">Administrador</mat-option>
+          <mat-option [value]="0">Estudiante</mat-option>
+          <mat-option [value]="1">Profesor</mat-option>
         </mat-select>
       </mat-form-field>
       

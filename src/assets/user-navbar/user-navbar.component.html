@@ -23,16 +23,16 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a (click)="goToLanding()">Inicio</a></li>
                     <li><a (click)="goToUnits()">Clases</a></li>
-                    <li *ngIf="authService.getToken('token')"><a (click)="goToProfile()">Perfil</a></li>
                     <li *ngIf="!authService.getToken('token')"><a (click)="goToLogin()">Iniciar Sesión</a></li>
                     <li *ngIf="!authService.getToken('token')"><a (click)="goToRegister()">Registrarse</a></li>
                     <li *ngIf="authService?.isAdmin()"><a (click)="goToMain()">Administrar</a></li>
+                    <li *ngIf="authService.getToken('token')"><a (click)="goToProfile()">{{user}}</a></li>
                     <li *ngIf="authService.getToken('token')"><a (click)="authService.logout()">Cerrar Sesión</a></li>
 
                 </ul>
 
 
-            </div>
+            </div> 
 
         </div>
     </nav>

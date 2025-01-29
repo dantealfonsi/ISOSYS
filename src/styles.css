@@ -226,7 +226,7 @@ body {
 
 .edit{
   border: none;
-  background: linear-gradient(45deg, rgb(170, 116, 201), #974fd1);
+  background: linear-gradient(45deg, #f44336, #f39533);
   color: white;
   padding: 0.7rem;
   font-size: 1rem;
@@ -239,7 +239,7 @@ body {
 }
 
 .edit:hover{
-  background: linear-gradient(45deg, rgb(137, 60, 153), #4e1194)
+  background: linear-gradient(45deg, rgb(235, 102, 40), #d42d10)
 }
 
 

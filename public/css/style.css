@@ -409,16 +409,19 @@ Button
 }
 
 .btn:hover {
-    background-color:var(--primary-2);
-    color: #fff;
+    transform: scale(1.1);
+    transition: .4s;
     text-decoration: none;
-    border: 1px solid var(--primary-2);
+    background: linear-gradient(45deg, rgb(240, 109, 39), #da351f);
+    color: white !important;
 }
 
 .btn-primary {
-    background-color: var(--primary-3);
     transition: .5s;
     padding: 9px 30px;
+    border-radius: 1rem;
+    background: linear-gradient(45deg, rgb(247 152 99), #ff694c);
+    box-shadow: 1px 1px 14px 0px #7f7f7f;
 }
 
 .btn_news_color{
@@ -564,7 +567,8 @@ input::-ms-input-placeholder {
 
 .main_menu_bg{
     margin-top: 0px;
-    background: linear-gradient(45deg, #d6471c, #ffc198c2);
+    background: linear-gradient(45deg, #525ddd, #0a5aada8);
+    
     height: 5.5rem;
 }
 
@@ -778,10 +782,11 @@ input::-ms-input-placeholder {
 .single_features_text a{
     margin-top: 35px;
     background: transparent;
-    color: var(--primary);
-    border: 1px solid var(--primary);
+    color: #e75b39;
+    border: 1px solid #e75b39;
     font-size: 0.8125rem;
     padding-top: 0.8em;
+    border-radius: 1rem;
 }
 
 

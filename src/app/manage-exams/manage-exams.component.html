@@ -137,7 +137,7 @@
       
     <mat-form-field class="example-full-width" *ngIf="showeditdialog"  style="width:100%;">
       <mat-label>Valor de la pregunta: </mat-label>
-      <input type="number" min="1" max="{{maxValueQuestion}}" matInput formControlName="question_mark">
+      <input type="number" min="1" max="{{getNumericValue(maxValueQuestion, currentQuestionMark)}}" matInput formControlName="question_mark">
     </mat-form-field>
 
       <mat-form-field appearance="fill" *ngIf="showeditdialog" style="width:100%;">

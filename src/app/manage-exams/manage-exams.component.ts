@@ -83,6 +83,8 @@ export class ManageExamsComponent {
   selectedQuestionList: any;
   isSelectDisabled: boolean = true;
   
+  currentQuestionMark!: number;
+
   constructor(private cdr: ChangeDetectorRef,private _formBuilder: FormBuilder, private route: ActivatedRoute,private http: HttpClient,private router: Router) {}
 
 
@@ -112,6 +114,12 @@ ngOnInit(): void {
   this.initializeFormGroups();
   this.loadList();  
 }
+
+
+getMaxValue(quantity: any): void{
+  alert(quantity);
+}
+
 
 /*isSelectDisabled(): boolean {
   return this.examDatafind && this.examDatafind.block_select > 0; 
@@ -264,6 +272,8 @@ onEditList(id: string) {
         question_mark: selectedQuestion.question_mark,
         text: selectedQuestion.text
       });
+
+      this.currentQuestionMark = selectedQuestion.question_mark;
     } else {
       console.error('Pregunta seleccionada no encontrada');
     }
@@ -479,6 +489,16 @@ openDialog() {
     Swal.fire('Sin Cupo', 'Has alcanzado el máximo de preguntas según la ponderación del examen', 'error');
   }
 }
+
+  getNumericValue(maxValue: number, currentMark: number): number {
+    // Convertir cadenas a números y sumar los valores
+    const max = Number(maxValue);
+    const mark = Number(currentMark);
+    return max + mark;
+  }
+
+
+
 
 openEditDialog() {
   this.showeditdialog = true;
