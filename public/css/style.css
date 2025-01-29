@@ -398,14 +398,14 @@ Button
     color: #fff;
     letter-spacing: 1px;
     margin: 0;
-    font-size:0.8125rem;
+    font-size:1rem;
     border-radius: 0px;
     margin-top: 20px;
     background-color: var(--primary-3);
     transition: .5s;
     border: 1px solid var(--primary2);
     font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
+    font-weight: 900;
 }
 
 .btn:hover {
