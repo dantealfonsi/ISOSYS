@@ -20,3 +20,36 @@
   .timer-button:hover{
     background: #004f4f;
   }
+
+  
+.profile-container{
+  position: fixed;
+  z-index: 100000;
+  top: 66px;
+  bottom: 0;
+  left: auto;
+  right: auto;
+  width: -webkit-fill-available; /* Safari/WebKit */ width: -moz-available; /* Firefox */ width: fill-available;
+  min-height: calc(100vh - 66px);
+  overflow-y: auto;
+  background: #dddde3f0;
+  margin: 0;
+  margin-left: -26px;
+  padding: 2rem;
+}
+
+hr{
+  margin: 0;
+}
+
+.row{
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  padding: 1rem !important;
+}
+
+.rounded-circle{
+  border-radius: 50%;
+  height: 11rem;
+}

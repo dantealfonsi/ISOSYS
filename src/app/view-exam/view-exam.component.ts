@@ -27,6 +27,8 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import autoTable from "jspdf-autotable";
 import { Router } from "@angular/router";
+import { MatExpansionModule } from '@angular/material/expansion';
+
 
 interface unit{
   unit_id: string;
@@ -34,6 +36,18 @@ interface unit{
   title: string;
   description: string;
   total_score: string;
+}
+
+
+interface Marks {
+  unit_name: string;  
+  unit_order: string;
+  exam_title: string;
+  score: string;
+  person_id: {
+    name: string;
+    last_name: string;
+  };
 }
 
 @Component({
@@ -57,7 +71,8 @@ interface unit{
     MatRadioModule,
     MatMenuModule,
     MatListModule,
-    MatButtonModule
+    MatButtonModule,
+    MatExpansionModule
   ],
   templateUrl: './view-exam.component.html',
   styleUrl: './view-exam.component.css'
@@ -73,8 +88,13 @@ export class ViewExamComponent {
   examList: any;
   unitList: any;
   examListMat: any;
+  examMarkList: any;
+  examMarkListMat: any;
   history: any;
   blockMark: boolean = true;
+
+  showProfileDialog: boolean = false;
+
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -83,6 +103,11 @@ export class ViewExamComponent {
 
   @ViewChild(MatPaginator) paginator : MatPaginator | undefined;
   @ViewChild(MatSort) sort!: MatSort;
+
+  
+  @ViewChild('paginator2') paginator2!: MatPaginator; 
+  @ViewChild('sort2') sort2!: MatSort;
+  
 
   ngOnInit() {    
     this.initializeFormGroups();
@@ -129,6 +154,23 @@ export class ViewExamComponent {
       console.error("Error en la solicitud:", error);
     }
   }
+
+  async markListRecover(id:string) {
+    try {
+      const response = await fetch(
+        "http://localhost/iso2sys_rest_api/server.php?exam_mark_list=&id="+id  
+      );
+      if (!response.ok) {
+        throw new Error("Error en la solicitud: " + response.status);
+      }
+      const data = await response.json();
+      console.log("Datos recibidos:", data);
+      return data; // Devuelve los datos
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  }
+
 
 
   initializeFormGroups() {
@@ -336,6 +378,27 @@ addExam() {
   hideEditDialog() {
     this.showeditdialog = false;
   }
+
+  async onProfileList(id: string) {
+    this.openProfileDialog();
+    this.examMarkList = await this.markListRecover(id);
+    console.log(this.examMarkList);
+    this.examMarkListMat = new MatTableDataSource<Marks>(this.examMarkList);
+
+    this.examMarkListMat.paginator = this.paginator2;  
+    this.examMarkListMat.sort = this.sort2;
+
+
+  }
+
+      openProfileDialog() {
+        this.showProfileDialog = true;
+      }
+    
+    
+      hideProfileDialog() {
+        this.showProfileDialog = false;
+      }
 
   firstLetterUpperCase(word: string): string {
     return word.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());

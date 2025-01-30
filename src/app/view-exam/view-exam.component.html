@@ -82,6 +82,10 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
+          <button (click)="onProfileList(item.id)" mat-menu-item>
+            <mat-icon >*</mat-icon>
+            <span>Notas Totales</span>
+          </button>
           <button (click)="onEditList(item.id)" mat-menu-item>
             <mat-icon >✎</mat-icon>
             <span>Editar</span>
@@ -224,3 +228,83 @@
 
 
 
+
+
+<!-------------VIEW MARK DATA------------------>
+<div *ngIf="showProfileDialog" class="profile-container" style="  
+position: fixed;
+z-index: 100000;
+top: 66px;
+bottom: 0;
+left: auto;
+right: auto;
+width: -webkit-fill-available; /* Safari/WebKit */ width: -moz-available; /* Firefox */ width: fill-available;
+min-height: calc(100vh - 66px);
+overflow-y: auto;
+background: #dddde3f0;
+margin: 0;
+margin-left: -26px;
+padding: 2rem;">
+  <div class="main-body">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+          <ol class="breadcrumb"
+            style="align-items: center;display:flex;flex-direction: row;justify-content: space-between;background: #ffffff;box-shadow: 1px 1px 6px 0px #454545;">
+            <div style="display: flex;">
+              <li class="breadcrumb-item" (click)="hideProfileDialog()"
+                style="color:#a2a3fb;text-decoration: underline; cursor: pointer;"><a>Examenes</a></li>/
+              <li class="breadcrumb-item active" aria-current="page">Notas del Examen</li>
+            </div>
+            <mat-icon class="close-icon" (click)="hideProfileDialog()">close</mat-icon>
+          </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+
+
+        <div style="width: 100%; padding: 1rem;">
+          <div class="card mt-3" style="box-shadow: 1px 1px 6px 0px #454545;">
+            <div class="header" style="text-align: center; padding: 1rem; background: linear-gradient(45deg, #808080, #b3b3b3); color: white;">
+              <h5 style="text-decoration: underline; font-size: 2rem;">Resultados del examen</h5>
+            </div>
+            <div class="table-responsive" style="background: white;">
+              <ng-container *ngIf="examMarkList.length > 0; else noData">
+                <table mat-table [dataSource]="examMarkList" matSort>
+                  <ng-container matColumnDef="unit_order">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">UNIDAD</th>
+                    <td mat-cell *matCellDef="let item"><b>Unidad {{ item.unit_order }}</b></td>
+                  </ng-container>
+                  <ng-container matColumnDef="unit_name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">TITULO</th>
+                    <td mat-cell *matCellDef="let item">{{ capitalizeWords(item.unit_name) }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="exam_title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">TITULO</th>
+                    <td mat-cell *matCellDef="let item">{{ capitalizeWords(item.exam.title) }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="student">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">ESTUDIANTE</th>
+                    <td mat-cell *matCellDef="let item">{{ capitalizeWords(item.person.name) }} {{ capitalizeWords(item.person.last_name) }}</td>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="mark">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-weight:bolder;">NOTA</th>
+                    <td mat-cell *matCellDef="let item"><b>{{ item.score }}-PTS</b></td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="['unit_order','unit_name','exam_title','student','mark']"></tr>
+                  <tr mat-row *matRowDef="let row; columns: ['unit_order','unit_name','exam_title','student','mark']"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              </ng-container>
+              <ng-template #noData>
+                <div style="text-align: center; padding: 1rem;">
+                  <p style="font-size: 1.4rem; font-weight: 900;">No hay datos disponibles.</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        
+      
+    </div>
+  </div>
