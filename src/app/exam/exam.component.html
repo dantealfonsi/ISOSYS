@@ -1,205 +1,242 @@
-
 <div class="culmn">
-    <header id="main_menu" class="header navbar-fixed-top">            
-        <div class="main_menu_bg">
-            <div class="container">
-                <div class="row">
-                 <app-user-navbar></app-user-navbar>
-                </div>
-  
-            </div>
-  
+  <header id="main_menu" class="header navbar-fixed-top">
+    <div class="main_menu_bg">
+      <div class="container">
+        <div class="row">
+          <app-user-navbar></app-user-navbar>
         </div>
-    </header> <!--End of header -->
-  
-  
-    
-  <div style="display: flex;margin-top: 5.5rem;padding-left: 1rem;">
-  
-    <div class="lesson_menu" style="
-    height: 95vh;
-    background: rgb(255, 255, 255);
-    width: 30%;
-    margin-top: 2rem;
-    border-radius: 1.5rem;">
-  
-      <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0"> 
-        <li style="
-        padding: 1rem;
-        border-bottom: 1px solid #0000001f;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        font-size: 1.6rem;
-        font-weight: 600;"><mat-icon style='background: linear-gradient(45deg, #ff380b, #ffa00ca3);
-      padding: 1rem;
-      border-radius: 7px;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;'>devices_other</mat-icon>
-          Ingenieria de Software</li>
-        <li style="display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
-          <div>
-            <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}} : {{unitsAndLessons[0]?.name}}</a>
-          </div>
-          <div>
-            <!--<b>Examen: {{ unitsAndLessons[0].title }} </b>-->
-          </div>
-        </li>
-  
-        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons" class="menu-li" style="cursor:pointer;" (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)">         
-            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>   
-            {{ lesson?.title }} 
-          </li>
-          <hr>
-          <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;" (click)="goToExam(unitsAndLessons[0].id, exam.id)">         
-            <mat-icon style='border: 1px solid gray; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;'>play_arrow</mat-icon>   
-            Examen {{ exam!.exam_order }} : {{ exam?.title }} 
-          </li>
-          
 
-    </ul>
-  
-  
-  
+      </div>
+
     </div>
-  
-  
-  
-      <div class="container" style="padding-top: 2rem;padding-bottom: 2rem;">
-  
-        <div class="section-outer-container">
-          <div class="section-container">
-              <mat-icon class="back-icon" (click)="goBack()"  matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
-            <mat-icon class="title-icon" style="display: flex;">book</mat-icon>
+  </header> <!--End of header -->
+
+
+
+  <div class="lesson-menu-container">
+
+    <div class="lesson-menu" [ngClass]="{'show': lessonMenuVisible}">
+      <ul>
+        <li class="menu-upper-title">
+          <div class="first-title">
+            <mat-icon class="lesson-menu-icon">devices_other</mat-icon>
+            <span>Ingenieria de Software</span>
+          </div>
+          <div><mat-icon class="close-menu-icon" (click)="toggleLessonMenu()">close</mat-icon></div>
+        </li>
+        <li class="lesson-menu-li" *ngIf="unitsAndLessons[0]?.lessons && unitsAndLessons[0].lessons.length > 0">
+          <button [disabled]="isFirstUnit" (click)="goToPreviousUnit2()" style="background:none;border:none;">
+            <mat-icon class="mat-unit-icon" [ngClass]="{'disabled': isFirstUnit}">navigate_before</mat-icon>
+          </button>
+          <div class="upper-lesson-menu-container">
             <div>
-              <h1 style="margin: 0;">{{exam.data_exam.title}}</h1>
-              <p style="margin: 0;
+              <a>Curso: ISO > Unidad {{unitsAndLessons[0]?.order}}</a>
+            </div>
+            <div>
+              <b style="text-transform: capitalize;">Examen: {{exam.data_exam.title}}</b>
+            </div>
+          </div>
+          <button [disabled]="isLastUnit" (click)="goToNextUnit()" style="background:none;border:none;">
+            <mat-icon class="mat-unit-icon" [ngClass]="{'disabled': isLastUnit}">navigate_next</mat-icon>
+          </button>
+        </li>
+      </ul>
+
+      <ul *ngIf="unitsAndLessons && unitsAndLessons.length > 0" style='overflow-y: auto;' class="lesson-menu-ul">
+        <li *ngFor="let lesson of unitsAndLessons[0]?.lessons; let i = index"
+          (click)="goToLesson(unitsAndLessons[0].id, lesson.lesson_order)" class="menu-li"
+          style="cursor:pointer;text-transform: capitalize;"
+          [ngClass]="{'active-lesson': lesson.lesson_order === lesson_order}">
+          <mat-icon class="play-icon">play_arrow</mat-icon> {{ lesson?.title }}
+        </li>
+        <hr>
+        <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
+          (click)="goToExam(unitsAndLessons[0].id, exam.id)">
+          <mat-icon class="play-icon">play_arrow</mat-icon>
+          Examen {{ exam!.exam_order }} : {{ exam?.title }}
+        </li>
+      </ul>
+
+    </div>
+
+
+    <div class="container left" style="padding-top: 2rem;padding-bottom: 2rem;">
+
+      <div class="section-outer-container">
+        <div class="section-container">
+          <mat-icon class="back-icon" (click)="goBack()" matTooltip="Ir a unidades">keyboard_backspace</mat-icon>
+          <mat-icon class="title-icon" style="display: flex;">list_alt</mat-icon>
+          <div>
+            <h1 style="margin: 0;">{{exam.data_exam.title}}</h1>
+            <p style="margin: 0;
               font-weight: 900;
               font-family: 'Montserrat';">Unidad {{unitsAndLessons[0]?.order}}</p>
-            </div>
           </div>
-        
-          <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;"/>
-        
+        </div>
+
+        <img src="img/unit.png" style="width: 30%; border-radius: 2rem; height: 6rem;" />
+
       </div>
 
 
       <section>
-        <mat-horizontal-stepper #stepper linear *ngIf="questions && questions.length > 0" >
-          <mat-step *ngFor="let question of questions; let index = index" [stepControl]="stepCtrl[index]" (click)="preventNavigation($event)">            
-            <form [formGroup]="stepCtrl[index]">
-              <div>
-                <p style="text-transform: uppercase;font-size: 1.2rem;font-weight: 600;margin-top: 1rem;padding: 1rem;">-{{ question.text }}</p>
-        
-                <mat-radio-group (change)="onRadioChange($event, index, question)"  formControlName="selectedAnswer" required>
+        <mat-horizontal-stepper #stepper linear *ngIf="questions && questions.length > 0" style="border: 16px solid #C4D0E1;box-shadow: .3rem .3rem .6rem 2px #a2a8bd, -.2rem -.2rem 9px 4px #ffffff;margin-bottom: 3rem;">
+          <mat-step *ngFor="let question of questions; let index = index" [stepControl]="stepCtrl[index]"
+            (click)="preventNavigation($event)" >
+            <form [formGroup]="stepCtrl[index]" >
+              <div #examDialog >
+                <p style="text-transform: uppercase;font-size: 1.2rem;font-weight: 600;margin-top: 1rem;padding: 1rem;">
+                  -{{ question.text }}</p>
+
+                <mat-radio-group (change)="onRadioChange($event, index, question)" formControlName="selectedAnswer"
+                  required>
                   <ng-container *ngFor="let answer of question.question_data">
                     <ng-container *ngIf="answer.type === 'radius'">
                       <mat-radio-button [value]="answer.id" [disabled]="colorChange">
-                        <span style='text-transform: capitalize;padding-top: .5rem;padding-bottom: .5rem;' [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
+                        <span style='text-transform: capitalize;padding-top: .5rem;padding-bottom: .5rem;'
+                          [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
                           {{ answer.answer }}
                         </span>
                       </mat-radio-button>
                       <br>
                     </ng-container>
                   </ng-container>
-                </mat-radio-group> 
-        
+                </mat-radio-group>
+
                 <!-- Opciones adicionales fuera del mat-radio-group -->
                 <div *ngFor="let answer of question.question_data" [ngSwitch]="answer.type">
                   <div *ngSwitchCase="'checkbox'">
-                    <mat-checkbox (change)="onSelectionChange(answer,index, answer.type, answer.checkbox_true, question.id, answer.true_response, $event.checked)" [disabled]="colorChange"  formControlName="selectedAnswer" required>
-                     <span style='text-transform: capitalize;' [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
-                      {{ answer.answer }}
-                    </span>
+                    <mat-checkbox
+                      (change)="onSelectionChange(answer,index, answer.type, answer.checkbox_true, question.id, answer.true_response, $event.checked)"
+                      [disabled]="colorChange" formControlName="selectedAnswer" required>
+                      <span style='text-transform: capitalize;'
+                        [ngStyle]="colorChange ? {'color': answer.true_response === 'true' ? 'green' : 'red', 'background-color': answer.true_response === 'true' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'} : {}">
+                        {{ answer.answer }}
+                      </span>
                     </mat-checkbox>
-                  </div>                  
-                  <div *ngSwitchCase="'text'"> 
+                  </div>
+                  <div *ngSwitchCase="'text'">
                     <div style="display: flex; gap:1rem;align-items: flex-start;">
                       <p style="text-transform: capitalize;font-size: 1.2rem;">-{{ answer.answer }}</p>
-                      <input style="padding: 0.2rem;display: flex;align-items: center;background: #ff58064f;color: #000000 !important;border: 1px solid;" placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)" [disabled]="colorChange" formControlName="selectedAnswer" required>
-                    </div>  
-                    <p *ngIf="colorChange" style="font-size: 1.2rem;padding:.5rem;color:red;text-decoration: underline;">La respuesta era: <b>{{ answer.true_response }}</b></p>       
+                      <input
+                        style="padding: 0.2rem;display: flex;align-items: center;background: #ff58064f;color: #000000 !important;border: 1px solid;"
+                        placeholder="Respuesta" (input)="onTextInput($event, index, question.id, answer)"
+                        [disabled]="colorChange" formControlName="selectedAnswer" required>
+                    </div>
+                    <p *ngIf="colorChange"
+                      style="font-size: 1.2rem;padding:.5rem;color:red;text-decoration: underline;">La respuesta era:
+                      <b>{{ answer.true_response }}</b></p>
                   </div>
                 </div>
-                <!-- Input oculto para el question_mark --> 
-                 <input type="hidden" [value]="question.question_mark" id="hidden-mark-{{index}}">
+                <!-- Input oculto para el question_mark -->
+                <input type="hidden" [value]="question.question_mark" id="hidden-mark-{{index}}">
               </div>
               <div style="display: flex;justify-content: flex-end;">
-                <button mat-button [disabled]="!isStepValid(index)" class='export' (click)="validateAndProceed($event, index, stepper)">{{ isLastStep(index) ? 'Finalizar examen' : 'Siguiente' }}  <mat-icon>arrow_right_alt</mat-icon></button>              </div>
+                <button mat-button [disabled]="!isStepValid(index)" class='neuromorphic-btn'
+                  (click)="validateAndProceed($event, index, stepper)">{{ isLastStep(index) ? 'Finalizar examen' :
+                  'Siguiente' }} <mat-icon>arrow_right_alt</mat-icon></button>
+              </div>
             </form>
           </mat-step>
         </mat-horizontal-stepper>
-        
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
-        
+
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
-        
+
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
-        
+
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
-        
+
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
-        
+
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
-        
+
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
+
         <!-- Mostrar el tipo de pregunta seleccionado -->
         <p *ngIf="selectedType">Tipo de pregunta seleccionado: {{ selectedType }}</p>
-        
+
         <div *ngIf="!questions || questions.length === 0">
           <p>No hay preguntas disponibles.</p>
         </div>
       </section>
+
+
       
+      <div>
 
-  
-  
-   
-  
-        <div>
-  
-          <div style='margin:auto;'>
-            <div>
+        <div style='margin:auto;'>
+          <div>
           </div>
-          <div class="description" style="display: flex; flex-direction: column;">
-            <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
-            padding-left: 1rem;
-            border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon> Descripción</h2></div>
-  
-            <div style="background-color: white; padding: 1rem; text-align: justify;">
-              <p>{{ exam.data_exam.description }}</p>
-            </div>
-          </div>
-      </div>
-      </div>
-  
-  
-  
-  </div>
-  
-  
-  </div>
-  <app-footer></app-footer>
+          <mat-tab-group>
+          
 
-  <div>
-  
-  
+            <mat-tab label="Descripción">
+              <div class="description-inside">
+                <p *ngIf="exam.data_exam.description; else noDescription">{{ exam.data_exam.description }}</p>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+      </div>
+
+      <ng-template #noDescription>
+        <div style="text-align: center;font-size: 1.2rem;padding: 1rem;color: #626f8b;">Sin información</div>
+      </ng-template>
+
+
+
+
+
+    </div>
+
+
+  </div>
+
+  <div style="
+  background: #E4EBF5;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  z-index: 100000000;
+  b: 1rem -1rem 2rem 0px #afb6cd, -.2rem -.2rem 0rem 1px #ffffff;
+  box-shadow: 1px -3px 7px 0px #b9b7c3;
+  height: 5rem;">
+
+    <button class="control-button" *ngIf="!isFirstLesson" (click)="goToPreviousLesson()">
+      <mat-icon>skip_previous</mat-icon> Anterior</button>
+
+    <button class="control-button" *ngIf="isFirstLesson" [disabled]="isFirstUnit" [ngClass]="{'disabled': isFirstUnit}"
+      (click)="goToPreviousUnit()"> <mat-icon>skip_previous</mat-icon> Anterior</button>
+
+    <button class="control-button control-blue" [ngClass]="{'toggle-active': lessonMenuVisible}"
+      (click)="toggleLessonMenu()"><mat-icon>menu</mat-icon></button>
+
+    <button class="control-button" *ngIf="!isLastLesson" (click)="goToNextLesson()">Siguiente
+      <mat-icon>skip_next</mat-icon></button>
+
+    <button class="control-button" *ngIf="isLastLesson" [disabled]="isLastUnit" [ngClass]="{'disabled': isLastUnit}"
+      (click)="goToNextUnit()">Siguiente <mat-icon>skip_next</mat-icon></button>
+
+
+
+  </div>

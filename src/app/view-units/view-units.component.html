@@ -13,7 +13,7 @@
     <div class="container" style="margin-top: 10rem;margin-bottom: 5rem;">
       <div *ngFor="let unit of unitsAndLessons" class="unit-container">
         <div class="unit-title-container">
-          <h1 class="desktop-unit-title">
+          <h1 class="desktop-unit-title" style="text-transform: capitalize;">
             <mat-icon>view_headline</mat-icon>
             Unidad {{unit.order}} - {{ unit.name }}
           </h1>
@@ -28,22 +28,22 @@
             <div class="lesson-container-inside">
               <mat-icon class='lesson-icon-checked' *ngIf="isLessonViewed(lesson.id); else playIcon">check</mat-icon>
               <ng-template #playIcon>
-                <mat-icon class="lesson-icon">play_arrow</mat-icon>
+                <mat-icon class="play-icon">play_arrow</mat-icon>
               </ng-template>
               <div class="progression-bar" [ngStyle]="{
                          'width': isLessonViewed(lesson.id) ? '1.8rem' : getDivWidth(lesson.id),
                          'display': getDivDisplay(lesson.id),
-                         'border-color': isLessonViewed(lesson.id) ? '#55c98f' : 'blue'
+                         'border-color': isLessonViewed(lesson.id) ? '#55c98f' : '#ffa47f'
                        }">
               </div>
             </div>
             <a (click)="goToLesson(unit.id, lesson.lesson_order)">Lección {{lesson.lesson_order}}: {{ lesson.title}}</a>
           </h3>
         </div>
-        <hr>
+        <hr style="width: 90%;text-align: center;border-top: 1px solid #e3e3e3 !important;">
         <div *ngFor="let exam of unit.exams">
           <h3 class="lesson-container">
-            <mat-icon class="lesson-icon">play_arrow</mat-icon>
+            <mat-icon class="play-icon">play_arrow</mat-icon>
             <a (click)="goToExam(unit.id,exam.id)">Examen {{exam.exam_order}}: {{ exam.title }}</a>
           </h3>
         </div>
