@@ -45,7 +45,7 @@
         </li>
         <hr>
         <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
-          (click)="goToExam(unitsAndLessons[0].id, exam.id)">
+          (click)="goToExam(unitsAndLessons[0].id, exam.id, exam.exam_order)">
           <mat-icon class="play-icon">play_arrow</mat-icon>
           Examen {{ exam!.exam_order }} : {{ exam?.title }}
         </li>

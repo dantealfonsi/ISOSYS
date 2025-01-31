@@ -192,8 +192,8 @@ export class ViewLessonsComponent implements OnInit {
 
   
 
-  goToExam(unitId: string, lesson_id: string): void {
-    this.router.navigate(['/view-exam', unitId, lesson_id]);
+  goToExam(unitId: string, lesson_id: string, exam_order: number): void {
+    this.router.navigate(['/view-exam', unitId, lesson_id, exam_order]);
   }
 
   goBack() {

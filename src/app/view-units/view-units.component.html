@@ -44,7 +44,7 @@
         <div *ngFor="let exam of unit.exams">
           <h3 class="lesson-container">
             <mat-icon class="play-icon">play_arrow</mat-icon>
-            <a (click)="goToExam(unit.id,exam.id)">Examen {{exam.exam_order}}: {{ exam.title }}</a>
+            <a (click)="goToExam(unit.id,exam.id,exam.exam_order)">Examen {{exam.exam_order}}: {{ exam.title }}</a>
           </h3>
         </div>
       </div>

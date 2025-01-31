@@ -41,8 +41,8 @@ export class ExamComponent {
 
   videoUrl: string = '';
 
-  isFirstLesson: boolean = false;
-  isLastLesson: boolean = false;
+  isFirstExam: boolean = false;
+  isLastExam: boolean = false;
   isFirstUnit: boolean = false;
   isLastUnit: boolean = false;
   currentLessonOrder!: number;
@@ -507,8 +507,8 @@ checkAllAnswersTrue(step: number): boolean {
         }
         
 
-        goToExam(unitId: string, lesson_id: string): void {
-          this.router.navigate(['/view-exam', unitId, lesson_id]);
+        goToExam(unitId: string, lesson_id: string, exam_order: number): void {
+          this.router.navigate(['/view-exam', unitId, lesson_id, exam_order]);
         }
 
         goBack(){
@@ -516,106 +516,96 @@ checkAllAnswersTrue(step: number): boolean {
         }
 
 
-          goToNextLesson() {
-            const unitIdParam = this.route.snapshot.paramMap.get('id');
-            const lessonOrderParam = this.route.snapshot.paramMap.get('lesson_order');
+        goToNextExam() {
+          const unitIdParam = this.route.snapshot.paramMap.get('id');
+          const examOrderParam = this.route.snapshot.paramMap.get('exam_order');
         
-            console.log('unitIdParam:', unitIdParam);
-            console.log('lessonOrderParam:', lessonOrderParam);
+          console.log('unitIdParam:', unitIdParam);
+          console.log('examOrderParam:', examOrderParam);
         
-            if (unitIdParam && lessonOrderParam) {
-              const unitId = +unitIdParam;
-              const lessonOrder = +lessonOrderParam;
+          if (unitIdParam && examOrderParam) {
+            const unitId = +unitIdParam;
+            const examOrder = +examOrderParam;
         
-              console.log('unitId:', unitId);
-              console.log('lessonOrder:', lessonOrder);
+            console.log('unitId:', unitId);
+            console.log('examOrder:', examOrder);
         
-              const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
+            const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
         
-              console.log('unit:', unit);
+            console.log('unit:', unit);
         
-              if (unit) {
-                // Encontrar la lección actual
-                const nextLesson = unit.lessons.find((lesson: { lesson_order: number; }) => lesson.lesson_order > lessonOrder);
+            if (unit) {
+              // Encontrar los exámenes con un orden mayor
+              const nextExams = unit.exams.filter((exam: { exam_order: number; }) => exam.exam_order > examOrder);
+              
+              console.log('nextExams:', nextExams);
         
-                console.log('nextLesson:', nextLesson);
+              if (nextExams.length > 0) {
+                // Tomar el primer examen con orden mayor
+                const nextExam = nextExams[0];
         
-                if (nextLesson) {
-                  this.videoUrl = ''; // Resetea la URL del video temporalmente
-                  setTimeout(() => {
-                    this.videoUrl = nextLesson.url; // Asigna la nueva URL del video después de un pequeño retraso
-                    console.log('videoUrl asignado:', this.videoUrl);
-                  });
-        
-                  this.videoTrackingService.resetWatchedTime();
-                  console.log('Tiempo de visualización reseteado');
-        
-                  this.router.navigate(['/view-lessons', unitId, nextLesson.lesson_order]);
-                  console.log('Navegando a la siguiente lección:', unitId, nextLesson.lesson_order);
-                } else {
-                  this.videoUrl = ''; // Si no hay siguiente lección, resetea la URL del video
-                  console.log('No hay siguiente lección, videoUrl reseteado');
-                }
+                this.router.navigate(['/view-exam', unitId, nextExam.id, nextExam.exam_order]);
+                console.log('Navegando al siguiente examen:', unitId, nextExam.id, nextExam.exam_order);
               } else {
-                this.videoUrl = ''; // Si no se encuentra la unidad, resetea la URL del video
-                console.log('Unidad no encontrada, videoUrl reseteado');
+                this.videoUrl = ''; // Si no hay exámenes siguientes, resetea la URL del video
+                console.log('No hay siguientes exámenes, videoUrl reseteado');
               }
             } else {
-              this.videoUrl = ''; // Si no se encuentran los parámetros, resetea la URL del video
-              console.log('Parámetros no encontrados, videoUrl reseteado');
+              this.videoUrl = ''; // Si no se encuentra la unidad, resetea la URL del video
+              console.log('Unidad no encontrada, videoUrl reseteado');
             }
+          } else {
+            this.videoUrl = ''; // Si no se encuentran los parámetros, resetea la URL del video
+            console.log('Parámetros no encontrados, videoUrl reseteado');
           }
+        }
         
         
-          goToPreviousLesson() {
-            const unitIdParam = this.route.snapshot.paramMap.get('id');
-            const lessonOrderParam = this.route.snapshot.paramMap.get('lesson_order');
         
-            console.log('unitIdParam:', unitIdParam);
-            console.log('lessonOrderParam:', lessonOrderParam);
+        goToPreviousExam() {
+          const unitIdParam = this.route.snapshot.paramMap.get('id');
+          const examOrderParam = this.route.snapshot.paramMap.get('exam_order');
         
-            if (unitIdParam && lessonOrderParam) {
-              const unitId = +unitIdParam;
-              const lessonOrder = +lessonOrderParam;
+          console.log('unitIdParam:', unitIdParam);
+          console.log('examOrderParam:', examOrderParam);
         
-              console.log('unitId:', unitId);
-              console.log('lessonOrder:', lessonOrder);
+          if (unitIdParam && examOrderParam) {
+            const unitId = +unitIdParam;
+            const examOrder = +examOrderParam;
         
-              const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
+            console.log('unitId:', unitId);
+            console.log('examOrder:', examOrder);
         
-              console.log('unit:', unit);
+            const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
         
-              if (unit) {
-                // Encontrar la lección actual
-                const previousLesson = unit.lessons.reverse().find((lesson: { lesson_order: number; }) => lesson.lesson_order < lessonOrder);
+            console.log('unit:', unit);
         
-                console.log('previousLesson:', previousLesson);
+            if (unit) {
+              // Encontrar los exámenes con un orden menor
+              const previousExams = unit.exams.filter((exam: { exam_order: number; }) => exam.exam_order < examOrder).reverse();
+              
+              console.log('previousExams:', previousExams);
         
-                if (previousLesson) {
-                  this.videoUrl = ''; // Resetea la URL del video temporalmente
-                  setTimeout(() => {
-                    this.videoUrl = previousLesson.url; // Asigna la nueva URL del video después de un pequeño retraso
-                    console.log('videoUrl asignado:', this.videoUrl);
-                  });
+              if (previousExams.length > 0) {
+                // Tomar el primer examen con orden menor
+                const previousExam = previousExams[0];
         
-                  this.videoTrackingService.resetWatchedTime();
-                  console.log('Tiempo de visualización reseteado');
-        
-                  this.router.navigate(['/view-lessons', unitId, previousLesson.lesson_order]);
-                  console.log('Navegando a la lección anterior:', unitId, previousLesson.lesson_order);
-                } else {
-                  this.videoUrl = ''; // Si no hay lección anterior, resetea la URL del video
-                  console.log('No hay lección anterior, videoUrl reseteado');
-                }
+                this.router.navigate(['/view-exam', unitId, previousExam.id, previousExam.exam_order]);
+                console.log('Navegando al examen anterior:', unitId, previousExam.id, previousExam.exam_order);
               } else {
-                this.videoUrl = ''; // Si no se encuentra la unidad, resetea la URL del video
-                console.log('Unidad no encontrada, videoUrl reseteado');
+                this.videoUrl = ''; // Si no hay exámenes anteriores, resetea la URL del video
+                console.log('No hay exámenes anteriores, videoUrl reseteado');
               }
             } else {
-              this.videoUrl = ''; // Si no se encuentran los parámetros, resetea la URL del video
-              console.log('Parámetros no encontrados, videoUrl reseteado');
+              this.videoUrl = ''; // Si no se encuentra la unidad, resetea la URL del video
+              console.log('Unidad no encontrada, videoUrl reseteado');
             }
+          } else {
+            this.videoUrl = ''; // Si no se encuentran los parámetros, resetea la URL del video
+            console.log('Parámetros no encontrados, videoUrl reseteado');
           }
+        }
+        
         
           lessonMenuVisible: boolean = false;
         
@@ -634,25 +624,25 @@ checkAllAnswersTrue(step: number): boolean {
         
         
         
-          checkForNoPreviousLesson() {
+          checkForNoPreviousExam() {
             const unitIdParam = this.route.snapshot.paramMap.get('id');
-            const lessonOrderParam = this.route.snapshot.paramMap.get('lesson_order');
+            const examOrderParam = this.route.snapshot.paramMap.get('exam_order');
         
-            if (unitIdParam && lessonOrderParam) {
+            if (unitIdParam && examOrderParam) {
               const unitId = +unitIdParam;
-              const lessonOrder = +lessonOrderParam;
+              const examOrder = +examOrderParam;
               const unit = this.unitsAndLessons.find((unit: { id: string; }) => +unit.id === unitId);
               if (unit) {
                 const previousLesson = unit.lessons.slice().reverse().find((
-                  lesson: { lesson_order: number; }) => lesson.lesson_order < lessonOrder);
+                  exam: { exam_order: number; }) => exam.exam_order < examOrder);
                 if (!previousLesson) {
-                  this.isFirstLesson = true;
+                  this.isFirstExam = true;
                 } else{
-                  this.isFirstLesson = false;
+                  this.isFirstExam = false;
                 }
               } else {
                 console.log('Unidad no encontrada, videoUrl reseteado');
-                this.isFirstLesson = false;
+                this.isFirstExam = false;
               }
             } else {
               console.log('Parámetros no encontrados, videoUrl reseteado');
@@ -675,17 +665,17 @@ checkAllAnswersTrue(step: number): boolean {
                 const nextLesson = unit.lessons.find((lesson: { lesson_order: number; }) => lesson.lesson_order > lessonOrder);
         
                 if (!nextLesson) {
-                  this.isLastLesson = true;
+                  this.isLastExam = true;
                 } else {
-                  this.isLastLesson = false;
+                  this.isLastExam = false;
                 }
               } else {
                 console.log('FALSO');
-                this.isLastLesson = false;
+                this.isLastExam = false;
               }
             } else {
               console.log('FALSO');
-              this.isLastLesson = false;
+              this.isLastExam = false;
             }
           }
         
@@ -877,11 +867,6 @@ checkAllAnswersTrue(step: number): boolean {
               console.log('Parámetros no encontrados, videoUrl reseteado');
             }
           }
-          
-          
-        
-          
-        
           
           goToPreviousUnit2() {
             const unitIdParam = this.route.snapshot.paramMap.get('id');

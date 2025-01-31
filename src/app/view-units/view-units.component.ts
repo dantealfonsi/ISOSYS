@@ -153,8 +153,8 @@ export class ViewUnitsComponent {
     this.router.navigate(['/view-lessons', unitId, lessonOrder]);
   }
 
-  goToExam(unitId: string, examId: string): void {
-    this.router.navigate(['/view-exam', unitId, examId]);
+  goToExam(unitId: string, lesson_id: string, exam_order: number): void {
+    this.router.navigate(['/view-exam', unitId, lesson_id, exam_order]);
   }
 
   ////////////////////////////END ROUTE CONTROLLERS///////////////////////////////////////

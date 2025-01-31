@@ -51,7 +51,7 @@
         </li>
         <hr>
         <li *ngFor="let exam of unitsAndLessons[0]?.exams" class="menu-li" style="cursor:pointer;"
-          (click)="goToExam(unitsAndLessons[0].id, exam.id)">
+          (click)="goToExam(unitsAndLessons[0].id, exam.id,exam.exam_order)">
           <mat-icon class="play-icon">play_arrow</mat-icon>
           Examen {{ exam!.exam_order }} : {{ exam?.title }}
         </li>
@@ -222,19 +222,19 @@
   box-shadow: 1px -3px 7px 0px #b9b7c3;
   height: 5rem;">
 
-    <button class="control-button" *ngIf="!isFirstLesson" (click)="goToPreviousLesson()">
+    <button class="control-button" *ngIf="!isFirstExam" (click)="goToPreviousExam()">
       <mat-icon>skip_previous</mat-icon> Anterior</button>
 
-    <button class="control-button" *ngIf="isFirstLesson" [disabled]="isFirstUnit" [ngClass]="{'disabled': isFirstUnit}"
+    <button class="control-button" *ngIf="isFirstExam" [disabled]="isFirstUnit" [ngClass]="{'disabled': isFirstUnit}"
       (click)="goToPreviousUnit()"> <mat-icon>skip_previous</mat-icon> Anterior</button>
 
     <button class="control-button control-blue" [ngClass]="{'toggle-active': lessonMenuVisible}"
       (click)="toggleLessonMenu()"><mat-icon>menu</mat-icon></button>
 
-    <button class="control-button" *ngIf="!isLastLesson" (click)="goToNextLesson()">Siguiente
+    <button class="control-button" *ngIf="!isLastExam" (click)="goToNextExam()">Siguiente
       <mat-icon>skip_next</mat-icon></button>
 
-    <button class="control-button" *ngIf="isLastLesson" [disabled]="isLastUnit" [ngClass]="{'disabled': isLastUnit}"
+    <button class="control-button" *ngIf="isLastExam" [disabled]="isLastUnit" [ngClass]="{'disabled': isLastUnit}"
       (click)="goToNextUnit()">Siguiente <mat-icon>skip_next</mat-icon></button>
 
 

@@ -31,7 +31,7 @@ export const routes: Routes = [
     {path: 'about-us',           component: AboutUsComponent},
     {path: 'terms',           component: TermsComponent},
     {path: 'view-lessons/:id/:lesson_order', component: ViewLessonsComponent},
-    {path: 'view-exam/:id/:exam_id', component: ExamComponent},
+    {path: 'view-exam/:id/:exam_id/:exam_order', component: ExamComponent},
     {path: 'view-units',           component: ViewUnitsComponent},
     {path: 'profile',           component: ProfileComponent},
     {path: 'main',     component: AdminControlComponent, 
