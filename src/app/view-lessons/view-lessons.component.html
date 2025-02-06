@@ -70,7 +70,7 @@
           <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
           padding-left: 1rem;
           border-radius: 10px 10px 0 0;">
-            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon>
+            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;font-weight: 900;"><mat-icon>reorder</mat-icon>
               Resúmen</h2>
           </div>
   
@@ -96,13 +96,13 @@
           <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
           padding-left: 1rem;
           border-radius: 10px 10px 0 0;">
-            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>ballot</mat-icon> Guias
+            <h2 style="gap: 1rem;color: white;display: flex;align-items: center;font-weight: 900;"><mat-icon>ballot</mat-icon> Guias
               Adjuntas</h2>
           </div>
 
           <ul style="background-color: white;">
             <li *ngFor="let file of lesson?.files" class="download-li">
-              <a [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}
+              <a style='font-weight: 900;' [href]="'http://localhost/iso2sys_rest_api/download.php?file='+file.file" download>{{ file.name }}
                 <mat-icon style="color: #ff3d009c;">cloud_download</mat-icon></a>
             </li>
           </ul>

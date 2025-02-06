@@ -109,7 +109,8 @@
                  <input type="hidden" [value]="question.question_mark" id="hidden-mark-{{index}}">
               </div>
               <div style="display: flex;justify-content: flex-end;">
-                <button mat-button [disabled]="!isStepValid(index)" class='export' (click)="validateAndProceed($event, index, stepper)">{{ isLastStep(index) ? 'Finalizar examen' : 'Siguiente' }}  <mat-icon>arrow_right_alt</mat-icon></button>              </div>
+                <button mat-button [disabled]="!isStepValid(index)" class='export' (click)="validateAndProceed($event, index, stepper)">{{ isLastStep(index) ? 'Finalizar examen' : 'Siguiente' }}  <mat-icon>arrow_right_alt</mat-icon></button>              
+              </div>
             </form>
           </mat-step>
         </mat-horizontal-stepper>
@@ -162,7 +163,7 @@
           <div class="description" style="display: flex; flex-direction: column;">
             <div style="background: linear-gradient(45deg, #ed684f, #e98f1b47);
             padding-left: 1rem;
-            border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;"><mat-icon>reorder</mat-icon> Resúmen</h2></div>
+            border-radius: 10px 10px 0 0;"><h2 style="gap: 1rem;color: white;display: flex;align-items: center;font-weight: 900;"><mat-icon>reorder</mat-icon> Resúmen</h2></div>
   
             <div style="background-color: white; padding: 1rem; text-align: justify;font-family: 1.4rem !important;">
               <h5 class='desc'>{{ exam.data_exam.description }}</h5>

@@ -428,40 +428,35 @@ checkAllAnswersTrue(step: number): boolean {
 
 
 
-        addMark(): Promise<void> {
-          return new Promise((resolve, reject) => {
-            const datos = {
-              addMark: "",
-              score: this.userMark,
-              exam_id: this.exam_id,
-              user_id: this.userId
-            };
-        
-            console.log(datos);
-            fetch('http://localhost/iso2sys_rest_api/server.php', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(datos)
-            })
-            .then(response => response.json())
-            .then(data => {
-              console.log(data);
-              Swal.fire({
-                title: 'Puntuación añadida!',
-                text: 'La puntuación fue añadida con éxito.',
-                icon: 'success'
-              }).then(() => {
-                resolve();  // Resuelve la promesa cuando los datos se envían con éxito
-              });
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              reject(error);  // Rechaza la promesa si hay un error
-            });
+      addMark(): Promise<void> {
+        return new Promise((resolve, reject) => {
+          const datos = {
+            addMark: "",
+            score: this.userMark,
+            exam_id: this.exam_id,
+            user_id: this.userId
+          };
+      
+          console.log(datos);
+          fetch('http://localhost/iso2sys_rest_api/server.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            resolve();  // Resuelve la promesa cuando los datos se envían con éxito
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            reject(error);  // Rechaza la promesa si hay un error
           });
-        }
+        });
+      }
+      
         
 
         goToExam(unitId: string, lesson_id: string): void {

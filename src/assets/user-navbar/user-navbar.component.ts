@@ -26,10 +26,11 @@ export class UserNavbarComponent {
   user: string | undefined
 
   ngOnInit(): void {
-
+/*
     if (!this.authService.isAdmin()) {
       this.router.navigate(['home']);
     } 
+*/
 
     this.user = JSON.parse(localStorage.getItem('token') || '{}')?.email;
 

@@ -25,7 +25,6 @@ export class ExamCompletionDialogComponent {
   }
 
   createConfetti() {
-    alert("ASDAS");
     for (let i = 0; i < 100; i++) {
       const confettiPiece = this.renderer.createElement('div');
       this.renderer.addClass(confettiPiece, 'confetti-piece');
